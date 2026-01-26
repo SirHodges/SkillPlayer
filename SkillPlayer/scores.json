@@ -1,0 +1,63 @@
+[
+  {
+    "name": "TYLER",
+    "score": 223,
+    "date": "2026-01-23T12:51:06.161846",
+    "stats": {}
+  },
+  {
+    "name": "HODGES",
+    "score": 130,
+    "date": "2026-01-23T09:52:29.542831"
+  },
+  {
+    "name": "TYLER",
+    "score": 123,
+    "date": "2026-01-23T11:51:12.966221",
+    "stats": {}
+  },
+  {
+    "name": "HODGES",
+    "score": 105,
+    "date": "2026-01-23T13:03:36.995901",
+    "stats": {}
+  },
+  {
+    "name": "TYLER",
+    "score": 104,
+    "date": "2026-01-23T11:27:52.746992"
+  },
+  {
+    "name": "HODGES",
+    "score": 96,
+    "date": "2026-01-26T15:47:27.305178",
+    "stats": {
+      "correct": 9,
+      "wrong": 6,
+      "skips": 0,
+      "streakCount": 3,
+      "bestStreak": 4
+    }
+  },
+  {
+    "name": "HODGES",
+    "score": 94,
+    "date": "2026-01-23T13:10:50.685383",
+    "stats": {}
+  },
+  {
+    "name": "BRI",
+    "score": 93,
+    "date": "2026-01-23T10:20:45.350261"
+  },
+  {
+    "name": "HODGES",
+    "score": 90,
+    "date": "2026-01-22T16:50:15.382655"
+  },
+  {
+    "name": "EM",
+    "score": 88,
+    "date": "2026-01-23T07:59:01.019778"
+  }
+]

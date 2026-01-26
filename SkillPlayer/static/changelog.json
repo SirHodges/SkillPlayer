@@ -1,0 +1,42 @@
+[
+    {
+        "version": "1.7",
+        "date": "2026-01-26 16:00",
+        "desc": "Implemented question hashing, fixed randomization, and improved server process management"
+    },
+    {
+        "version": "1.6",
+        "date": "2026-01-23 11:30",
+        "desc": "Added detailed stats tooltip (Correct, Wrong, Skips, Streaks) on leaderboard hover"
+    },
+    {
+        "version": "1.5",
+        "date": "2026-01-23 11:00",
+        "desc": "Added volume slider and removed error sound"
+    },
+    {
+        "version": "1.4",
+        "date": "2026-01-23 10:45",
+        "desc": "Added Right/Wrong sound effects"
+    },
+    {
+        "version": "1.3",
+        "date": "2026-01-23 10:30",
+        "desc": "Added \"No thank you\" button and flashing leaderboard placeholder"
+    },
+    {
+        "version": "1.2",
+        "date": "2026-01-23 10:15",
+        "desc": "Updated leaderboard layout to side-by-side"
+    },
+    {
+        "version": "1.1",
+        "date": "2026-01-23 10:00",
+        "desc": "Updated streak bonus to require 3+ correct answers"
+    },
+    {
+        "version": "1.0",
+        "date": "2026-01-23 09:45",
+        "desc": "Increased name length to 10 characters"
+    }
+]

@@ -1,0 +1,3082 @@
+[
+  {
+    "question": "What is the primary cause of cellular hypoxia?",
+    "answers": [
+      "Excessive oxygen delivery",
+      "Inadequate oxygen delivery to tissues",
+      "Increased carbon dioxide production",
+      "Enhanced cellular metabolism"
+    ],
+    "correct": "Inadequate oxygen delivery to tissues"
+  },
+  {
+    "question": "Which type of necrosis is characterized by cell death due to ischemia in most organs?",
+    "answers": [
+      "Caseous necrosis",
+      "Liquefactive necrosis",
+      "Coagulative necrosis",
+      "Fat necrosis"
+    ],
+    "correct": "Coagulative necrosis"
+  },
+  {
+    "question": "What is the most common cause of cellular injury?",
+    "answers": [
+      "Physical agents",
+      "Hypoxia",
+      "Chemical agents",
+      "Infectious agents"
+    ],
+    "correct": "Hypoxia"
+  },
+  {
+    "question": "Which of the following is NOT a cardinal sign of inflammation?",
+    "answers": [
+      "Rubor (redness)",
+      "Tumor (swelling)",
+      "Pallor (paleness)",
+      "Dolor (pain)"
+    ],
+    "correct": "Pallor (paleness)"
+  },
+  {
+    "question": "What is the term for programmed cell death?",
+    "answers": [
+      "Necrosis",
+      "Apoptosis",
+      "Atrophy",
+      "Metaplasia"
+    ],
+    "correct": "Apoptosis"
+  },
+  {
+    "question": "Which electrolyte imbalance can cause cardiac arrhythmias and muscle weakness?",
+    "answers": [
+      "Hypernatremia",
+      "Hypocalcemia",
+      "Hypokalemia",
+      "Hypermagnesemia"
+    ],
+    "correct": "Hypokalemia"
+  },
+  {
+    "question": "What type of shock results from severe blood or fluid loss?",
+    "answers": [
+      "Cardiogenic shock",
+      "Distributive shock",
+      "Obstructive shock",
+      "Hypovolemic shock"
+    ],
+    "correct": "Hypovolemic shock"
+  },
+  {
+    "question": "Which cell type is primarily responsible for chronic inflammation?",
+    "answers": [
+      "Neutrophils",
+      "Macrophages and lymphocytes",
+      "Eosinophils",
+      "Basophils"
+    ],
+    "correct": "Macrophages and lymphocytes"
+  },
+  {
+    "question": "What is the term for an abnormal decrease in cell size?",
+    "answers": [
+      "Hyperplasia",
+      "Hypertrophy",
+      "Atrophy",
+      "Dysplasia"
+    ],
+    "correct": "Atrophy"
+  },
+  {
+    "question": "Which condition is characterized by an abnormal accumulation of fluid in the interstitial spaces?",
+    "answers": [
+      "Ascites",
+      "Edema",
+      "Effusion",
+      "Anasarca"
+    ],
+    "correct": "Edema"
+  },
+  {
+    "question": "What is the primary function of fever in the inflammatory response?",
+    "answers": [
+      "Increase comfort",
+      "Enhance immune function and inhibit pathogen growth",
+      "Decrease metabolic rate",
+      "Promote sleep"
+    ],
+    "correct": "Enhance immune function and inhibit pathogen growth"
+  },
+  {
+    "question": "Which type of hypersensitivity reaction is mediated by IgE antibodies?",
+    "answers": [
+      "Type I (immediate)",
+      "Type II (cytotoxic)",
+      "Type III (immune complex)",
+      "Type IV (delayed)"
+    ],
+    "correct": "Type I (immediate)"
+  },
+  {
+    "question": "What is the most common cause of metabolic acidosis?",
+    "answers": [
+      "Hyperventilation",
+      "Vomiting",
+      "Diabetes mellitus (diabetic ketoacidosis)",
+      "Excessive antacid use"
+    ],
+    "correct": "Diabetes mellitus (diabetic ketoacidosis)"
+  },
+  {
+    "question": "Which term describes the spread of cancer cells to distant sites?",
+    "answers": [
+      "Invasion",
+      "Angiogenesis",
+      "Metastasis",
+      "Dysplasia"
+    ],
+    "correct": "Metastasis"
+  },
+  {
+    "question": "What is the primary mediator of vasodilation in acute inflammation?",
+    "answers": [
+      "Histamine",
+      "Serotonin",
+      "Bradykinin",
+      "Leukotrienes"
+    ],
+    "correct": "Histamine"
+  },
+  {
+    "question": "Which organ is primarily responsible for maintaining acid-base balance?",
+    "answers": [
+      "Liver",
+      "Kidneys",
+      "Pancreas",
+      "Spleen"
+    ],
+    "correct": "Kidneys"
+  },
+  {
+    "question": "What is the term for an increase in cell number?",
+    "answers": [
+      "Hypertrophy",
+      "Hyperplasia",
+      "Metaplasia",
+      "Anaplasia"
+    ],
+    "correct": "Hyperplasia"
+  },
+  {
+    "question": "Which condition results from inadequate tissue perfusion and oxygenation?",
+    "answers": [
+      "Hyperemia",
+      "Ischemia",
+      "Congestion",
+      "Thrombosis"
+    ],
+    "correct": "Ischemia"
+  },
+  {
+    "question": "What is the normal pH range of arterial blood?",
+    "answers": [
+      "7.00-7.20",
+      "7.25-7.30",
+      "7.35-7.45",
+      "7.50-7.60"
+    ],
+    "correct": "7.35-7.45"
+  },
+  {
+    "question": "Which type of hemoglobin is unable to carry oxygen?",
+    "answers": [
+      "Oxyhemoglobin",
+      "Carboxyhemoglobin",
+      "Deoxyhemoglobin",
+      "Methemoglobin"
+    ],
+    "correct": "Methemoglobin"
+  },
+  {
+    "question": "What is the term for the reversible replacement of one differentiated cell type with another?",
+    "answers": [
+      "Dysplasia",
+      "Metaplasia",
+      "Hyperplasia",
+      "Anaplasia"
+    ],
+    "correct": "Metaplasia"
+  },
+  {
+    "question": "Which cells are first to arrive at the site of acute inflammation?",
+    "answers": [
+      "Macrophages",
+      "Lymphocytes",
+      "Neutrophils",
+      "Eosinophils"
+    ],
+    "correct": "Neutrophils"
+  },
+  {
+    "question": "What is the primary cause of transudate formation?",
+    "answers": [
+      "Increased vascular permeability",
+      "Inflammation",
+      "Increased hydrostatic pressure or decreased oncotic pressure",
+      "Infection"
+    ],
+    "correct": "Increased hydrostatic pressure or decreased oncotic pressure"
+  },
+  {
+    "question": "Which condition is characterized by a deficiency of all blood cell types?",
+    "answers": [
+      "Anemia",
+      "Leukopenia",
+      "Thrombocytopenia",
+      "Pancytopenia"
+    ],
+    "correct": "Pancytopenia"
+  },
+  {
+    "question": "What is the primary mechanism of action of aspirin in reducing inflammation?",
+    "answers": [
+      "Blocking histamine receptors",
+      "Inhibiting cyclooxygenase (COX) enzymes",
+      "Enhancing immune function",
+      "Increasing prostaglandin production"
+    ],
+    "correct": "Inhibiting cyclooxygenase (COX) enzymes"
+  },
+  {
+    "question": "Which organ failure can result in the accumulation of nitrogenous wastes in the blood?",
+    "answers": [
+      "Liver failure",
+      "Renal failure",
+      "Heart failure",
+      "Lung failure"
+    ],
+    "correct": "Renal failure"
+  },
+  {
+    "question": "What is the term for death of tissue due to loss of blood supply?",
+    "answers": [
+      "Infarction",
+      "Atrophy",
+      "Gangrene",
+      "Ischemia"
+    ],
+    "correct": "Infarction"
+  },
+  {
+    "question": "Which type of necrosis is typically seen in brain tissue following ischemia?",
+    "answers": [
+      "Coagulative necrosis",
+      "Liquefactive necrosis",
+      "Caseous necrosis",
+      "Fibrinoid necrosis"
+    ],
+    "correct": "Liquefactive necrosis"
+  },
+  {
+    "question": "What is the primary purpose of the complement system?",
+    "answers": [
+      "Blood clotting",
+      "Oxygen transport",
+      "Immune defense and inflammation",
+      "Nutrient absorption"
+    ],
+    "correct": "Immune defense and inflammation"
+  },
+  {
+    "question": "Which condition results from chronic exposure to ultraviolet radiation?",
+    "answers": [
+      "Thermal burns",
+      "Radiation dermatitis and increased cancer risk",
+      "Frostbite",
+      "Chemical burns"
+    ],
+    "correct": "Radiation dermatitis and increased cancer risk"
+  },
+  {
+    "question": "What is the term for abnormal cell development with loss of normal architecture?",
+    "answers": [
+      "Metaplasia",
+      "Hyperplasia",
+      "Dysplasia",
+      "Anaplasia"
+    ],
+    "correct": "Dysplasia"
+  },
+  {
+    "question": "Which enzyme is elevated in the blood following myocardial infarction?",
+    "answers": [
+      "Amylase",
+      "Lipase",
+      "Troponin",
+      "Alkaline phosphatase"
+    ],
+    "correct": "Troponin"
+  },
+  {
+    "question": "What is the primary mechanism of septic shock?",
+    "answers": [
+      "Decreased cardiac output",
+      "Massive vasodilation and increased vascular permeability",
+      "Blood loss",
+      "Pulmonary embolism"
+    ],
+    "correct": "Massive vasodilation and increased vascular permeability"
+  },
+  {
+    "question": "Which vitamin deficiency can lead to impaired wound healing?",
+    "answers": [
+      "Vitamin A",
+      "Vitamin B12",
+      "Vitamin C",
+      "Vitamin D"
+    ],
+    "correct": "Vitamin C"
+  },
+  {
+    "question": "What is the term for an abnormal passage between two epithelial surfaces?",
+    "answers": [
+      "Abscess",
+      "Fistula",
+      "Ulcer",
+      "Sinus"
+    ],
+    "correct": "Fistula"
+  },
+  {
+    "question": "Which condition is characterized by excessive clotting and bleeding simultaneously?",
+    "answers": [
+      "Hemophilia",
+      "Thrombocytopenia",
+      "Disseminated intravascular coagulation (DIC)",
+      "Von Willebrand disease"
+    ],
+    "correct": "Disseminated intravascular coagulation (DIC)"
+  },
+  {
+    "question": "What is the primary cellular adaptation to increased workload?",
+    "answers": [
+      "Atrophy",
+      "Hypertrophy",
+      "Metaplasia",
+      "Dysplasia"
+    ],
+    "correct": "Hypertrophy"
+  },
+  {
+    "question": "Which substance is responsible for the yellow color of jaundice?",
+    "answers": [
+      "Hemoglobin",
+      "Bilirubin",
+      "Melanin",
+      "Carotene"
+    ],
+    "correct": "Bilirubin"
+  },
+  {
+    "question": "What is the most common cause of hyponatremia?",
+    "answers": [
+      "Excessive salt intake",
+      "Dehydration",
+      "Excess water retention or dilution",
+      "Kidney stones"
+    ],
+    "correct": "Excess water retention or dilution"
+  },
+  {
+    "question": "Which type of immunity provides immediate but non-specific protection?",
+    "answers": [
+      "Adaptive immunity",
+      "Humoral immunity",
+      "Innate immunity",
+      "Cell-mediated immunity"
+    ],
+    "correct": "Innate immunity"
+  },
+  {
+    "question": "What is the primary cause of respiratory acidosis?",
+    "answers": [
+      "Hyperventilation",
+      "Hypoventilation and CO2 retention",
+      "Kidney failure",
+      "Diarrhea"
+    ],
+    "correct": "Hypoventilation and CO2 retention"
+  },
+  {
+    "question": "Which cells produce antibodies?",
+    "answers": [
+      "T lymphocytes",
+      "Natural killer cells",
+      "Plasma cells (B lymphocytes)",
+      "Macrophages"
+    ],
+    "correct": "Plasma cells (B lymphocytes)"
+  },
+  {
+    "question": "What is the term for localized tissue death in a living organism?",
+    "answers": [
+      "Apoptosis",
+      "Necrosis",
+      "Autophagy",
+      "Senescence"
+    ],
+    "correct": "Necrosis"
+  },
+  {
+    "question": "Which condition results from excessive growth hormone in adults?",
+    "answers": [
+      "Gigantism",
+      "Acromegaly",
+      "Dwarfism",
+      "Cretinism"
+    ],
+    "correct": "Acromegaly"
+  },
+  {
+    "question": "What is the primary characteristic of benign tumors?",
+    "answers": [
+      "Rapid growth and metastasis",
+      "Invasion of surrounding tissues",
+      "Slow growth and well-differentiated cells",
+      "Poorly differentiated cells"
+    ],
+    "correct": "Slow growth and well-differentiated cells"
+  },
+  {
+    "question": "Which electrolyte imbalance can cause tetany and muscle spasms?",
+    "answers": [
+      "Hyperkalemia",
+      "Hypocalcemia",
+      "Hypernatremia",
+      "Hypomagnesemia"
+    ],
+    "correct": "Hypocalcemia"
+  },
+  {
+    "question": "What is the primary function of cytokines in inflammation?",
+    "answers": [
+      "Oxygen transport",
+      "Cell signaling and communication",
+      "Blood clotting",
+      "Nutrient storage"
+    ],
+    "correct": "Cell signaling and communication"
+  },
+  {
+    "question": "Which type of gangrene is caused by bacterial infection producing gas?",
+    "answers": [
+      "Dry gangrene",
+      "Wet gangrene",
+      "Gas gangrene",
+      "Fournier's gangrene"
+    ],
+    "correct": "Gas gangrene"
+  },
+  {
+    "question": "What is the term for excessive uric acid in the blood?",
+    "answers": [
+      "Hyperglycemia",
+      "Hyperlipidemia",
+      "Hyperuricemia",
+      "Hyperkalemia"
+    ],
+    "correct": "Hyperuricemia"
+  },
+  {
+    "question": "Which process describes the migration of white blood cells through blood vessel walls?",
+    "answers": [
+      "Phagocytosis",
+      "Diapedesis",
+      "Chemotaxis",
+      "Opsonization"
+    ],
+    "correct": "Diapedesis"
+  },
+  {
+    "question": "What is the primary cause of right-sided heart failure?",
+    "answers": [
+      "Systemic hypertension",
+      "Left-sided heart failure",
+      "Pulmonary embolism",
+      "Aortic stenosis"
+    ],
+    "correct": "Left-sided heart failure"
+  },
+  {
+    "question": "Which type of stroke is caused by a ruptured blood vessel in the brain?",
+    "answers": [
+      "Ischemic stroke",
+      "Embolic stroke",
+      "Hemorrhagic stroke",
+      "Thrombotic stroke"
+    ],
+    "correct": "Hemorrhagic stroke"
+  },
+  {
+    "question": "What is the term for decreased oxygen saturation in arterial blood?",
+    "answers": [
+      "Hypoxia",
+      "Hypoxemia",
+      "Anoxia",
+      "Ischemia"
+    ],
+    "correct": "Hypoxemia"
+  },
+  {
+    "question": "Which condition is characterized by the destruction of alveolar walls?",
+    "answers": [
+      "Asthma",
+      "Chronic bronchitis",
+      "Emphysema",
+      "Pneumonia"
+    ],
+    "correct": "Emphysema"
+  },
+  {
+    "question": "What is the primary defect in Type 1 diabetes mellitus?",
+    "answers": [
+      "Insulin resistance",
+      "Autoimmune destruction of beta cells",
+      "Decreased glucagon production",
+      "Excessive insulin production"
+    ],
+    "correct": "Autoimmune destruction of beta cells"
+  },
+  {
+    "question": "Which electrolyte imbalance can prolong the QT interval on an ECG?",
+    "answers": [
+      "Hyperkalemia",
+      "Hypokalemia",
+      "Hypernatremia",
+      "Hyperchloremia"
+    ],
+    "correct": "Hypokalemia"
+  },
+  {
+    "question": "What is the term for the formation of new blood vessels in tumors?",
+    "answers": [
+      "Angiogenesis",
+      "Vasculogenesis",
+      "Neovascularization",
+      "Arteriogenesis"
+    ],
+    "correct": "Angiogenesis"
+  },
+  {
+    "question": "Which condition results from chronic liver disease and portal hypertension?",
+    "answers": [
+      "Ascites",
+      "Pleural effusion",
+      "Pericardial effusion",
+      "Cerebral edema"
+    ],
+    "correct": "Ascites"
+  },
+  {
+    "question": "What is the primary mechanism of action of diuretics in treating edema?",
+    "answers": [
+      "Increasing cardiac output",
+      "Increasing sodium and water excretion",
+      "Decreasing vascular permeability",
+      "Increasing albumin production"
+    ],
+    "correct": "Increasing sodium and water excretion"
+  },
+  {
+    "question": "Which hormone is deficient in Addison's disease?",
+    "answers": [
+      "Insulin",
+      "Cortisol",
+      "Growth hormone",
+      "Thyroid hormone"
+    ],
+    "correct": "Cortisol"
+  },
+  {
+    "question": "What is the most common cause of chronic kidney disease?",
+    "answers": [
+      "Glomerulonephritis",
+      "Diabetes mellitus",
+      "Polycystic kidney disease",
+      "Kidney stones"
+    ],
+    "correct": "Diabetes mellitus"
+  },
+  {
+    "question": "Which cell organelle is primarily affected by hypoxic injury?",
+    "answers": [
+      "Nucleus",
+      "Mitochondria",
+      "Golgi apparatus",
+      "Endoplasmic reticulum"
+    ],
+    "correct": "Mitochondria"
+  },
+  {
+    "question": "What is the term for red blood cell destruction?",
+    "answers": [
+      "Erythropoiesis",
+      "Hemolysis",
+      "Hematopoiesis",
+      "Phagocytosis"
+    ],
+    "correct": "Hemolysis"
+  },
+  {
+    "question": "Which condition is characterized by increased intracranial pressure?",
+    "answers": [
+      "Hydrocephalus",
+      "Meningitis",
+      "Encephalitis",
+      "All of the above"
+    ],
+    "correct": "All of the above"
+  },
+  {
+    "question": "What is the primary cause of cardiogenic shock?",
+    "answers": [
+      "Myocardial infarction",
+      "Hemorrhage",
+      "Sepsis",
+      "Anaphylaxis"
+    ],
+    "correct": "Myocardial infarction"
+  },
+  {
+    "question": "Which type of hypoxia results from decreased oxygen-carrying capacity of blood?",
+    "answers": [
+      "Hypoxic hypoxia",
+      "Anemic hypoxia",
+      "Circulatory hypoxia",
+      "Histotoxic hypoxia"
+    ],
+    "correct": "Anemic hypoxia"
+  },
+  {
+    "question": "What is the term for abnormally high blood glucose levels?",
+    "answers": [
+      "Hypoglycemia",
+      "Hyperglycemia",
+      "Glucosuria",
+      "Glycogenolysis"
+    ],
+    "correct": "Hyperglycemia"
+  },
+  {
+    "question": "Which condition is characterized by progressive muscle weakness due to acetylcholine receptor antibodies?",
+    "answers": [
+      "Multiple sclerosis",
+      "Myasthenia gravis",
+      "Guillain-Barr\u00e9 syndrome",
+      "Muscular dystrophy"
+    ],
+    "correct": "Myasthenia gravis"
+  },
+  {
+    "question": "What is the primary function of albumin in the blood?",
+    "answers": [
+      "Oxygen transport",
+      "Maintaining oncotic pressure",
+      "Blood clotting",
+      "Immune defense"
+    ],
+    "correct": "Maintaining oncotic pressure"
+  },
+  {
+    "question": "Which condition results from excessive cortisol production?",
+    "answers": [
+      "Addison's disease",
+      "Cushing's syndrome",
+      "Grave's disease",
+      "Hashimoto's thyroiditis"
+    ],
+    "correct": "Cushing's syndrome"
+  },
+  {
+    "question": "What is the term for pus formation?",
+    "answers": [
+      "Suppuration",
+      "Granulation",
+      "Exudation",
+      "Organization"
+    ],
+    "correct": "Suppuration"
+  },
+  {
+    "question": "Which type of embolism is most commonly caused by deep vein thrombosis?",
+    "answers": [
+      "Fat embolism",
+      "Air embolism",
+      "Pulmonary embolism",
+      "Amniotic fluid embolism"
+    ],
+    "correct": "Pulmonary embolism"
+  },
+  {
+    "question": "What is the primary pathophysiological mechanism in anaphylactic shock?",
+    "answers": [
+      "Massive histamine release and vasodilation",
+      "Decreased cardiac output",
+      "Blood loss",
+      "Neurogenic vasodilation"
+    ],
+    "correct": "Massive histamine release and vasodilation"
+  },
+  {
+    "question": "Which condition is characterized by demyelination of the central nervous system?",
+    "answers": [
+      "Guillain-Barr\u00e9 syndrome",
+      "Multiple sclerosis",
+      "Amyotrophic lateral sclerosis",
+      "Parkinson's disease"
+    ],
+    "correct": "Multiple sclerosis"
+  },
+  {
+    "question": "What is the term for abnormally low platelet count?",
+    "answers": [
+      "Leukopenia",
+      "Anemia",
+      "Thrombocytopenia",
+      "Neutropenia"
+    ],
+    "correct": "Thrombocytopenia"
+  },
+  {
+    "question": "Which condition results from autoimmune destruction of thyroid tissue?",
+    "answers": [
+      "Grave's disease",
+      "Hashimoto's thyroiditis",
+      "Thyroid storm",
+      "Multinodular goiter"
+    ],
+    "correct": "Hashimoto's thyroiditis"
+  },
+  {
+    "question": "What is the primary cause of hepatic encephalopathy?",
+    "answers": [
+      "Viral hepatitis",
+      "Accumulation of ammonia and toxins",
+      "Bile duct obstruction",
+      "Fatty liver disease"
+    ],
+    "correct": "Accumulation of ammonia and toxins"
+  },
+  {
+    "question": "Which phase of wound healing involves collagen deposition?",
+    "answers": [
+      "Inflammatory phase",
+      "Proliferative phase",
+      "Remodeling phase",
+      "Hemostatic phase"
+    ],
+    "correct": "Proliferative phase"
+  },
+  {
+    "question": "What is the term for abnormally slow heart rate?",
+    "answers": [
+      "Tachycardia",
+      "Bradycardia",
+      "Arrhythmia",
+      "Fibrillation"
+    ],
+    "correct": "Bradycardia"
+  },
+  {
+    "question": "Which condition is characterized by progressive loss of dopaminergic neurons?",
+    "answers": [
+      "Alzheimer's disease",
+      "Parkinson's disease",
+      "Huntington's disease",
+      "Multiple sclerosis"
+    ],
+    "correct": "Parkinson's disease"
+  },
+  {
+    "question": "What is the primary mechanism of osteoporosis?",
+    "answers": [
+      "Increased bone formation",
+      "Decreased bone resorption",
+      "Increased bone resorption exceeding formation",
+      "Vitamin D toxicity"
+    ],
+    "correct": "Increased bone resorption exceeding formation"
+  },
+  {
+    "question": "Which type of necrosis is seen in tuberculosis?",
+    "answers": [
+      "Coagulative necrosis",
+      "Liquefactive necrosis",
+      "Caseous necrosis",
+      "Fat necrosis"
+    ],
+    "correct": "Caseous necrosis"
+  },
+  {
+    "question": "What is the primary cause of respiratory alkalosis?",
+    "answers": [
+      "Hypoventilation",
+      "Hyperventilation",
+      "Kidney failure",
+      "Vomiting"
+    ],
+    "correct": "Hyperventilation"
+  },
+  {
+    "question": "Which condition results from vitamin B12 deficiency?",
+    "answers": [
+      "Iron deficiency anemia",
+      "Pernicious anemia",
+      "Sickle cell anemia",
+      "Aplastic anemia"
+    ],
+    "correct": "Pernicious anemia"
+  },
+  {
+    "question": "What is the term for difficulty swallowing?",
+    "answers": [
+      "Dysphagia",
+      "Dyspnea",
+      "Dysuria",
+      "Dysarthria"
+    ],
+    "correct": "Dysphagia"
+  },
+  {
+    "question": "Which condition is characterized by autoantibodies against acetylcholine receptors?",
+    "answers": [
+      "Multiple sclerosis",
+      "Guillain-Barr\u00e9 syndrome",
+      "Myasthenia gravis",
+      "Lambert-Eaton syndrome"
+    ],
+    "correct": "Myasthenia gravis"
+  },
+  {
+    "question": "What is the primary pathophysiology of acute respiratory distress syndrome (ARDS)?",
+    "answers": [
+      "Bronchospasm",
+      "Diffuse alveolar damage and increased permeability",
+      "Airway obstruction",
+      "Pleural effusion"
+    ],
+    "correct": "Diffuse alveolar damage and increased permeability"
+  },
+  {
+    "question": "Which hormone regulates calcium levels in the blood?",
+    "answers": [
+      "Insulin",
+      "Cortisol",
+      "Parathyroid hormone",
+      "Growth hormone"
+    ],
+    "correct": "Parathyroid hormone"
+  },
+  {
+    "question": "What is the term for blood in the urine?",
+    "answers": [
+      "Proteinuria",
+      "Hematuria",
+      "Pyuria",
+      "Glycosuria"
+    ],
+    "correct": "Hematuria"
+  },
+  {
+    "question": "Which condition results from autoimmune attack on myelin in peripheral nerves?",
+    "answers": [
+      "Multiple sclerosis",
+      "Guillain-Barr\u00e9 syndrome",
+      "Myasthenia gravis",
+      "Amyotrophic lateral sclerosis"
+    ],
+    "correct": "Guillain-Barr\u00e9 syndrome"
+  },
+  {
+    "question": "What is the primary mechanism of action of beta-blockers?",
+    "answers": [
+      "Blocking alpha receptors",
+      "Blocking beta-adrenergic receptors",
+      "Increasing heart rate",
+      "Vasodilation"
+    ],
+    "correct": "Blocking beta-adrenergic receptors"
+  },
+  {
+    "question": "Which type of immunity is provided by antibodies transferred from mother to fetus?",
+    "answers": [
+      "Active natural immunity",
+      "Active artificial immunity",
+      "Passive natural immunity",
+      "Passive artificial immunity"
+    ],
+    "correct": "Passive natural immunity"
+  },
+  {
+    "question": "What is the term for the cessation of breathing?",
+    "answers": [
+      "Dyspnea",
+      "Tachypnea",
+      "Apnea",
+      "Bradypnea"
+    ],
+    "correct": "Apnea"
+  },
+  {
+    "question": "Which condition is characterized by excessive growth hormone in children?",
+    "answers": [
+      "Acromegaly",
+      "Gigantism",
+      "Dwarfism",
+      "Cretinism"
+    ],
+    "correct": "Gigantism"
+  },
+  {
+    "question": "What is the primary cause of peptic ulcer disease?",
+    "answers": [
+      "Excessive acid production only",
+      "Helicobacter pylori infection and NSAIDs",
+      "Stress alone",
+      "Vitamin deficiency"
+    ],
+    "correct": "Helicobacter pylori infection and NSAIDs"
+  },
+  {
+    "question": "Which condition results from thyroid hormone excess?",
+    "answers": [
+      "Hypothyroidism",
+      "Hyperthyroidism",
+      "Hashimoto's thyroiditis",
+      "Myxedema"
+    ],
+    "correct": "Hyperthyroidism"
+  },
+  {
+    "question": "What is the term for abnormally fast heart rate?",
+    "answers": [
+      "Bradycardia",
+      "Tachycardia",
+      "Asystole",
+      "Fibrillation"
+    ],
+    "correct": "Tachycardia"
+  },
+  {
+    "question": "Which type of shock results from spinal cord injury?",
+    "answers": [
+      "Hypovolemic shock",
+      "Cardiogenic shock",
+      "Neurogenic shock",
+      "Septic shock"
+    ],
+    "correct": "Neurogenic shock"
+  },
+  {
+    "question": "What is the primary mechanism of chronic obstructive pulmonary disease (COPD)?",
+    "answers": [
+      "Airway inflammation and obstruction",
+      "Alveolar hypertrophy",
+      "Pulmonary fibrosis",
+      "Pleural thickening"
+    ],
+    "correct": "Airway inflammation and obstruction"
+  },
+  {
+    "question": "Which condition is characterized by progressive dementia and neurofibrillary tangles?",
+    "answers": [
+      "Parkinson's disease",
+      "Alzheimer's disease",
+      "Huntington's disease",
+      "Creutzfeldt-Jakob disease"
+    ],
+    "correct": "Alzheimer's disease"
+  },
+  {
+    "question": "What is the term for white blood cells in the urine?",
+    "answers": [
+      "Hematuria",
+      "Proteinuria",
+      "Pyuria",
+      "Glycosuria"
+    ],
+    "correct": "Pyuria"
+  },
+  {
+    "question": "Which vitamin deficiency causes scurvy?",
+    "answers": [
+      "Vitamin A",
+      "Vitamin B12",
+      "Vitamin C",
+      "Vitamin D"
+    ],
+    "correct": "Vitamin C"
+  },
+  {
+    "question": "What is the primary pathophysiology of asthma?",
+    "answers": [
+      "Alveolar destruction",
+      "Reversible airway inflammation and bronchospasm",
+      "Pulmonary fibrosis",
+      "Chronic bronchitis"
+    ],
+    "correct": "Reversible airway inflammation and bronchospasm"
+  },
+  {
+    "question": "Which condition results from iron deficiency?",
+    "answers": [
+      "Pernicious anemia",
+      "Microcytic anemia",
+      "Hemolytic anemia",
+      "Aplastic anemia"
+    ],
+    "correct": "Microcytic anemia"
+  },
+  {
+    "question": "What is the term for difficulty breathing?",
+    "answers": [
+      "Apnea",
+      "Tachypnea",
+      "Dyspnea",
+      "Orthopnea"
+    ],
+    "correct": "Dyspnea"
+  },
+  {
+    "question": "Which enzyme is responsible for converting angiotensin I to angiotensin II?",
+    "answers": [
+      "Renin",
+      "Angiotensin-converting enzyme (ACE)",
+      "Aldosterone",
+      "Antidiuretic hormone"
+    ],
+    "correct": "Angiotensin-converting enzyme (ACE)"
+  },
+  {
+    "question": "What is the primary cause of metabolic alkalosis?",
+    "answers": [
+      "Diarrhea",
+      "Prolonged vomiting or excessive antacid use",
+      "Kidney failure",
+      "Hyperventilation"
+    ],
+    "correct": "Prolonged vomiting or excessive antacid use"
+  },
+  {
+    "question": "Which condition is characterized by autoimmune destruction of the adrenal cortex?",
+    "answers": [
+      "Cushing's syndrome",
+      "Addison's disease",
+      "Pheochromocytoma",
+      "Conn's syndrome"
+    ],
+    "correct": "Addison's disease"
+  },
+  {
+    "question": "What is the term for excessive thirst?",
+    "answers": [
+      "Polydipsia",
+      "Polyuria",
+      "Polyphagia",
+      "Polymyalgia"
+    ],
+    "correct": "Polydipsia"
+  },
+  {
+    "question": "Which condition results from vitamin D deficiency in children?",
+    "answers": [
+      "Osteoporosis",
+      "Osteomalacia",
+      "Rickets",
+      "Scurvy"
+    ],
+    "correct": "Rickets"
+  },
+  {
+    "question": "What is the primary mechanism of action of ACE inhibitors?",
+    "answers": [
+      "Blocking angiotensin II formation",
+      "Increasing cardiac output",
+      "Blocking calcium channels",
+      "Increasing renin production"
+    ],
+    "correct": "Blocking angiotensin II formation"
+  },
+  {
+    "question": "Which type of anemia is characterized by abnormally shaped red blood cells?",
+    "answers": [
+      "Iron deficiency anemia",
+      "Pernicious anemia",
+      "Sickle cell anemia",
+      "Aplastic anemia"
+    ],
+    "correct": "Sickle cell anemia"
+  },
+  {
+    "question": "What is the term for excessive urination?",
+    "answers": [
+      "Polydipsia",
+      "Polyuria",
+      "Oliguria",
+      "Anuria"
+    ],
+    "correct": "Polyuria"
+  },
+  {
+    "question": "Which condition is characterized by bilateral renal cysts?",
+    "answers": [
+      "Glomerulonephritis",
+      "Polycystic kidney disease",
+      "Pyelonephritis",
+      "Nephrotic syndrome"
+    ],
+    "correct": "Polycystic kidney disease"
+  },
+  {
+    "question": "What is the primary pathophysiology of cirrhosis?",
+    "answers": [
+      "Acute hepatitis",
+      "Progressive fibrosis and nodule formation",
+      "Bile duct obstruction",
+      "Hepatic steatosis only"
+    ],
+    "correct": "Progressive fibrosis and nodule formation"
+  },
+  {
+    "question": "Which hormone is produced by the posterior pituitary gland to regulate water balance?",
+    "answers": [
+      "Aldosterone",
+      "Antidiuretic hormone (ADH)",
+      "Cortisol",
+      "Growth hormone"
+    ],
+    "correct": "Antidiuretic hormone (ADH)"
+  },
+  {
+    "question": "What is the term for decreased urine output?",
+    "answers": [
+      "Polyuria",
+      "Oliguria",
+      "Anuria",
+      "Dysuria"
+    ],
+    "correct": "Oliguria"
+  },
+  {
+    "question": "Which condition results from autoimmune thyroid stimulation?",
+    "answers": [
+      "Hashimoto's thyroiditis",
+      "Grave's disease",
+      "Thyroid cancer",
+      "Multinodular goiter"
+    ],
+    "correct": "Grave's disease"
+  },
+  {
+    "question": "What is the primary cause of portal hypertension?",
+    "answers": [
+      "Heart failure",
+      "Cirrhosis and hepatic fibrosis",
+      "Pulmonary embolism",
+      "Renal failure"
+    ],
+    "correct": "Cirrhosis and hepatic fibrosis"
+  },
+  {
+    "question": "Which type of diabetes insipidus results from kidney insensitivity to ADH?",
+    "answers": [
+      "Central diabetes insipidus",
+      "Nephrogenic diabetes insipidus",
+      "Gestational diabetes",
+      "Type 1 diabetes"
+    ],
+    "correct": "Nephrogenic diabetes insipidus"
+  },
+  {
+    "question": "What is the term for painful urination?",
+    "answers": [
+      "Polyuria",
+      "Oliguria",
+      "Dysuria",
+      "Hematuria"
+    ],
+    "correct": "Dysuria"
+  },
+  {
+    "question": "Which condition is characterized by progressive kidney damage from diabetes?",
+    "answers": [
+      "Glomerulonephritis",
+      "Diabetic nephropathy",
+      "Polycystic kidney disease",
+      "Acute tubular necrosis"
+    ],
+    "correct": "Diabetic nephropathy"
+  },
+  {
+    "question": "What is the primary mechanism of rheumatoid arthritis?",
+    "answers": [
+      "Degenerative joint disease",
+      "Autoimmune synovial inflammation",
+      "Bacterial infection",
+      "Crystal deposition"
+    ],
+    "correct": "Autoimmune synovial inflammation"
+  },
+  {
+    "question": "Which condition results from excessive aldosterone production?",
+    "answers": [
+      "Addison's disease",
+      "Cushing's syndrome",
+      "Conn's syndrome",
+      "Pheochromocytoma"
+    ],
+    "correct": "Conn's syndrome"
+  },
+  {
+    "question": "What is the term for excessive hunger?",
+    "answers": [
+      "Polydipsia",
+      "Polyuria",
+      "Polyphagia",
+      "Dysphagia"
+    ],
+    "correct": "Polyphagia"
+  },
+  {
+    "question": "Which condition is characterized by uric acid crystal deposition in joints?",
+    "answers": [
+      "Rheumatoid arthritis",
+      "Osteoarthritis",
+      "Gout",
+      "Septic arthritis"
+    ],
+    "correct": "Gout"
+  },
+  {
+    "question": "What is the primary pathophysiology of atherosclerosis?",
+    "answers": [
+      "Arterial dilation",
+      "Plaque formation in arterial walls",
+      "Venous insufficiency",
+      "Capillary proliferation"
+    ],
+    "correct": "Plaque formation in arterial walls"
+  },
+  {
+    "question": "Which hormone is deficient in diabetes insipidus?",
+    "answers": [
+      "Insulin",
+      "Cortisol",
+      "Antidiuretic hormone (ADH)",
+      "Growth hormone"
+    ],
+    "correct": "Antidiuretic hormone (ADH)"
+  },
+  {
+    "question": "What is the term for protein in the urine?",
+    "answers": [
+      "Hematuria",
+      "Proteinuria",
+      "Pyuria",
+      "Glycosuria"
+    ],
+    "correct": "Proteinuria"
+  },
+  {
+    "question": "Which condition results from prolonged immobility and pressure on tissue?",
+    "answers": [
+      "Cellulitis",
+      "Pressure ulcer",
+      "Abscess",
+      "Fistula"
+    ],
+    "correct": "Pressure ulcer"
+  },
+  {
+    "question": "What is the primary mechanism of obstructive shock?",
+    "answers": [
+      "Decreased cardiac output",
+      "Physical obstruction of blood flow",
+      "Vasodilation",
+      "Blood loss"
+    ],
+    "correct": "Physical obstruction of blood flow"
+  },
+  {
+    "question": "Which condition is characterized by antibodies against glomerular basement membrane?",
+    "answers": [
+      "Minimal change disease",
+      "Goodpasture syndrome",
+      "IgA nephropathy",
+      "Membranous nephropathy"
+    ],
+    "correct": "Goodpasture syndrome"
+  },
+  {
+    "question": "What is the term for abnormally rapid breathing?",
+    "answers": [
+      "Bradypnea",
+      "Tachypnea",
+      "Apnea",
+      "Dyspnea"
+    ],
+    "correct": "Tachypnea"
+  },
+  {
+    "question": "Which vitamin deficiency causes night blindness?",
+    "answers": [
+      "Vitamin A",
+      "Vitamin C",
+      "Vitamin D",
+      "Vitamin K"
+    ],
+    "correct": "Vitamin A"
+  },
+  {
+    "question": "What is the primary cause of pericarditis?",
+    "answers": [
+      "Atherosclerosis",
+      "Inflammation of the pericardium",
+      "Valve disease",
+      "Arrhythmia"
+    ],
+    "correct": "Inflammation of the pericardium"
+  },
+  {
+    "question": "Which condition results from calcium pyrophosphate crystal deposition?",
+    "answers": [
+      "Gout",
+      "Pseudogout",
+      "Rheumatoid arthritis",
+      "Osteoarthritis"
+    ],
+    "correct": "Pseudogout"
+  },
+  {
+    "question": "What is the term for difficulty breathing while lying flat?",
+    "answers": [
+      "Dyspnea",
+      "Tachypnea",
+      "Orthopnea",
+      "Apnea"
+    ],
+    "correct": "Orthopnea"
+  },
+  {
+    "question": "Which condition is characterized by excessive catecholamine production?",
+    "answers": [
+      "Addison's disease",
+      "Cushing's syndrome",
+      "Pheochromocytoma",
+      "Conn's syndrome"
+    ],
+    "correct": "Pheochromocytoma"
+  },
+  {
+    "question": "What is the primary mechanism of Type 2 diabetes mellitus?",
+    "answers": [
+      "Autoimmune beta cell destruction",
+      "Insulin resistance and relative insulin deficiency",
+      "Excessive insulin production",
+      "ADH deficiency"
+    ],
+    "correct": "Insulin resistance and relative insulin deficiency"
+  },
+  {
+    "question": "Which type of shock results from severe allergic reaction?",
+    "answers": [
+      "Hypovolemic shock",
+      "Cardiogenic shock",
+      "Anaphylactic shock",
+      "Septic shock"
+    ],
+    "correct": "Anaphylactic shock"
+  },
+  {
+    "question": "What is the term for glucose in the urine?",
+    "answers": [
+      "Hematuria",
+      "Proteinuria",
+      "Glycosuria",
+      "Ketonuria"
+    ],
+    "correct": "Glycosuria"
+  },
+  {
+    "question": "Which condition results from vitamin K deficiency?",
+    "answers": [
+      "Anemia",
+      "Bleeding disorders",
+      "Rickets",
+      "Scurvy"
+    ],
+    "correct": "Bleeding disorders"
+  },
+  {
+    "question": "What is the primary pathophysiology of glomerulonephritis?",
+    "answers": [
+      "Tubular obstruction",
+      "Glomerular inflammation and damage",
+      "Renal artery stenosis",
+      "Polycystic changes"
+    ],
+    "correct": "Glomerular inflammation and damage"
+  },
+  {
+    "question": "Which hormone regulates blood glucose by promoting glucose uptake?",
+    "answers": [
+      "Glucagon",
+      "Insulin",
+      "Cortisol",
+      "Growth hormone"
+    ],
+    "correct": "Insulin"
+  },
+  {
+    "question": "What is the term for absence of urine production?",
+    "answers": [
+      "Polyuria",
+      "Oliguria",
+      "Anuria",
+      "Dysuria"
+    ],
+    "correct": "Anuria"
+  },
+  {
+    "question": "Which condition is characterized by degenerative joint disease?",
+    "answers": [
+      "Rheumatoid arthritis",
+      "Osteoarthritis",
+      "Gout",
+      "Septic arthritis"
+    ],
+    "correct": "Osteoarthritis"
+  },
+  {
+    "question": "What causes the bluish discoloration of skin known as cyanosis?",
+    "answers": [
+      "Increased oxyhemoglobin",
+      "Increased deoxyhemoglobin in blood",
+      "Decreased melanin",
+      "Increased bilirubin"
+    ],
+    "correct": "Increased deoxyhemoglobin in blood"
+  },
+  {
+    "question": "What is the primary source of reactive oxygen species (ROS) in cells?",
+    "answers": [
+      "Ribosomes",
+      "Mitochondria",
+      "Golgi apparatus",
+      "Nucleus"
+    ],
+    "correct": "Mitochondria"
+  },
+  {
+    "question": "What is the mechanism of reperfusion injury following ischemia?",
+    "answers": [
+      "Decreased oxygen delivery",
+      "Oxidative stress from restored blood flow",
+      "Continued hypoxia",
+      "Decreased inflammation"
+    ],
+    "correct": "Oxidative stress from restored blood flow"
+  },
+  {
+    "question": "What type of cell is central to granuloma formation?",
+    "answers": [
+      "Neutrophils",
+      "Epithelioid macrophages",
+      "Eosinophils",
+      "Basophils"
+    ],
+    "correct": "Epithelioid macrophages"
+  },
+  {
+    "question": "Which growth factor is most important in the development of fibrosis?",
+    "answers": [
+      "Epidermal growth factor",
+      "Transforming growth factor-beta (TGF-\u03b2)",
+      "Platelet-derived growth factor",
+      "Vascular endothelial growth factor"
+    ],
+    "correct": "Transforming growth factor-beta (TGF-\u03b2)"
+  },
+  {
+    "question": "What distinguishes a keloid from a hypertrophic scar?",
+    "answers": [
+      "Keloids regress spontaneously",
+      "Keloids extend beyond original wound margins",
+      "Keloids contain less collagen",
+      "Keloids are not elevated"
+    ],
+    "correct": "Keloids extend beyond original wound margins"
+  },
+  {
+    "question": "What is the term for separation of wound edges after surgical closure?",
+    "answers": [
+      "Evisceration",
+      "Dehiscence",
+      "Herniation",
+      "Fistulation"
+    ],
+    "correct": "Dehiscence"
+  },
+  {
+    "question": "What is the primary characteristic of an abscess?",
+    "answers": [
+      "Diffuse inflammation",
+      "Localized collection of pus surrounded by a wall",
+      "Granulomatous inflammation",
+      "Serous fluid accumulation"
+    ],
+    "correct": "Localized collection of pus surrounded by a wall"
+  },
+  {
+    "question": "What type of infection is cellulitis?",
+    "answers": [
+      "Localized abscess",
+      "Diffuse spreading infection of connective tissue",
+      "Granulomatous infection",
+      "Viral skin infection"
+    ],
+    "correct": "Diffuse spreading infection of connective tissue"
+  },
+  {
+    "question": "What is the term for an elevated white blood cell count?",
+    "answers": [
+      "Leukopenia",
+      "Leukocytosis",
+      "Lymphocytosis",
+      "Neutropenia"
+    ],
+    "correct": "Leukocytosis"
+  },
+  {
+    "question": "Which condition is most commonly associated with neutrophilia?",
+    "answers": [
+      "Viral infection",
+      "Bacterial infection",
+      "Parasitic infection",
+      "Allergic reaction"
+    ],
+    "correct": "Bacterial infection"
+  },
+  {
+    "question": "What condition is most commonly associated with eosinophilia?",
+    "answers": [
+      "Bacterial infection",
+      "Viral infection",
+      "Parasitic infection or allergic reaction",
+      "Fungal infection"
+    ],
+    "correct": "Parasitic infection or allergic reaction"
+  },
+  {
+    "question": "Which type of infection typically causes lymphocytosis?",
+    "answers": [
+      "Acute bacterial infection",
+      "Viral infection",
+      "Parasitic infection",
+      "Fungal infection"
+    ],
+    "correct": "Viral infection"
+  },
+  {
+    "question": "What does a 'left shift' indicate in a complete blood count?",
+    "answers": [
+      "Decreased lymphocytes",
+      "Increased immature neutrophils (bands)",
+      "Increased eosinophils",
+      "Decreased platelets"
+    ],
+    "correct": "Increased immature neutrophils (bands)"
+  },
+  {
+    "question": "Where is erythropoietin primarily produced?",
+    "answers": [
+      "Bone marrow",
+      "Liver",
+      "Kidneys",
+      "Spleen"
+    ],
+    "correct": "Kidneys"
+  },
+  {
+    "question": "What is the primary function of ferritin?",
+    "answers": [
+      "Iron transport in blood",
+      "Iron storage in cells",
+      "Oxygen transport",
+      "Hemoglobin synthesis"
+    ],
+    "correct": "Iron storage in cells"
+  },
+  {
+    "question": "What is the function of transferrin?",
+    "answers": [
+      "Store iron in tissues",
+      "Transport iron in the blood",
+      "Absorb iron from gut",
+      "Excrete excess iron"
+    ],
+    "correct": "Transport iron in the blood"
+  },
+  {
+    "question": "What is hemochromatosis?",
+    "answers": [
+      "Iron deficiency",
+      "Iron overload disorder",
+      "Copper deficiency",
+      "Zinc toxicity"
+    ],
+    "correct": "Iron overload disorder"
+  },
+  {
+    "question": "Which metal accumulates in Wilson's disease?",
+    "answers": [
+      "Iron",
+      "Zinc",
+      "Copper",
+      "Lead"
+    ],
+    "correct": "Copper"
+  },
+  {
+    "question": "What organ damage results from alpha-1 antitrypsin deficiency?",
+    "answers": [
+      "Heart and kidney",
+      "Liver and lungs",
+      "Brain and spleen",
+      "Pancreas and stomach"
+    ],
+    "correct": "Liver and lungs"
+  },
+  {
+    "question": "Which protein is defective in cystic fibrosis?",
+    "answers": [
+      "Hemoglobin",
+      "CFTR chloride channel",
+      "Dystrophin",
+      "Spectrin"
+    ],
+    "correct": "CFTR chloride channel"
+  },
+  {
+    "question": "Which clotting factor is deficient in hemophilia A?",
+    "answers": [
+      "Factor VII",
+      "Factor VIII",
+      "Factor IX",
+      "Factor X"
+    ],
+    "correct": "Factor VIII"
+  },
+  {
+    "question": "What is the most common inherited bleeding disorder?",
+    "answers": [
+      "Hemophilia A",
+      "Hemophilia B",
+      "Von Willebrand disease",
+      "Factor V Leiden"
+    ],
+    "correct": "Von Willebrand disease"
+  },
+  {
+    "question": "What type of disorder is Factor V Leiden?",
+    "answers": [
+      "Bleeding disorder",
+      "Thrombophilia (increased clotting)",
+      "Platelet disorder",
+      "Red blood cell disorder"
+    ],
+    "correct": "Thrombophilia (increased clotting)"
+  },
+  {
+    "question": "What is the consequence of protein C deficiency?",
+    "answers": [
+      "Increased bleeding",
+      "Increased thrombosis risk",
+      "Anemia",
+      "Leukemia"
+    ],
+    "correct": "Increased thrombosis risk"
+  },
+  {
+    "question": "What is a major complication of antiphospholipid syndrome?",
+    "answers": [
+      "Bleeding",
+      "Recurrent thrombosis and pregnancy loss",
+      "Anemia",
+      "Leukocytosis"
+    ],
+    "correct": "Recurrent thrombosis and pregnancy loss"
+  },
+  {
+    "question": "What causes lymphedema?",
+    "answers": [
+      "Venous insufficiency",
+      "Obstruction or damage to lymphatic vessels",
+      "Arterial occlusion",
+      "Cardiac failure"
+    ],
+    "correct": "Obstruction or damage to lymphatic vessels"
+  },
+  {
+    "question": "What is the primary pathophysiology of varicose veins?",
+    "answers": [
+      "Arterial insufficiency",
+      "Venous valve incompetence",
+      "Lymphatic obstruction",
+      "Capillary fragility"
+    ],
+    "correct": "Venous valve incompetence"
+  },
+  {
+    "question": "What is an aneurysm?",
+    "answers": [
+      "Narrowing of a blood vessel",
+      "Localized dilation of a blood vessel wall",
+      "Complete occlusion of a vessel",
+      "Inflammation of vessel wall"
+    ],
+    "correct": "Localized dilation of a blood vessel wall"
+  },
+  {
+    "question": "What occurs in an aortic dissection?",
+    "answers": [
+      "Rupture of the aorta",
+      "Tear in the intimal layer with blood tracking through media",
+      "Aneurysm formation",
+      "Complete aortic occlusion"
+    ],
+    "correct": "Tear in the intimal layer with blood tracking through media"
+  },
+  {
+    "question": "What is vasculitis?",
+    "answers": [
+      "Dilation of blood vessels",
+      "Inflammation of blood vessel walls",
+      "Narrowing of arteries",
+      "Blood clot formation"
+    ],
+    "correct": "Inflammation of blood vessel walls"
+  },
+  {
+    "question": "What triggers Raynaud's phenomenon?",
+    "answers": [
+      "Heat exposure",
+      "Cold exposure or emotional stress",
+      "Exercise",
+      "Eating"
+    ],
+    "correct": "Cold exposure or emotional stress"
+  },
+  {
+    "question": "What causes intermittent claudication?",
+    "answers": [
+      "Venous insufficiency",
+      "Peripheral arterial disease causing muscle ischemia",
+      "Nerve compression",
+      "Muscle strain"
+    ],
+    "correct": "Peripheral arterial disease causing muscle ischemia"
+  },
+  {
+    "question": "What is the underlying cause of stable angina pectoris?",
+    "answers": [
+      "Complete coronary occlusion",
+      "Myocardial oxygen demand exceeding supply",
+      "Pericardial inflammation",
+      "Aortic dissection"
+    ],
+    "correct": "Myocardial oxygen demand exceeding supply"
+  },
+  {
+    "question": "What is the primary consequence of left-sided heart failure?",
+    "answers": [
+      "Peripheral edema",
+      "Pulmonary congestion and edema",
+      "Hepatomegaly",
+      "Jugular venous distension"
+    ],
+    "correct": "Pulmonary congestion and edema"
+  },
+  {
+    "question": "What characterizes dilated cardiomyopathy?",
+    "answers": [
+      "Thickened ventricular walls",
+      "Enlarged, weakened ventricular chambers",
+      "Stiff, non-compliant ventricles",
+      "Outflow tract obstruction"
+    ],
+    "correct": "Enlarged, weakened ventricular chambers"
+  },
+  {
+    "question": "What characterizes hypertrophic cardiomyopathy?",
+    "answers": [
+      "Dilated ventricles",
+      "Asymmetric septal hypertrophy",
+      "Thin ventricular walls",
+      "Pericardial effusion"
+    ],
+    "correct": "Asymmetric septal hypertrophy"
+  },
+  {
+    "question": "What is the hallmark of restrictive cardiomyopathy?",
+    "answers": [
+      "Ventricular dilation",
+      "Impaired ventricular filling due to stiffness",
+      "Ventricular hypertrophy",
+      "Valve regurgitation"
+    ],
+    "correct": "Impaired ventricular filling due to stiffness"
+  },
+  {
+    "question": "What is the classic triad of symptoms in aortic stenosis?",
+    "answers": [
+      "Cough, fever, weight loss",
+      "Angina, syncope, heart failure",
+      "Palpitations, anxiety, tremor",
+      "Edema, ascites, jaundice"
+    ],
+    "correct": "Angina, syncope, heart failure"
+  },
+  {
+    "question": "What heart sound is associated with mitral regurgitation?",
+    "answers": [
+      "Systolic ejection murmur",
+      "Holosystolic murmur at apex",
+      "Diastolic rumble",
+      "Opening snap"
+    ],
+    "correct": "Holosystolic murmur at apex"
+  },
+  {
+    "question": "What is the hallmark lesion of infective endocarditis?",
+    "answers": [
+      "Atherosclerotic plaque",
+      "Vegetation on valve leaflets",
+      "Pericardial effusion",
+      "Myocardial abscess"
+    ],
+    "correct": "Vegetation on valve leaflets"
+  },
+  {
+    "question": "What is the most common cause of myocarditis?",
+    "answers": [
+      "Bacterial infection",
+      "Viral infection",
+      "Fungal infection",
+      "Parasitic infection"
+    ],
+    "correct": "Viral infection"
+  },
+  {
+    "question": "What is Beck's triad in cardiac tamponade?",
+    "answers": [
+      "Fever, rash, arthritis",
+      "Hypotension, distended neck veins, muffled heart sounds",
+      "Chest pain, dyspnea, cough",
+      "Edema, ascites, jaundice"
+    ],
+    "correct": "Hypotension, distended neck veins, muffled heart sounds"
+  },
+  {
+    "question": "What is pulsus paradoxus?",
+    "answers": [
+      "Irregular pulse",
+      "Exaggerated drop in blood pressure during inspiration",
+      "Bounding pulse",
+      "Weak thready pulse"
+    ],
+    "correct": "Exaggerated drop in blood pressure during inspiration"
+  },
+  {
+    "question": "What is the major complication of atrial fibrillation?",
+    "answers": [
+      "Myocardial infarction",
+      "Stroke from atrial thrombus formation",
+      "Aortic dissection",
+      "Pulmonary hypertension"
+    ],
+    "correct": "Stroke from atrial thrombus formation"
+  },
+  {
+    "question": "What is the most common cause of community-acquired pneumonia?",
+    "answers": [
+      "Staphylococcus aureus",
+      "Streptococcus pneumoniae",
+      "Pseudomonas aeruginosa",
+      "Klebsiella pneumoniae"
+    ],
+    "correct": "Streptococcus pneumoniae"
+  },
+  {
+    "question": "What characterizes bronchiectasis?",
+    "answers": [
+      "Narrowing of bronchi",
+      "Permanent dilation of bronchi",
+      "Inflammation of bronchioles",
+      "Collapse of alveoli"
+    ],
+    "correct": "Permanent dilation of bronchi"
+  },
+  {
+    "question": "What is the pathological hallmark of idiopathic pulmonary fibrosis?",
+    "answers": [
+      "Granulomas",
+      "Usual interstitial pneumonia pattern",
+      "Eosinophilic infiltration",
+      "Caseous necrosis"
+    ],
+    "correct": "Usual interstitial pneumonia pattern"
+  },
+  {
+    "question": "What is the most common cause of cardiogenic pulmonary edema?",
+    "answers": [
+      "Right heart failure",
+      "Left heart failure",
+      "Pulmonary embolism",
+      "Pneumonia"
+    ],
+    "correct": "Left heart failure"
+  },
+  {
+    "question": "What distinguishes an exudate from a transudate in pleural effusion?",
+    "answers": [
+      "Lower protein content",
+      "Higher protein and LDH content",
+      "Clear appearance",
+      "Lower specific gravity"
+    ],
+    "correct": "Higher protein and LDH content"
+  },
+  {
+    "question": "What is a tension pneumothorax?",
+    "answers": [
+      "Small stable pneumothorax",
+      "Progressive air accumulation causing mediastinal shift",
+      "Bilateral pneumothorax",
+      "Pneumothorax with effusion"
+    ],
+    "correct": "Progressive air accumulation causing mediastinal shift"
+  },
+  {
+    "question": "What is atelectasis?",
+    "answers": [
+      "Lung hyperinflation",
+      "Collapse or incomplete expansion of lung tissue",
+      "Lung consolidation",
+      "Pleural thickening"
+    ],
+    "correct": "Collapse or incomplete expansion of lung tissue"
+  },
+  {
+    "question": "What is hypercapnia?",
+    "answers": [
+      "Low blood oxygen",
+      "Elevated carbon dioxide in blood",
+      "Low blood pH",
+      "Elevated blood bicarbonate"
+    ],
+    "correct": "Elevated carbon dioxide in blood"
+  },
+  {
+    "question": "What does ventilation-perfusion (V/Q) mismatch cause?",
+    "answers": [
+      "Hypercapnia only",
+      "Hypoxemia",
+      "Polycythemia",
+      "Alkalosis"
+    ],
+    "correct": "Hypoxemia"
+  },
+  {
+    "question": "What is the hallmark finding in acute kidney injury?",
+    "answers": [
+      "Gradual creatinine rise over months",
+      "Rapid rise in serum creatinine and/or decreased urine output",
+      "Proteinuria only",
+      "Hematuria only"
+    ],
+    "correct": "Rapid rise in serum creatinine and/or decreased urine output"
+  },
+  {
+    "question": "What causes prerenal acute kidney injury?",
+    "answers": [
+      "Glomerular disease",
+      "Decreased renal perfusion",
+      "Urinary obstruction",
+      "Tubular necrosis"
+    ],
+    "correct": "Decreased renal perfusion"
+  },
+  {
+    "question": "What is the most common cause of intrinsic acute kidney injury?",
+    "answers": [
+      "Glomerulonephritis",
+      "Acute tubular necrosis",
+      "Interstitial nephritis",
+      "Vasculitis"
+    ],
+    "correct": "Acute tubular necrosis"
+  },
+  {
+    "question": "What is the defining feature of nephrotic syndrome?",
+    "answers": [
+      "Hematuria",
+      "Massive proteinuria (>3.5 g/day)",
+      "Elevated creatinine",
+      "Pyuria"
+    ],
+    "correct": "Massive proteinuria (>3.5 g/day)"
+  },
+  {
+    "question": "What characterizes nephritic syndrome?",
+    "answers": [
+      "Massive proteinuria",
+      "Hematuria, hypertension, and azotemia",
+      "Lipiduria",
+      "Edema only"
+    ],
+    "correct": "Hematuria, hypertension, and azotemia"
+  },
+  {
+    "question": "What is the most common causative organism of urinary tract infections?",
+    "answers": [
+      "Staphylococcus aureus",
+      "Escherichia coli",
+      "Streptococcus pneumoniae",
+      "Pseudomonas aeruginosa"
+    ],
+    "correct": "Escherichia coli"
+  },
+  {
+    "question": "What distinguishes pyelonephritis from cystitis?",
+    "answers": [
+      "Dysuria only",
+      "Involvement of kidney parenchyma with fever and flank pain",
+      "Sterile urine",
+      "Absence of bacteria"
+    ],
+    "correct": "Involvement of kidney parenchyma with fever and flank pain"
+  },
+  {
+    "question": "What causes hydronephrosis?",
+    "answers": [
+      "Decreased urine production",
+      "Obstruction of urinary flow causing renal pelvis dilation",
+      "Increased GFR",
+      "Glomerular disease"
+    ],
+    "correct": "Obstruction of urinary flow causing renal pelvis dilation"
+  },
+  {
+    "question": "What is the primary defect in distal (Type 1) renal tubular acidosis?",
+    "answers": [
+      "Bicarbonate wasting",
+      "Inability to secrete hydrogen ions",
+      "Aldosterone deficiency",
+      "Carbonic anhydrase deficiency"
+    ],
+    "correct": "Inability to secrete hydrogen ions"
+  },
+  {
+    "question": "Which hepatitis virus is most commonly transmitted through the fecal-oral route?",
+    "answers": [
+      "Hepatitis B",
+      "Hepatitis C",
+      "Hepatitis A",
+      "Hepatitis D"
+    ],
+    "correct": "Hepatitis A"
+  },
+  {
+    "question": "What is the most common cause of fatty liver disease in developed countries?",
+    "answers": [
+      "Alcohol",
+      "Non-alcoholic fatty liver disease (metabolic syndrome)",
+      "Viral hepatitis",
+      "Drug toxicity"
+    ],
+    "correct": "Non-alcoholic fatty liver disease (metabolic syndrome)"
+  },
+  {
+    "question": "What characterizes cholestasis?",
+    "answers": [
+      "Decreased bile production",
+      "Impaired bile flow",
+      "Excessive bile production",
+      "Bile duct rupture"
+    ],
+    "correct": "Impaired bile flow"
+  },
+  {
+    "question": "What mechanism primarily causes ascites in liver cirrhosis?",
+    "answers": [
+      "Decreased portal pressure",
+      "Portal hypertension and hypoalbuminemia",
+      "Increased lymph drainage",
+      "Decreased capillary permeability"
+    ],
+    "correct": "Portal hypertension and hypoalbuminemia"
+  },
+  {
+    "question": "What is hepatorenal syndrome?",
+    "answers": [
+      "Liver failure from kidney disease",
+      "Functional renal failure in advanced liver disease",
+      "Combined hepatitis and glomerulonephritis",
+      "Kidney transplant rejection"
+    ],
+    "correct": "Functional renal failure in advanced liver disease"
+  },
+  {
+    "question": "What are the two most common causes of acute pancreatitis?",
+    "answers": [
+      "Diabetes and obesity",
+      "Gallstones and alcohol",
+      "Infection and trauma",
+      "Medications and cancer"
+    ],
+    "correct": "Gallstones and alcohol"
+  },
+  {
+    "question": "What is steatorrhea?",
+    "answers": [
+      "Blood in stool",
+      "Fatty, foul-smelling stools",
+      "Mucus in stool",
+      "Black tarry stools"
+    ],
+    "correct": "Fatty, foul-smelling stools"
+  },
+  {
+    "question": "What triggers the immune response in celiac disease?",
+    "answers": [
+      "Lactose",
+      "Gluten",
+      "Fructose",
+      "Casein"
+    ],
+    "correct": "Gluten"
+  },
+  {
+    "question": "What distinguishes Crohn's disease from ulcerative colitis?",
+    "answers": [
+      "Limited to colon",
+      "Transmural inflammation and skip lesions",
+      "Continuous mucosal involvement",
+      "Always involves rectum"
+    ],
+    "correct": "Transmural inflammation and skip lesions"
+  },
+  {
+    "question": "What is paralytic ileus?",
+    "answers": [
+      "Mechanical bowel obstruction",
+      "Functional intestinal obstruction without mechanical cause",
+      "Bowel perforation",
+      "Intestinal ischemia"
+    ],
+    "correct": "Functional intestinal obstruction without mechanical cause"
+  },
+  {
+    "question": "What is the most common cause of small bowel obstruction?",
+    "answers": [
+      "Tumors",
+      "Adhesions from prior surgery",
+      "Hernias",
+      "Inflammatory bowel disease"
+    ],
+    "correct": "Adhesions from prior surgery"
+  },
+  {
+    "question": "What is diverticulitis?",
+    "answers": [
+      "Presence of diverticula",
+      "Inflammation of diverticula",
+      "Bleeding from diverticula",
+      "Obstruction by diverticula"
+    ],
+    "correct": "Inflammation of diverticula"
+  },
+  {
+    "question": "What is the most serious complication of a perforated viscus?",
+    "answers": [
+      "Constipation",
+      "Peritonitis and sepsis",
+      "Diarrhea",
+      "Bloating"
+    ],
+    "correct": "Peritonitis and sepsis"
+  },
+  {
+    "question": "What CSF finding suggests bacterial meningitis?",
+    "answers": [
+      "Normal glucose",
+      "Elevated glucose and lymphocytes",
+      "Decreased glucose and elevated neutrophils",
+      "Clear appearance"
+    ],
+    "correct": "Decreased glucose and elevated neutrophils"
+  },
+  {
+    "question": "What distinguishes encephalitis from meningitis?",
+    "answers": [
+      "Fever presence",
+      "Brain parenchymal involvement with altered mental status",
+      "Headache severity",
+      "CSF pleocytosis"
+    ],
+    "correct": "Brain parenchymal involvement with altered mental status"
+  },
+  {
+    "question": "What is the time window for thrombolytic therapy in acute ischemic stroke?",
+    "answers": [
+      "Within 24 hours",
+      "Within 4.5 hours of symptom onset",
+      "Within 1 week",
+      "Any time"
+    ],
+    "correct": "Within 4.5 hours of symptom onset"
+  },
+  {
+    "question": "What defines status epilepticus?",
+    "answers": [
+      "Single brief seizure",
+      "Continuous seizure activity lasting 5+ minutes or recurrent seizures without recovery",
+      "Absence seizure",
+      "Febrile seizure"
+    ],
+    "correct": "Continuous seizure activity lasting 5+ minutes or recurrent seizures without recovery"
+  },
+  {
+    "question": "What causes communicating hydrocephalus?",
+    "answers": [
+      "Obstruction within ventricles",
+      "Impaired CSF absorption at arachnoid granulations",
+      "Decreased CSF production",
+      "Spinal cord injury"
+    ],
+    "correct": "Impaired CSF absorption at arachnoid granulations"
+  },
+  {
+    "question": "What is the most common cause of peripheral neuropathy?",
+    "answers": [
+      "Trauma",
+      "Diabetes mellitus",
+      "Vitamin B12 deficiency",
+      "Alcohol"
+    ],
+    "correct": "Diabetes mellitus"
+  },
+  {
+    "question": "What is the most common cause of hypothyroidism worldwide?",
+    "answers": [
+      "Hashimoto's thyroiditis",
+      "Iodine deficiency",
+      "Thyroid surgery",
+      "Radiation"
+    ],
+    "correct": "Iodine deficiency"
+  },
+  {
+    "question": "What is thyroid storm?",
+    "answers": [
+      "Mild hyperthyroidism",
+      "Life-threatening thyrotoxicosis",
+      "Thyroid cancer",
+      "Thyroiditis"
+    ],
+    "correct": "Life-threatening thyrotoxicosis"
+  },
+  {
+    "question": "What is myxedema?",
+    "answers": [
+      "Hyperthyroid state",
+      "Severe hypothyroidism with characteristic skin changes",
+      "Thyroid nodule",
+      "Goiter"
+    ],
+    "correct": "Severe hypothyroidism with characteristic skin changes"
+  },
+  {
+    "question": "What is the mnemonic for symptoms of hypercalcemia from hyperparathyroidism?",
+    "answers": [
+      "Bones, stones, groans, and psychiatric moans",
+      "Fever, rash, joint pain",
+      "Cough, cold, congestion",
+      "Red, hot, swollen joints"
+    ],
+    "correct": "Bones, stones, groans, and psychiatric moans"
+  },
+  {
+    "question": "What is Chvostek's sign indicative of?",
+    "answers": [
+      "Hyperkalemia",
+      "Hypocalcemia",
+      "Hyponatremia",
+      "Hypermagnesemia"
+    ],
+    "correct": "Hypocalcemia"
+  },
+  {
+    "question": "What electrolyte abnormality occurs in SIADH?",
+    "answers": [
+      "Hypernatremia",
+      "Hyponatremia with euvolemia",
+      "Hyperkalemia",
+      "Hypercalcemia"
+    ],
+    "correct": "Hyponatremia with euvolemia"
+  },
+  {
+    "question": "What is the term for deficiency of all pituitary hormones?",
+    "answers": [
+      "Acromegaly",
+      "Panhypopituitarism",
+      "Hyperpituitarism",
+      "Diabetes insipidus"
+    ],
+    "correct": "Panhypopituitarism"
+  },
+  {
+    "question": "What is Kussmaul breathing in diabetic ketoacidosis?",
+    "answers": [
+      "Shallow rapid breathing",
+      "Deep rapid breathing to compensate for acidosis",
+      "Slow irregular breathing",
+      "Periodic breathing"
+    ],
+    "correct": "Deep rapid breathing to compensate for acidosis"
+  },
+  {
+    "question": "What distinguishes hyperosmolar hyperglycemic state (HHS) from DKA?",
+    "answers": [
+      "Lower glucose levels",
+      "Absence of significant ketosis",
+      "More acidosis",
+      "Younger patients"
+    ],
+    "correct": "Absence of significant ketosis"
+  },
+  {
+    "question": "What are the components of metabolic syndrome?",
+    "answers": [
+      "Anemia, fatigue, weakness",
+      "Central obesity, hypertension, dyslipidemia, insulin resistance",
+      "Fever, rash, joint pain",
+      "Cough, dyspnea, chest pain"
+    ],
+    "correct": "Central obesity, hypertension, dyslipidemia, insulin resistance"
+  },
+  {
+    "question": "What is cachexia?",
+    "answers": [
+      "Obesity",
+      "Severe wasting syndrome associated with chronic illness",
+      "Muscle hypertrophy",
+      "Fluid retention"
+    ],
+    "correct": "Severe wasting syndrome associated with chronic illness"
+  },
+  {
+    "question": "What causes kwashiorkor?",
+    "answers": [
+      "Total caloric deficiency",
+      "Protein deficiency with adequate calories",
+      "Vitamin C deficiency",
+      "Iron deficiency"
+    ],
+    "correct": "Protein deficiency with adequate calories"
+  },
+  {
+    "question": "What distinguishes marasmus from kwashiorkor?",
+    "answers": [
+      "Edema is present",
+      "Total caloric and protein deficiency without edema",
+      "Only protein deficiency",
+      "Only vitamin deficiency"
+    ],
+    "correct": "Total caloric and protein deficiency without edema"
+  },
+  {
+    "question": "What causes pellagra?",
+    "answers": [
+      "Vitamin C deficiency",
+      "Niacin (B3) deficiency",
+      "Vitamin D deficiency",
+      "Vitamin A deficiency"
+    ],
+    "correct": "Niacin (B3) deficiency"
+  },
+  {
+    "question": "What vitamin deficiency causes beriberi?",
+    "answers": [
+      "Vitamin B12",
+      "Thiamine (B1)",
+      "Folate",
+      "Riboflavin"
+    ],
+    "correct": "Thiamine (B1)"
+  },
+  {
+    "question": "What is the classic triad of Wernicke encephalopathy?",
+    "answers": [
+      "Fever, rash, arthritis",
+      "Confusion, ataxia, ophthalmoplegia",
+      "Headache, vomiting, papilledema",
+      "Tremor, rigidity, bradykinesia"
+    ],
+    "correct": "Confusion, ataxia, ophthalmoplegia"
+  },
+  {
+    "question": "What is the most common causative organism of osteomyelitis?",
+    "answers": [
+      "Escherichia coli",
+      "Staphylococcus aureus",
+      "Streptococcus pyogenes",
+      "Pseudomonas aeruginosa"
+    ],
+    "correct": "Staphylococcus aureus"
+  },
+  {
+    "question": "What is the correct sequence of fracture healing?",
+    "answers": [
+      "Remodeling, callus, hematoma",
+      "Hematoma, soft callus, hard callus, remodeling",
+      "Callus, hematoma, remodeling",
+      "Remodeling, hematoma, callus"
+    ],
+    "correct": "Hematoma, soft callus, hard callus, remodeling"
+  },
+  {
+    "question": "What is avascular necrosis?",
+    "answers": [
+      "Infection of bone",
+      "Bone death due to interrupted blood supply",
+      "Bone cancer",
+      "Bone overgrowth"
+    ],
+    "correct": "Bone death due to interrupted blood supply"
+  },
+  {
+    "question": "What serious complication can result from rhabdomyolysis?",
+    "answers": [
+      "Liver failure",
+      "Acute kidney injury from myoglobin",
+      "Heart failure",
+      "Respiratory failure"
+    ],
+    "correct": "Acute kidney injury from myoglobin"
+  },
+  {
+    "question": "What is the hallmark symptom of compartment syndrome?",
+    "answers": [
+      "Numbness only",
+      "Pain out of proportion to injury, worse with passive stretch",
+      "Swelling only",
+      "Bruising"
+    ],
+    "correct": "Pain out of proportion to injury, worse with passive stretch"
+  },
+  {
+    "question": "What is the characteristic skin finding in dermatomyositis?",
+    "answers": [
+      "Malar rash",
+      "Heliotrope rash around eyes",
+      "Erythema nodosum",
+      "Psoriatic plaques"
+    ],
+    "correct": "Heliotrope rash around eyes"
+  },
+  {
+    "question": "What is the characteristic facial rash of systemic lupus erythematosus?",
+    "answers": [
+      "Heliotrope rash",
+      "Butterfly (malar) rash",
+      "Erythema marginatum",
+      "Target lesions"
+    ],
+    "correct": "Butterfly (malar) rash"
+  },
+  {
+    "question": "What is the hallmark feature of systemic sclerosis (scleroderma)?",
+    "answers": [
+      "Joint inflammation",
+      "Skin thickening from collagen deposition",
+      "Muscle weakness",
+      "Photosensitivity"
+    ],
+    "correct": "Skin thickening from collagen deposition"
+  },
+  {
+    "question": "What are the primary symptoms of Sj\u00f6gren's syndrome?",
+    "answers": [
+      "Joint pain and fever",
+      "Dry eyes (keratoconjunctivitis sicca) and dry mouth",
+      "Skin rash and arthritis",
+      "Muscle weakness and fatigue"
+    ],
+    "correct": "Dry eyes (keratoconjunctivitis sicca) and dry mouth"
+  },
+  {
+    "question": "What is the characteristic skin lesion in psoriasis?",
+    "answers": [
+      "Vesicles",
+      "Silver-scaled plaques on erythematous base",
+      "Wheals",
+      "Petechiae"
+    ],
+    "correct": "Silver-scaled plaques on erythematous base"
+  },
+  {
+    "question": "What causes urticaria (hives)?",
+    "answers": [
+      "Bacterial infection",
+      "Mast cell degranulation and histamine release",
+      "Autoimmune destruction",
+      "Viral infection"
+    ],
+    "correct": "Mast cell degranulation and histamine release"
+  },
+  {
+    "question": "What type of hypersensitivity reaction is allergic contact dermatitis?",
+    "answers": [
+      "Type I (immediate)",
+      "Type II (cytotoxic)",
+      "Type III (immune complex)",
+      "Type IV (delayed/cell-mediated)"
+    ],
+    "correct": "Type IV (delayed/cell-mediated)"
+  },
+  {
+    "question": "What criteria define systemic inflammatory response syndrome (SIRS)?",
+    "answers": [
+      "Positive blood cultures",
+      "Two or more of: fever/hypothermia, tachycardia, tachypnea, abnormal WBC",
+      "Hypotension only",
+      "Organ failure"
+    ],
+    "correct": "Two or more of: fever/hypothermia, tachycardia, tachypnea, abnormal WBC"
+  },
+  {
+    "question": "What defines sepsis according to current criteria?",
+    "answers": [
+      "Bacteremia",
+      "Life-threatening organ dysfunction due to dysregulated host response to infection",
+      "Positive blood cultures",
+      "Fever and tachycardia"
+    ],
+    "correct": "Life-threatening organ dysfunction due to dysregulated host response to infection"
+  },
+  {
+    "question": "What electrolyte abnormalities occur in tumor lysis syndrome?",
+    "answers": [
+      "Hypocalcemia, hypokalemia, hypophosphatemia",
+      "Hyperuricemia, hyperkalemia, hyperphosphatemia, hypocalcemia",
+      "Hypernatremia and hypercalcemia",
+      "Hyponatremia only"
+    ],
+    "correct": "Hyperuricemia, hyperkalemia, hyperphosphatemia, hypocalcemia"
+  },
+  {
+    "question": "What is a paraneoplastic syndrome?",
+    "answers": [
+      "Direct tumor invasion effects",
+      "Remote effects of cancer not due to direct invasion or metastasis",
+      "Chemotherapy side effects",
+      "Radiation effects"
+    ],
+    "correct": "Remote effects of cancer not due to direct invasion or metastasis"
+  },
+  {
+    "question": "What is the function of tumor suppressor genes?",
+    "answers": [
+      "Promote cell division",
+      "Inhibit cell growth and division",
+      "Repair DNA damage only",
+      "Stimulate angiogenesis"
+    ],
+    "correct": "Inhibit cell growth and division"
+  },
+  {
+    "question": "What is the function of the p53 gene?",
+    "answers": [
+      "Stimulate cell division",
+      "Guardian of the genome - induces apoptosis in damaged cells",
+      "Promote angiogenesis",
+      "Inhibit DNA repair"
+    ],
+    "correct": "Guardian of the genome - induces apoptosis in damaged cells"
+  },
+  {
+    "question": "What are oncogenes?",
+    "answers": [
+      "Genes that suppress tumors",
+      "Mutated genes that promote cancer development",
+      "Normal housekeeping genes",
+      "DNA repair genes"
+    ],
+    "correct": "Mutated genes that promote cancer development"
+  },
+  {
+    "question": "What is the role of telomeres?",
+    "answers": [
+      "Initiate DNA replication",
+      "Protect chromosome ends from degradation",
+      "Encode proteins",
+      "Regulate gene expression"
+    ],
+    "correct": "Protect chromosome ends from degradation"
+  },
+  {
+    "question": "What is healing by primary intention?",
+    "answers": [
+      "Healing of large open wounds",
+      "Healing with minimal scarring when wound edges are approximated",
+      "Healing with granulation tissue",
+      "Delayed wound closure"
+    ],
+    "correct": "Healing with minimal scarring when wound edges are approximated"
+  },
+  {
+    "question": "What is healing by secondary intention?",
+    "answers": [
+      "Surgical wound closure",
+      "Healing of wounds with separated edges through granulation tissue",
+      "Primary closure of wounds",
+      "Healing without scar formation"
+    ],
+    "correct": "Healing of wounds with separated edges through granulation tissue"
+  },
+  {
+    "question": "What composes granulation tissue?",
+    "answers": [
+      "Mature collagen",
+      "New blood vessels and fibroblasts in loose connective tissue",
+      "Epithelial cells only",
+      "Necrotic debris"
+    ],
+    "correct": "New blood vessels and fibroblasts in loose connective tissue"
+  },
+  {
+    "question": "What is dystrophic calcification?",
+    "answers": [
+      "Calcium deposition in normal tissue",
+      "Calcium deposition in damaged or necrotic tissue with normal calcium levels",
+      "Calcium deposition due to hypercalcemia",
+      "Calcium deficiency"
+    ],
+    "correct": "Calcium deposition in damaged or necrotic tissue with normal calcium levels"
+  },
+  {
+    "question": "What is metastatic calcification?",
+    "answers": [
+      "Calcium deposition in dead tissue",
+      "Calcium deposition in normal tissue due to hypercalcemia",
+      "Spread of calcium crystals",
+      "Calcium deficiency"
+    ],
+    "correct": "Calcium deposition in normal tissue due to hypercalcemia"
+  },
+  {
+    "question": "What is amyloidosis?",
+    "answers": [
+      "Fat accumulation in tissues",
+      "Deposition of abnormal fibrillar protein in tissues",
+      "Calcium deposition",
+      "Iron overload"
+    ],
+    "correct": "Deposition of abnormal fibrillar protein in tissues"
+  },
+  {
+    "question": "What is lipofuscin?",
+    "answers": [
+      "Abnormal protein deposit",
+      "Wear-and-tear pigment from lipid peroxidation",
+      "Iron storage form",
+      "Calcium deposit"
+    ],
+    "correct": "Wear-and-tear pigment from lipid peroxidation"
+  },
+  {
+    "question": "What is steatosis?",
+    "answers": [
+      "Protein accumulation",
+      "Abnormal accumulation of fat within cells",
+      "Iron deposition",
+      "Calcium deposition"
+    ],
+    "correct": "Abnormal accumulation of fat within cells"
+  },
+  {
+    "question": "What is autophagy?",
+    "answers": [
+      "Programmed cell death",
+      "Cellular self-digestion of damaged organelles",
+      "Cell division",
+      "Inflammation"
+    ],
+    "correct": "Cellular self-digestion of damaged organelles"
+  },
+  {
+    "question": "What is pyroptosis?",
+    "answers": [
+      "Apoptosis",
+      "Inflammatory programmed cell death activated by inflammasomes",
+      "Necrosis",
+      "Autophagy"
+    ],
+    "correct": "Inflammatory programmed cell death activated by inflammasomes"
+  },
+  {
+    "question": "What is necroptosis?",
+    "answers": [
+      "Classical apoptosis",
+      "Programmed necrosis triggered when apoptosis is inhibited",
+      "Autophagy",
+      "Pyroptosis"
+    ],
+    "correct": "Programmed necrosis triggered when apoptosis is inhibited"
+  },
+  {
+    "question": "What is the function of heat shock proteins?",
+    "answers": [
+      "Cause cell death",
+      "Act as molecular chaperones to protect proteins during stress",
+      "Promote inflammation",
+      "Degrade damaged proteins"
+    ],
+    "correct": "Act as molecular chaperones to protect proteins during stress"
+  },
+  {
+    "question": "What is the primary vascular effect of nitric oxide?",
+    "answers": [
+      "Vasoconstriction",
+      "Vasodilation",
+      "Platelet aggregation",
+      "Coagulation"
+    ],
+    "correct": "Vasodilation"
+  },
+  {
+    "question": "What are the effects of bradykinin in inflammation?",
+    "answers": [
+      "Vasoconstriction and pain relief",
+      "Vasodilation, increased permeability, and pain",
+      "Decreased inflammation",
+      "Platelet aggregation"
+    ],
+    "correct": "Vasodilation, increased permeability, and pain"
+  },
+  {
+    "question": "What enzyme produces prostaglandins from arachidonic acid?",
+    "answers": [
+      "Lipoxygenase",
+      "Cyclooxygenase",
+      "Phospholipase A2",
+      "Protease"
+    ],
+    "correct": "Cyclooxygenase"
+  },
+  {
+    "question": "What enzyme produces leukotrienes from arachidonic acid?",
+    "answers": [
+      "Cyclooxygenase",
+      "Lipoxygenase",
+      "Phospholipase C",
+      "Kinase"
+    ],
+    "correct": "Lipoxygenase"
+  },
+  {
+    "question": "What is the function of MHC class I molecules?",
+    "answers": [
+      "Present extracellular antigens",
+      "Present intracellular antigens to CD8+ T cells",
+      "Produce antibodies",
+      "Activate complement"
+    ],
+    "correct": "Present intracellular antigens to CD8+ T cells"
+  },
+  {
+    "question": "What is the function of MHC class II molecules?",
+    "answers": [
+      "Present intracellular antigens",
+      "Present extracellular antigens to CD4+ T cells",
+      "Directly kill pathogens",
+      "Transport antibodies"
+    ],
+    "correct": "Present extracellular antigens to CD4+ T cells"
+  },
+  {
+    "question": "What is the mechanism of Type II hypersensitivity reactions?",
+    "answers": [
+      "IgE-mediated mast cell degranulation",
+      "Antibody-mediated cytotoxicity against cell surface antigens",
+      "Immune complex deposition",
+      "T cell-mediated damage"
+    ],
+    "correct": "Antibody-mediated cytotoxicity against cell surface antigens"
+  },
+  {
+    "question": "What is the mechanism of Type III hypersensitivity reactions?",
+    "answers": [
+      "IgE-mediated reaction",
+      "Cytotoxic antibodies",
+      "Immune complex deposition in tissues",
+      "T cell-mediated inflammation"
+    ],
+    "correct": "Immune complex deposition in tissues"
+  },
+  {
+    "question": "What is immunological tolerance?",
+    "answers": [
+      "Exaggerated immune response",
+      "Unresponsiveness to self-antigens",
+      "Inability to respond to any antigen",
+      "Chronic inflammation"
+    ],
+    "correct": "Unresponsiveness to self-antigens"
+  },
+  {
+    "question": "Where does central T cell tolerance occur?",
+    "answers": [
+      "Lymph nodes",
+      "Thymus",
+      "Spleen",
+      "Bone marrow"
+    ],
+    "correct": "Thymus"
+  },
+  {
+    "question": "What is T cell anergy?",
+    "answers": [
+      "T cell activation",
+      "Functional inactivation of T cells",
+      "T cell proliferation",
+      "T cell death"
+    ],
+    "correct": "Functional inactivation of T cells"
+  },
+  {
+    "question": "What is opsonization?",
+    "answers": [
+      "Direct cell killing",
+      "Coating pathogens to enhance phagocytosis",
+      "Antibody production",
+      "Complement activation only"
+    ],
+    "correct": "Coating pathogens to enhance phagocytosis"
+  },
+  {
+    "question": "What does the membrane attack complex (MAC) do?",
+    "answers": [
+      "Opsonize bacteria",
+      "Form pores in pathogen membranes causing lysis",
+      "Activate T cells",
+      "Produce antibodies"
+    ],
+    "correct": "Form pores in pathogen membranes causing lysis"
+  },
+  {
+    "question": "What is chemotaxis?",
+    "answers": [
+      "Random cell movement",
+      "Directed cell movement along a chemical gradient",
+      "Cell adhesion",
+      "Cell division"
+    ],
+    "correct": "Directed cell movement along a chemical gradient"
+  },
+  {
+    "question": "What is margination in inflammation?",
+    "answers": [
+      "White blood cells accumulating along vessel endothelium",
+      "Red blood cell aggregation",
+      "Platelet adhesion",
+      "Plasma leakage"
+    ],
+    "correct": "White blood cells accumulating along vessel endothelium"
+  },
+  {
+    "question": "What molecules mediate leukocyte rolling on endothelium?",
+    "answers": [
+      "Integrins",
+      "Selectins",
+      "Immunoglobulins",
+      "Cadherins"
+    ],
+    "correct": "Selectins"
+  },
+  {
+    "question": "What is the role of integrins in leukocyte extravasation?",
+    "answers": [
+      "Initial rolling",
+      "Firm adhesion to endothelium",
+      "Chemotaxis",
+      "Phagocytosis"
+    ],
+    "correct": "Firm adhesion to endothelium"
+  },
+  {
+    "question": "What is the respiratory burst in neutrophils?",
+    "answers": [
+      "Increased oxygen consumption for energy",
+      "Rapid production of reactive oxygen species to kill pathogens",
+      "Release of cytokines",
+      "Phagocytosis"
+    ],
+    "correct": "Rapid production of reactive oxygen species to kill pathogens"
+  },
+  {
+    "question": "What forms when a phagosome fuses with a lysosome?",
+    "answers": [
+      "Endosome",
+      "Phagolysosome",
+      "Autophagosome",
+      "Secretory vesicle"
+    ],
+    "correct": "Phagolysosome"
+  },
+  {
+    "question": "What is resolution in the context of inflammation?",
+    "answers": [
+      "Chronic inflammation",
+      "Complete restoration of tissue to normal",
+      "Scar formation",
+      "Abscess formation"
+    ],
+    "correct": "Complete restoration of tissue to normal"
+  },
+  {
+    "question": "What is the difference between regeneration and repair?",
+    "answers": [
+      "They are identical processes",
+      "Regeneration replaces with same cells; repair replaces with scar tissue",
+      "Repair is faster than regeneration",
+      "Regeneration only occurs in embryos"
+    ],
+    "correct": "Regeneration replaces with same cells; repair replaces with scar tissue"
+  },
+  {
+    "question": "Which tissues contain labile (continuously dividing) cells?",
+    "answers": [
+      "Cardiac muscle",
+      "Neurons",
+      "Skin and GI epithelium",
+      "Skeletal muscle"
+    ],
+    "correct": "Skin and GI epithelium"
+  },
+  {
+    "question": "Which cell types are considered permanent (non-dividing)?",
+    "answers": [
+      "Hepatocytes",
+      "Neurons and cardiac myocytes",
+      "Epithelial cells",
+      "Fibroblasts"
+    ],
+    "correct": "Neurons and cardiac myocytes"
+  },
+  {
+    "question": "What characterizes stable (quiescent) cells?",
+    "answers": [
+      "Continuously dividing",
+      "In G0 but can re-enter cell cycle when stimulated",
+      "Cannot divide at all",
+      "Only divide during embryogenesis"
+    ],
+    "correct": "In G0 but can re-enter cell cycle when stimulated"
+  },
+  {
+    "question": "What is the primary function of vascular endothelial growth factor (VEGF)?",
+    "answers": [
+      "Inhibit blood vessel formation",
+      "Stimulate new blood vessel formation",
+      "Cause vasoconstriction",
+      "Promote blood clotting"
+    ],
+    "correct": "Stimulate new blood vessel formation"
+  },
+  {
+    "question": "What is the primary function of platelets?",
+    "answers": [
+      "Fight infection",
+      "Carry oxygen",
+      "Hemostasis and clot formation",
+      "Transport nutrients"
+    ],
+    "correct": "Hemostasis and clot formation"
+  },
+  {
+    "question": "What is the final product of the coagulation cascade?",
+    "answers": [
+      "Prothrombin",
+      "Fibrin",
+      "Thrombin",
+      "Plasmin"
+    ],
+    "correct": "Fibrin"
+  },
+  {
+    "question": "What enzyme breaks down fibrin clots?",
+    "answers": [
+      "Thrombin",
+      "Plasmin",
+      "Factor Xa",
+      "Fibrinogen"
+    ],
+    "correct": "Plasmin"
+  },
+  {
+    "question": "What does an elevated D-dimer indicate?",
+    "answers": [
+      "Bleeding disorder",
+      "Recent fibrin clot formation and breakdown",
+      "Liver disease",
+      "Vitamin K deficiency"
+    ],
+    "correct": "Recent fibrin clot formation and breakdown"
+  },
+  {
+    "question": "What does prothrombin time (PT) measure?",
+    "answers": [
+      "Intrinsic pathway",
+      "Extrinsic and common coagulation pathway",
+      "Platelet function",
+      "Fibrinolysis"
+    ],
+    "correct": "Extrinsic and common coagulation pathway"
+  },
+  {
+    "question": "What does activated partial thromboplastin time (aPTT) measure?",
+    "answers": [
+      "Extrinsic pathway",
+      "Intrinsic and common coagulation pathway",
+      "Platelet count",
+      "Fibrinogen level"
+    ],
+    "correct": "Intrinsic and common coagulation pathway"
+  },
+  {
+    "question": "What are the components of Virchow's triad for thrombosis?",
+    "answers": [
+      "Fever, rash, arthritis",
+      "Endothelial injury, stasis, hypercoagulability",
+      "Hypoxia, acidosis, hypothermia",
+      "Pain, swelling, redness"
+    ],
+    "correct": "Endothelial injury, stasis, hypercoagulability"
+  }
+]

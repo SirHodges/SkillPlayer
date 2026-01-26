@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.pyc
+
+# Build Artifacts
+build/
+dist/
+dist_signed/
+*.spec
+*.exe
+
+# Runtime Data
+scores.json
+quiz_answers.json
+views.json
+data/
+question_skips.json
+content/
+
+# Environment
+venv/
+.env
+
+# OS
+.DS_Store
+Thumbs.db
