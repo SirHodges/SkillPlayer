@@ -1,5 +1,10 @@
 [
     {
+        "version": "2.0",
+        "date": "2026-01-27 18:15",
+        "desc": "Added update_and_reboot script for easy Pi updates"
+    },
+    {
         "version": "1.8",
         "date": "2026-01-27 16:05",
         "desc": "added GitHub support"
