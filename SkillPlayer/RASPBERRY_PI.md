@@ -60,8 +60,8 @@ You can either download the code directly from GitHub (easiest) or transfer it v
 3.  **Copy to Home**:
     *   Open the **File Manager** (folder icon).
     *   Find your USB drive on the left.
-    *   Drag the `SkillPlayer` folder from the USB drive to the `/home/pi/` folder (standard user home).
-    *   *Result: You should now have a folder located at `/home/pi/SkillPlayer`*.
+    *   Drag the `SkillPlayer` folder from the USB drive to your **Home** folder (usually called `pi` or your username like `paramedictraining`).
+    *   *Result: You should now have a folder located at `~/SkillPlayer`*.
 
 4.  **Open Terminal**:
     *   Click the default **Terminal** icon (black screen icon) in the top bar.
@@ -107,3 +107,16 @@ Now you check double-click it anytime to launch the app!
 ## Troubleshooting
 - **No Audio?**: Right-click the speaker icon on the Pi top bar and ensure HDMI or AV Jack is selected correctly.
 - **Videos Laggy?**: The Pi Zero might struggle with 4K videos. 1080p or 720p is recommended for Raspberry Pi.
+
+## Part 4: Updating the App (In the future)
+
+To get the latest version from GitHub:
+
+1.  **Open Terminal**.
+2.  **Type these commands**:
+    ```bash
+    cd ~/SkillPlayer
+    git pull
+    ```
+    *This will download any new changes (like version 1.8!) immediately.*
+
