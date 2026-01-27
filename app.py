@@ -471,6 +471,36 @@ def quiz_track_skip():
     })
 
 
+# ========================================
+# System Management API Routes
+# ========================================
+
+@app.route('/api/system/update', methods=['POST'])
+def system_update_and_reboot():
+    """Trigger git pull and reboot (Linux/Pi only)."""
+    import subprocess
+    import platform
+    
+    if platform.system() != 'Linux':
+        return jsonify({
+            "success": False,
+            "error": "Update only available on Raspberry Pi"
+        }), 400
+    
+    try:
+        # Run the update script in background
+        script_path = BASE_DIR / "update_and_reboot.sh"
+        if script_path.exists():
+            subprocess.Popen(['bash', str(script_path)], 
+                           cwd=str(BASE_DIR),
+                           start_new_session=True)
+            return jsonify({"success": True, "message": "Update started, rebooting..."})
+        else:
+            return jsonify({"success": False, "error": "Update script not found"}), 404
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+
+
 def open_browser():
     """Open the browser after a short delay."""
     webbrowser.open('http://127.0.0.1:5000')

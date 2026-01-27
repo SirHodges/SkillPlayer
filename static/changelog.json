@@ -1,8 +1,8 @@
 [
     {
-        "version": "2.0",
-        "date": "2026-01-27 18:15",
-        "desc": "Added update_and_reboot script for easy Pi updates"
+        "version": "2.0.1",
+        "date": "2026-01-27 18:20",
+        "desc": "Added in-app Update button for easy Pi updates"
     },
     {
         "version": "1.8",
