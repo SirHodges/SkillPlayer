@@ -121,6 +121,17 @@ Now you check double-click it anytime to launch the app!
   cd SkillPlayer
   ```
 
+---
+## Appendix: Useful Linux Commands
+*   `ls` : List files in current folder.
+*   `cd foldername` : Go into a folder.
+*   `cd ..` : Go up one folder level.
+*   `mv oldname newname` : Rename or move a file/folder.
+*   `rm filename` : Delete a file.
+*   `rm -rf foldername` : **Delete a folder** and everything inside it.
+*   `sudo reboot` : Restart the Pi.
+*   `sudo shutdown now` : Turn off the Pi.
+
 To get the latest version from GitHub:
 
 ### First Time Setup (If you installed via USB)
