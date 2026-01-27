@@ -120,6 +120,18 @@ Now you check double-click it anytime to launch the app!
   mv SkillPlayer_New SkillPlayer
   cd SkillPlayer
   ```
+- **"fatal: not a git repository"**: Make sure you are *inside* the folder (`cd ~/SkillPlayer`) before running git commands.
+- **Accidentally made Home a Git Repo?**: If `ls -ld ~/.git` shows a folder, you ran `git init` in the wrong place. Fix it with:
+  ```bash
+  rm -rf ~/.git
+  ```
+- **"There is no tracking information" / "No commit on branch"**:
+  Run this to force the connection:
+  ```bash
+  git fetch origin
+  git reset --hard origin/main
+  git branch --set-upstream-to=origin/main main
+  ```
 
 ---
 ## Appendix: Useful Linux Commands
