@@ -1,8 +1,8 @@
 [
     {
-        "version": "2.0.1",
-        "date": "2026-01-27 18:20",
-        "desc": "Added in-app Update button for easy Pi updates"
+        "version": "2.1",
+        "date": "2026-01-27 18:25",
+        "desc": "Added Admin Menu with Update, Reset Scores, and Version History"
     },
     {
         "version": "1.8",
