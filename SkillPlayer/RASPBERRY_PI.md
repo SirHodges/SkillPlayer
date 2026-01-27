@@ -2,7 +2,29 @@
 
 Follow these steps exactly to move your app from this computer to your Raspberry Pi.
 
-## Part 1: Move Files (On your Windows PC)
+## Part 1: Get Files onto the Pi
+
+You can either download the code directly from GitHub (easiest) or transfer it via USB.
+
+### Option A: Via GitHub (Recommended)
+*Requires the Pi to be connected to the internet.*
+
+1.  **Open Terminal** on your Raspberry Pi.
+2.  **Clone the Repository**:
+    Type the following command:
+    ```bash
+    cd ~
+    git clone https://github.com/SirHodges/SkillPlayer.git
+    ```
+    *Note: `~` is a shortcut for your home folder (e.g. `/home/paramedictraining`)*
+
+3.  **Enter Folder**:
+    ```bash
+    cd SkillPlayer
+    ```
+    *Note: If your repository is private, you may be asked for a username and a Personal Access Token as the password.*
+
+### Option B: Via USB Drive (Offline Method)
 
 1.  **Insert your USB Drive** (or SD card) into this computer.
 2.  **Open the SkillPlayer folder**:
@@ -24,6 +46,12 @@ Follow these steps exactly to move your app from this computer to your Raspberry
     *(Note: Do NOT copy the `dist`, `build`, or `.exe` files. They are for Windows only).*
 4.  **Paste** them onto your USB Drive.
     *Recommendation: Create a folder on the USB drive called `SkillPlayer` and paste inside that.*
+
+5.  **Move to Home (on Pi)**:
+    *   Plug USB into Pi.
+    *   Open File Manager on Pi.
+    *   Drag the `SkillPlayer` folder to your **Home** folder (usually usually called `pi` or your username like `paramedictraining`).
+    *   *Result: You should now have a folder located at `~/SkillPlayer`*.
 
 ## Part 2: Setup (On the Raspberry Pi)
 

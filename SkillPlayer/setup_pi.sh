@@ -26,7 +26,7 @@ pip3 install flask waitress --break-system-packages
 
 # 4. Permissions
 echo "[4/4] Setting permissions..."
-chmod +x "$DIR/run_pi.sh"
+chmod +x ./run_pi.sh
 
 echo "------------------------------------------------"
 echo "Setup Complete!"
