@@ -107,6 +107,13 @@ Now you check double-click it anytime to launch the app!
 ## Troubleshooting
 - **No Audio?**: Right-click the speaker icon on the Pi top bar and ensure HDMI or AV Jack is selected correctly.
 - **Videos Laggy?**: The Pi Zero might struggle with 4K videos. 1080p or 720p is recommended for Raspberry Pi.
+- **"SkillPlayer/SkillPlayer" exists?**: If you accidentally cloned inside the folder, run:
+  ```bash
+  cd ~/SkillPlayer
+  mv SkillPlayer/* .
+  mv SkillPlayer/.* .
+  rmdir SkillPlayer
+  ```
 
 To get the latest version from GitHub:
 
