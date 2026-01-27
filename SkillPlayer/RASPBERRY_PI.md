@@ -120,6 +120,7 @@ git branch -M main
 git remote add origin https://github.com/SirHodges/SkillPlayer.git
 git fetch --all
 git reset --hard origin/main
+git branch --set-upstream-to=origin/main main
 ```
 *Note: This is safe! It won't delete your scores or data.*
 
