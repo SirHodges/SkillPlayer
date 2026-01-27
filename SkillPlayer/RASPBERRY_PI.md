@@ -125,9 +125,10 @@ Now you check double-click it anytime to launch the app!
   ```bash
   rm -rf ~/.git
   ```
-- **"There is no tracking information" / "No commit on branch"**:
-  Run this to force the connection:
+- **"Origin does not appear" / "No tracking information"**:
+  Run this full block to reconnect everything:
   ```bash
+  git remote add origin https://github.com/SirHodges/SkillPlayer.git
   git fetch origin
   git reset --hard origin/main
   git branch --set-upstream-to=origin/main main
