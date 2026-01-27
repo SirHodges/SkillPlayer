@@ -1,8 +1,0 @@
-[Desktop Entry]
-Type=Application
-Name=SkillPlayer
-Comment=Portable Video Learning App
-Exec=bash /home/pi/SkillPlayer/run_pi.sh
-Icon=utilities-terminal
-Terminal=true
-Categories=Education;

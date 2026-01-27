@@ -1,0 +1,10 @@
+#!/bin/bash
+# Update from GitHub and reboot the Pi
+
+echo "📥 Pulling latest updates from GitHub..."
+cd ~/SkillPlayer
+git pull
+
+echo "✅ Update complete! Rebooting in 3 seconds..."
+sleep 3
+sudo reboot
