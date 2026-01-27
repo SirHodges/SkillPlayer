@@ -108,9 +108,23 @@ Now you check double-click it anytime to launch the app!
 - **No Audio?**: Right-click the speaker icon on the Pi top bar and ensure HDMI or AV Jack is selected correctly.
 - **Videos Laggy?**: The Pi Zero might struggle with 4K videos. 1080p or 720p is recommended for Raspberry Pi.
 
-## Part 4: Updating the App (In the future)
-
 To get the latest version from GitHub:
+
+### First Time Setup (If you installed via USB)
+If you originally copied files via USB, your Pi doesn't know about GitHub yet. Run this **one time** to connect them:
+
+```bash
+cd ~/SkillPlayer
+git init
+git branch -M main
+git remote add origin https://github.com/SirHodges/SkillPlayer.git
+git fetch --all
+git reset --hard origin/main
+```
+*Note: This is safe! It won't delete your scores or data.*
+
+### Standard Update Command
+Once connected (or if you cloned from GitHub originally), just run:
 
 1.  **Open Terminal**.
 2.  **Type these commands**:
