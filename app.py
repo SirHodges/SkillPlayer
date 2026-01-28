@@ -16,10 +16,6 @@ from quiz import load_questions, get_random_questions
 from leaderboard import get_leaderboard, add_score, is_top_score, save_scores
 
 # Determine base path (works for both dev and PyInstaller exe)
-
-# Determine base path (works for both dev and PyInstaller exe)
-
-# Determine base path (works for both dev and PyInstaller exe)
 if getattr(sys, 'frozen', False):
     # Running as compiled exe
     BASE_DIR = Path(sys.executable).parent

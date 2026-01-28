@@ -1,0 +1,2 @@
+# Development dependencies (not needed on Raspberry Pi)
+pyinstaller>=6.15.0
