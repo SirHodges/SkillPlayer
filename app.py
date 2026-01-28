@@ -58,7 +58,19 @@ if SOCKETIO_AVAILABLE and socketio:
         global gamepad_handler
         if gamepad_handler:
             gamepad_handler.start_binding_mode()
-            print("[SocketIO] Gamepad binding mode started")
+            count = len(gamepad_handler.devices)
+            print(f"[SocketIO] Binding mode started. Devices found: {count}")
+            socketio.emit('binding_status', {
+                'status': 'listening', 
+                'device_count': count,
+                'message': f'Listening on {count} device(s)...'
+            })
+        else:
+            print("[SocketIO] Gamepad handler not availble")
+            socketio.emit('binding_status', {
+                'status': 'error', 
+                'message': 'Gamepad support not available (check logs)'
+            })
     
     @socketio.on('end_gamepad_session')
     def handle_end_session():

@@ -199,7 +199,15 @@
                             </div>
                             <h2 class="binding-title">Press Any Button to Start</h2>
                             <p class="binding-subtitle">The first gamepad to press will control this quiz</p>
+                            <p id="binding-status-text" class="binding-status"
+                                style="margin-bottom: 20px; color: yellow;">Waiting for gamepads...</p>
                             <div class="binding-pulse"></div>
+
+                            <button class="quiz-btn-secondary"
+                                style="margin-top: 40px; width: auto; position: relative; z-index: 10;"
+                                onclick="cancelBinding()">
+                                Cancel / Use Mouse
+                            </button>
                         </div>
                     </div>
 
@@ -837,6 +845,13 @@
             document.getElementById(`quiz-${screenName}-screen`).classList.add('active');
         }
 
+        function cancelBinding() {
+            // Force valid context if needed or just proceed
+            // Switch to mouse input locally for this session
+            showQuizScreen('countdown');
+            runCountdown();
+        }
+
         function resetQuiz() {
             // Stop any running timer
             quizIsGameActive = false;
@@ -896,6 +911,8 @@
 
                     quizElements.totalQuestions.textContent = quizQuestions.length;
                     quizElements.score.textContent = '0';
+
+
 
                     // If in gamepad mode, show binding screen first
                     if (inputMode === 'gamepad') {
@@ -1856,6 +1873,24 @@
             if (bindingScreen && bindingScreen.classList.contains('active')) {
                 showQuizScreen('countdown');
                 runCountdown();
+            }
+        });
+
+        // Binding Status Handler
+        socket.on('binding_status', (data) => {
+            console.log('[Gamepad] Binding status:', data);
+            const statusText = document.getElementById('binding-status-text');
+            if (statusText) {
+                statusText.textContent = data.message;
+                if (data.status === 'error') {
+                    statusText.style.color = '#ef4444'; // red
+                } else if (data.status === 'listening') {
+                    if (data.device_count > 0) {
+                        statusText.style.color = '#22c55e'; // green
+                    } else {
+                        statusText.style.color = '#eab308'; // yellow
+                    }
+                }
             }
         });
 
