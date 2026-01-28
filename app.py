@@ -58,7 +58,7 @@ if SOCKETIO_AVAILABLE and socketio:
         global gamepad_handler
         if gamepad_handler:
             gamepad_handler.start_binding_mode()
-            count = len(gamepad_handler.devices)
+            count = len(gamepad_handler.active_listeners)
             print(f"[SocketIO] Binding mode started. Devices found: {count}")
             socketio.emit('binding_status', {
                 'status': 'listening', 
