@@ -1,2 +1,4 @@
 flask==3.0.0
 waitress==2.1.2
+flask-socketio==5.3.6
+evdev==1.7.1

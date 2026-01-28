@@ -7,6 +7,7 @@
     <title>SkillPlayer - Video Learning</title>
     <link rel="stylesheet" href="/static/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.min.js"></script>
 </head>
 
 <body>
@@ -399,6 +400,36 @@
     </div>
 
     <script>
+        // ===========================================
+        // SocketIO for Gamepad Support
+        // ===========================================
+        let gamepadSocket = null;
+
+        // Initialize gamepad socket after page load
+        function initGamepadSocket() {
+            try {
+                if (typeof io !== 'undefined') {
+                    gamepadSocket = io();
+                    console.log('[Gamepad] SocketIO connected');
+
+                    // Listen for gamepad button presses
+                    gamepadSocket.on('gamepad_button', function (data) {
+                        console.log('[Gamepad] Button received:', data);
+
+                        // Only handle gamepad input when in gamepad mode, quiz mode, and game is active
+                        if (inputMode === 'gamepad' && currentAppMode === 'quiz' && quizIsGameActive && !quizIsAnswerLocked) {
+                            const answerIndex = data.answer_index;
+                            if (answerIndex >= 0 && answerIndex <= 3) {
+                                selectQuizAnswer(answerIndex);
+                            }
+                        }
+                    });
+                }
+            } catch (e) {
+                console.log('[Gamepad] SocketIO not available:', e);
+            }
+        }
+
         // ===========================================
         // App Mode State
         // ===========================================
@@ -1762,6 +1793,18 @@
         socket.on('disconnect', () => {
             bridgeStatus.textContent = "DISCONNECTED";
             bridgeStatus.style.color = "red";
+        });
+
+        // Gamepad button handler
+        socket.on('gamepad_button', (data) => {
+            console.log('[Gamepad] Button received:', data);
+            // Only handle gamepad input when in gamepad mode, quiz mode, and game is active
+            if (inputMode === 'gamepad' && currentAppMode === 'quiz' && quizIsGameActive && !quizIsAnswerLocked) {
+                const answerIndex = data.answer_index;
+                if (answerIndex >= 0 && answerIndex <= 3) {
+                    selectQuizAnswer(answerIndex);
+                }
+            }
         });
 
         // Update cursor positions (60Hz interpolation target)

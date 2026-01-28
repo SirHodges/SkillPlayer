@@ -12,6 +12,16 @@ import webbrowser
 import threading
 from pathlib import Path
 from flask import Flask, render_template, jsonify, send_file, abort, request
+import platform
+
+# Try to import Flask-SocketIO (optional, for gamepad support)
+try:
+    from flask_socketio import SocketIO
+    SOCKETIO_AVAILABLE = True
+except ImportError:
+    SOCKETIO_AVAILABLE = False
+    print("[Info] flask-socketio not installed. Gamepad support disabled.")
+
 from quiz import load_questions, get_random_questions
 from leaderboard import get_leaderboard, add_score, is_top_score, save_scores
 
@@ -30,6 +40,12 @@ ANSWERS_FILE = BASE_DIR / "quiz_answers.json"
 app = Flask(__name__, 
             template_folder=str(BASE_DIR / "templates"),
             static_folder=str(BASE_DIR / "static"))
+
+# Initialize SocketIO if available
+if SOCKETIO_AVAILABLE:
+    socketio = SocketIO(app, cors_allowed_origins="*")
+else:
+    socketio = None
 
 # Supported extensions
 SUPPORTED_EXTENSIONS = {
@@ -512,16 +528,33 @@ if __name__ == '__main__':
     print(f"Add skill folders with videos to: {CONTENT_DIR}")
     print()
     
+    # Start gamepad handler on Linux if SocketIO is available
+    gamepad_handler = None
+    if platform.system() == 'Linux' and SOCKETIO_AVAILABLE:
+        try:
+            from gamepad_handler import start_gamepad_handler
+            gamepad_handler = start_gamepad_handler(socketio)
+            if gamepad_handler:
+                print("[Gamepad] Handler started")
+        except Exception as e:
+            print(f"[Gamepad] Could not start handler: {e}")
+    
     # Open browser after a short delay
     threading.Timer(1.5, open_browser).start()
     
-    # Use waitress for production-ready serving on Windows
-    try:
-        from waitress import serve
-        print("Starting server at http://127.0.0.1:5000")
+    # Use SocketIO if available, otherwise fallback to waitress/Flask
+    if SOCKETIO_AVAILABLE and socketio:
+        print("Starting server with SocketIO at http://127.0.0.1:5000")
         print("Press Ctrl+C to stop")
-        serve(app, host='127.0.0.1', port=5000, threads=4)
-    except ImportError:
-        # Fallback to Flask dev server
-        print("Starting development server at http://127.0.0.1:5000")
-        app.run(host='127.0.0.1', port=5000, debug=False)
+        socketio.run(app, host='127.0.0.1', port=5000, debug=False, allow_unsafe_werkzeug=True)
+    else:
+        # Use waitress for production-ready serving on Windows
+        try:
+            from waitress import serve
+            print("Starting server at http://127.0.0.1:5000")
+            print("Press Ctrl+C to stop")
+            serve(app, host='127.0.0.1', port=5000, threads=4)
+        except ImportError:
+            # Fallback to Flask dev server
+            print("Starting development server at http://127.0.0.1:5000")
+            app.run(host='127.0.0.1', port=5000, debug=False)
