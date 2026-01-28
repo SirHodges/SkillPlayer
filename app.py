@@ -47,6 +47,27 @@ if SOCKETIO_AVAILABLE:
 else:
     socketio = None
 
+# Gamepad handler reference (set at runtime)
+gamepad_handler = None
+
+# SocketIO event handlers for gamepad session control
+if SOCKETIO_AVAILABLE and socketio:
+    @socketio.on('start_gamepad_binding')
+    def handle_start_binding():
+        """Frontend requests to enter binding mode."""
+        global gamepad_handler
+        if gamepad_handler:
+            gamepad_handler.start_binding_mode()
+            print("[SocketIO] Gamepad binding mode started")
+    
+    @socketio.on('end_gamepad_session')
+    def handle_end_session():
+        """Frontend requests to end the session."""
+        global gamepad_handler
+        if gamepad_handler:
+            gamepad_handler.end_session()
+            print("[SocketIO] Gamepad session ended")
+
 # Supported extensions
 SUPPORTED_EXTENSIONS = {
     # Video
@@ -529,7 +550,6 @@ if __name__ == '__main__':
     print()
     
     # Start gamepad handler on Linux if SocketIO is available
-    gamepad_handler = None
     if platform.system() == 'Linux' and SOCKETIO_AVAILABLE:
         try:
             from gamepad_handler import start_gamepad_handler

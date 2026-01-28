@@ -1010,6 +1010,71 @@ body {
     border: 1px solid rgba(34, 197, 94, 0.3);
 }
 
+/* Gamepad Binding Screen */
+.binding-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 400px;
+    text-align: center;
+    position: relative;
+}
+
+.binding-icon {
+    margin-bottom: 24px;
+    animation: bindingFloat 2s ease-in-out infinite;
+}
+
+@keyframes bindingFloat {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+.binding-title {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 12px;
+    background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.binding-subtitle {
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+    margin-bottom: 32px;
+}
+
+.binding-pulse {
+    width: 100px;
+    height: 100px;
+    border: 3px solid rgba(99, 102, 241, 0.5);
+    border-radius: 50%;
+    position: absolute;
+    animation: bindingPulse 1.5s ease-out infinite;
+}
+
+@keyframes bindingPulse {
+    0% {
+        transform: scale(0.8);
+        opacity: 1;
+    }
+
+    100% {
+        transform: scale(2);
+        opacity: 0;
+    }
+}
+
 /* Quiz Buttons */
 .quiz-btn-primary {
     width: 100%;

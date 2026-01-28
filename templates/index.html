@@ -181,6 +181,28 @@
                         <button id="quiz-start-btn" class="quiz-btn-primary" onclick="startQuiz()">Start Quiz</button>
                     </div>
 
+                    <!-- Gamepad Binding Screen -->
+                    <div id="quiz-binding-screen" class="quiz-screen">
+                        <div class="binding-container">
+                            <div class="binding-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24"
+                                    fill="url(#bindGradient)">
+                                    <defs>
+                                        <linearGradient id="bindGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                            <stop offset="0%" stop-color="#6366f1" />
+                                            <stop offset="100%" stop-color="#a855f7" />
+                                        </linearGradient>
+                                    </defs>
+                                    <path
+                                        d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-10 7H8v3H6v-3H3v-2h3V8h2v3h3v2zm4.5 2c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm4-3c-.83 0-1.5-.67-1.5-1.5S18.67 9 19.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z" />
+                                </svg>
+                            </div>
+                            <h2 class="binding-title">Press Any Button to Start</h2>
+                            <p class="binding-subtitle">The first gamepad to press will control this quiz</p>
+                            <div class="binding-pulse"></div>
+                        </div>
+                    </div>
+
                     <!-- Countdown Screen -->
                     <div id="quiz-countdown-screen" class="quiz-screen">
                         <div class="countdown-container">
@@ -820,6 +842,11 @@
             quizIsGameActive = false;
             clearInterval(quizTimerInterval);
 
+            // End gamepad session if active
+            if (socket && socket.connected) {
+                socket.emit('end_gamepad_session');
+            }
+
             // Reset all state
             quizQuestions = [];
             quizCurrentQuestionIndex = 0;
@@ -870,9 +897,18 @@
                     quizElements.totalQuestions.textContent = quizQuestions.length;
                     quizElements.score.textContent = '0';
 
-                    // Show countdown screen
-                    showQuizScreen('countdown');
-                    runCountdown();
+                    // If in gamepad mode, show binding screen first
+                    if (inputMode === 'gamepad') {
+                        showQuizScreen('binding');
+                        // Tell backend to start listening for any button
+                        if (socket && socket.connected) {
+                            socket.emit('start_gamepad_binding');
+                        }
+                    } else {
+                        // Show countdown screen directly for mouse mode
+                        showQuizScreen('countdown');
+                        runCountdown();
+                    }
                 }
             } catch (error) {
                 console.error('Failed to start quiz:', error);
@@ -1303,6 +1339,11 @@
         function endQuiz() {
             quizIsGameActive = false;
             clearInterval(quizTimerInterval);
+
+            // End gamepad session if active
+            if (socket && socket.connected) {
+                socket.emit('end_gamepad_session');
+            }
 
             quizElements.finalScore.textContent = quizScore;
             showQuizScreen('end');
@@ -1804,6 +1845,17 @@
                 if (answerIndex >= 0 && answerIndex <= 3) {
                     selectQuizAnswer(answerIndex);
                 }
+            }
+        });
+
+        // Gamepad bound handler - triggered when a controller claims the session
+        socket.on('gamepad_bound', (data) => {
+            console.log('[Gamepad] Controller bound:', data);
+            // If we're on the binding screen, start the countdown
+            const bindingScreen = document.getElementById('quiz-binding-screen');
+            if (bindingScreen && bindingScreen.classList.contains('active')) {
+                showQuizScreen('countdown');
+                runCountdown();
             }
         });
 

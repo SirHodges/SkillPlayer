@@ -1,7 +1,7 @@
 """
 Gamepad Handler for SkillPlayer Quiz
 Handles USB gamepad input using evdev (Linux only).
-Maps gamepad buttons to quiz answer selections in diamond layout.
+Supports multi-gamepad detection with session binding - first button press binds that controller.
 """
 
 import threading
@@ -32,68 +32,104 @@ BUTTON_TO_ANSWER = {
 }
 
 
-def find_gamepad_device():
-    """Find gamepad device by name instead of hardcoding path."""
+def find_all_gamepad_devices():
+    """Find ALL gamepad devices named 'usb gamepad'."""
     if not EVDEV_AVAILABLE:
-        return None
+        return []
     
+    gamepads = []
     try:
-        devices = [evdev.InputDevice(path) for path in evdev.list_devices()]
-        for device in devices:
-            # Look for device with "gamepad" in name (case insensitive)
-            if 'gamepad' in device.name.lower():
+        for path in evdev.list_devices():
+            device = evdev.InputDevice(path)
+            # Only look for devices with "usb gamepad" in name (case insensitive)
+            if 'usb gamepad' in device.name.lower():
                 print(f"[Gamepad] Found device: {device.name} at {device.path}")
-                return device.path
+                gamepads.append(device.path)
         
-        # Fallback: also check for common gamepad identifiers
-        for device in devices:
-            name_lower = device.name.lower()
-            if any(keyword in name_lower for keyword in ['joystick', 'controller', 'game']):
-                print(f"[Gamepad] Found device: {device.name} at {device.path}")
-                return device.path
+        if not gamepads:
+            print("[Gamepad] No 'usb gamepad' devices found")
+        else:
+            print(f"[Gamepad] Found {len(gamepads)} gamepad(s)")
         
-        print("[Gamepad] No gamepad device found")
-        return None
+        return gamepads
     except Exception as e:
         print(f"[Gamepad] Error scanning for devices: {e}")
-        return None
+        return []
 
 
 class GamepadHandler:
-    """Handles USB gamepad input and emits button presses via SocketIO."""
+    """
+    Handles USB gamepad input with session binding.
+    
+    Flow:
+    1. When waiting_for_bind=True, listens to ALL gamepads for any button press
+    2. First gamepad to fire a button becomes the active_device for this session
+    3. Only that device's inputs are forwarded until session ends
+    """
     
     def __init__(self, socketio):
         self.socketio = socketio
         self.running = True
-        self.device_path = None
         
-        # Start the listener thread
-        self.listener_thread = threading.Thread(target=self._device_listener, daemon=True)
-        self.listener_thread.start()
+        # Session binding state
+        self.waiting_for_bind = False
+        self.active_device_path = None
+        self.session_active = False
+        
+        # Thread management
+        self.listener_threads = []
+        self.devices = []
+        
+        # Start initial device scan
+        self._start_device_listeners()
+        
+        # Periodic rescan for new devices
+        self.rescan_thread = threading.Thread(target=self._rescan_loop, daemon=True)
+        self.rescan_thread.start()
     
-    def _device_listener(self):
-        """Monitor gamepad device, auto-reconnecting on failure."""
-        print("[Gamepad] Input listener started")
+    def start_binding_mode(self):
+        """Enter binding mode - waiting for any gamepad button press."""
+        print("[Gamepad] Entering binding mode - waiting for any button press")
+        self.waiting_for_bind = True
+        self.active_device_path = None
+        self.session_active = False
+    
+    def end_session(self):
+        """End the current session and reset binding."""
+        print("[Gamepad] Session ended")
+        self.waiting_for_bind = False
+        self.active_device_path = None
+        self.session_active = False
+    
+    def _start_device_listeners(self):
+        """Start listener threads for all found gamepads."""
+        device_paths = find_all_gamepad_devices()
+        
+        for path in device_paths:
+            if path not in [d for d in self.devices]:
+                self.devices.append(path)
+                thread = threading.Thread(
+                    target=self._device_listener, 
+                    args=(path,), 
+                    daemon=True
+                )
+                thread.start()
+                self.listener_threads.append(thread)
+    
+    def _rescan_loop(self):
+        """Periodically rescan for new gamepad devices."""
+        while self.running:
+            time.sleep(5)
+            self._start_device_listeners()
+    
+    def _device_listener(self, device_path):
+        """Monitor a single gamepad device."""
+        print(f"[Gamepad] Listener started for {device_path}")
         
         while self.running:
-            # Find the gamepad device
-            self.device_path = find_gamepad_device()
-            
-            if not self.device_path:
-                print("[Gamepad] No device found. Retrying in 5s...")
-                time.sleep(5)
-                continue
-            
             try:
-                device = evdev.InputDevice(self.device_path)
-                print(f"[Gamepad] Connected: {device.name}")
-                
-                # Try to grab the device (optional, prevents other apps from seeing input)
-                try:
-                    device.grab()
-                    print("[Gamepad] Device GRABBED")
-                except Exception as e:
-                    print(f"[Gamepad] Could not grab device: {e}")
+                device = evdev.InputDevice(device_path)
+                print(f"[Gamepad] Connected: {device.name} at {device_path}")
                 
                 # Read events
                 for event in device.read_loop():
@@ -101,24 +137,49 @@ class GamepadHandler:
                         break
                     
                     # Only handle EV_KEY events (button presses)
-                    if event.type == ecodes.EV_KEY:
-                        # Only trigger on key DOWN (value == 1), ignore key UP (value == 0)
-                        if event.value == 1:
-                            if event.code in BUTTON_TO_ANSWER:
-                                answer_index = BUTTON_TO_ANSWER[event.code]
-                                print(f"[Gamepad] Button {event.code} pressed -> Answer {answer_index}")
-                                
-                                # Emit the button press to the frontend
-                                self.socketio.emit('gamepad_button', {
-                                    'answer_index': answer_index
-                                })
+                    if event.type == ecodes.EV_KEY and event.value == 1:
+                        self._handle_button_press(device_path, event.code)
                 
             except (OSError, FileNotFoundError) as e:
-                print(f"[Gamepad] Device disconnected: {e}. Retrying in 2s...")
-                time.sleep(2)
+                print(f"[Gamepad] Device {device_path} disconnected: {e}")
+                # Remove from device list
+                if device_path in self.devices:
+                    self.devices.remove(device_path)
+                break  # Exit thread, will be recreated on rescan
             except Exception as e:
-                print(f"[Gamepad] Unexpected error: {e}")
+                print(f"[Gamepad] Error on {device_path}: {e}")
                 time.sleep(2)
+    
+    def _handle_button_press(self, device_path, button_code):
+        """Handle a button press from any device."""
+        
+        # Mode 1: Waiting for binding - any button from any device binds it
+        if self.waiting_for_bind:
+            print(f"[Gamepad] Device {device_path} claimed session with button {button_code}")
+            self.active_device_path = device_path
+            self.waiting_for_bind = False
+            self.session_active = True
+            
+            # Emit binding event to frontend
+            self.socketio.emit('gamepad_bound', {
+                'device_path': device_path
+            })
+            return
+        
+        # Mode 2: Session active - only accept input from bound device
+        if self.session_active:
+            if device_path != self.active_device_path:
+                # Ignore input from other controllers
+                return
+            
+            # Only forward X/Y/A/B buttons
+            if button_code in BUTTON_TO_ANSWER:
+                answer_index = BUTTON_TO_ANSWER[button_code]
+                print(f"[Gamepad] Button {button_code} -> Answer {answer_index}")
+                
+                self.socketio.emit('gamepad_button', {
+                    'answer_index': answer_index
+                })
     
     def stop(self):
         """Stop the gamepad handler."""
