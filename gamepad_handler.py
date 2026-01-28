@@ -132,10 +132,15 @@ class GamepadHandler:
                 print(f"[Gamepad] Connected: {device.name} at {device_path}")
                 
                 # Read events
+                print(f"[Gamepad] Reading events from {device.name}...")
                 for event in device.read_loop():
                     if not self.running:
                         break
                     
+                    # Log every key event for debugging
+                    if event.type == ecodes.EV_KEY:
+                        print(f"[Gamepad] Raw Event: {event.code}, Value: {event.value} bound={self.active_device_path}")
+
                     # Only handle EV_KEY events (button presses)
                     if event.type == ecodes.EV_KEY and event.value == 1:
                         self._handle_button_press(device_path, event.code)
