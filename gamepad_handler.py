@@ -17,17 +17,23 @@ except ImportError:
     print("[Gamepad] evdev not available (Windows). Gamepad support disabled.")
 
 # Button code mapping (User: X=288, B=290, A=291, Y=289)
-X_BTN = 288  # Trigger/Left (Index 3)
-Y_BTN = 289  # Thumb/Top (Index 0)
-B_BTN = 290  # Thumb2/Right (Index 1)
-A_BTN = 291  # Top/Bottom (Index 2)
+X_BTN = 288  # Trigger/Left
+Y_BTN = 289  # Thumb/Top
+B_BTN = 290  # Thumb2/Right
+A_BTN = 291  # Top/Bottom
 
 # Map button codes to answer indices (diamond layout positions)
+# User Report: Top->Left(3), Right->Top(0), Bottom->Right(1), Left->Bottom(2)
+# Logic:
+# Top sends 288 (was mapped to 3/Left). New Map: 288->0
+# Right sends 289 (was mapped to 0/Top). New Map: 289->1
+# Bottom sends 290 (was mapped to 1/Right). New Map: 290->2
+# Left sends 291 (was mapped to 2/Bottom). New Map: 291->3
 BUTTON_TO_ANSWER = {
-    Y_BTN: 0,  # Top
-    B_BTN: 1,  # Right
-    A_BTN: 2,  # Bottom
-    X_BTN: 3,  # Left
+    X_BTN: 0,  # Top
+    Y_BTN: 1,  # Right
+    B_BTN: 2,  # Bottom
+    A_BTN: 3,  # Left
 }
 
 
