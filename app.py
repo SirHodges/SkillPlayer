@@ -43,7 +43,8 @@ app = Flask(__name__,
 
 # Initialize SocketIO if available
 if SOCKETIO_AVAILABLE:
-    socketio = SocketIO(app, cors_allowed_origins="*")
+    # Force threading mode since we're using standard Flask/Waitress
+    socketio = SocketIO(app, cors_allowed_origins="*", async_mode='threading')
 else:
     socketio = None
 
