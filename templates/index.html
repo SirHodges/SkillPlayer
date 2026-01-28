@@ -1870,11 +1870,22 @@
         socket.on('gamepad_bound', (data) => {
             console.log('[Gamepad] Controller bound:', data);
 
+            // Visual feedback
+            const statusText = document.getElementById('binding-status-text');
+            if (statusText) {
+                statusText.textContent = "GAMEPAD BOUND! STARTING...";
+                statusText.style.color = "#00ff00"; // Green
+                statusText.style.fontSize = "24px";
+                statusText.style.fontWeight = "bold";
+            }
+
             // If we are in gamepad mode, we should proceed, regardless of exact screen state
             // This is safer than checking for .active class which might be in flux
             if (inputMode === 'gamepad') {
-                showQuizScreen('countdown');
-                runCountdown();
+                setTimeout(() => {
+                    showQuizScreen('countdown');
+                    runCountdown();
+                }, 500); // Small delay to see the success message
             }
         });
 
