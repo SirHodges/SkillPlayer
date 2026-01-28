@@ -637,6 +637,45 @@ body {
     }
 }
 
+/* Input Mode Toggle */
+.input-mode-toggle {
+    display: flex;
+    gap: 4px;
+    margin-left: auto;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-md);
+    padding: 4px;
+}
+
+.input-toggle-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 36px;
+    border: none;
+    border-radius: var(--radius-sm);
+    background: transparent;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.input-toggle-btn:hover {
+    color: var(--text-primary);
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.input-toggle-btn.active {
+    background: linear-gradient(135deg, var(--accent-primary) 0%, #5a4fcf 100%);
+    color: white;
+    box-shadow: 0 2px 8px var(--accent-glow);
+}
+
+.input-toggle-btn svg {
+    animation: none !important;
+}
+
 /* ========================================
    App Mode Tabs (Top of Sidebar)
    ======================================== */
@@ -1343,6 +1382,57 @@ body {
     75% {
         transform: translateX(8px);
     }
+}
+
+/* Gamepad Diamond Layout */
+.quiz-answers-container.diamond-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: auto auto auto;
+    gap: 12px;
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Diamond positions: Top (index 0), Right (1), Bottom (2), Left (3) */
+.quiz-answers-container.diamond-layout .quiz-answer-btn:nth-child(1) {
+    grid-column: 2;
+    grid-row: 1;
+}
+
+.quiz-answers-container.diamond-layout .quiz-answer-btn:nth-child(2) {
+    grid-column: 3;
+    grid-row: 2;
+}
+
+.quiz-answers-container.diamond-layout .quiz-answer-btn:nth-child(3) {
+    grid-column: 2;
+    grid-row: 3;
+}
+
+.quiz-answers-container.diamond-layout .quiz-answer-btn:nth-child(4) {
+    grid-column: 1;
+    grid-row: 2;
+}
+
+.quiz-answers-container.diamond-layout .quiz-answer-btn {
+    text-align: center;
+    padding: 24px 16px;
+    min-height: 80px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.quiz-answers-container.diamond-layout .quiz-answer-btn .answer-letter {
+    margin-right: 0;
+    margin-bottom: 8px;
+}
+
+.quiz-answers-container.diamond-layout .quiz-answer-btn:hover:not(:disabled) {
+    transform: scale(1.05);
 }
 
 /* Quiz Feedback */
