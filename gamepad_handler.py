@@ -128,9 +128,7 @@ class GamepadHandler:
                 
                 # Log EV_KEY for debugging
                 if event.type == ecodes.EV_KEY:
-                    # Debug log - uncomment if needed, but reducing spam now
-                    # print(f"[Gamepad] Raw: {event.code}, Val: {event.value}, Bound: {self.active_device_path}")
-                    pass
+                    print(f"[Gamepad] Raw: {event.code}, Val: {event.value}, Bound: {self.active_device_path}", flush=True)
 
                 # Handle button presses (value=1)
                 if event.type == ecodes.EV_KEY and event.value == 1:
