@@ -17,18 +17,18 @@ except ImportError:
     print("[Gamepad] evdev not available (Windows). Gamepad support disabled.")
 
 # Button code mapping
-# These are EV_KEY codes for a typical USB gamepad
-X_BTN = 288  # Top answer (index 0)
-A_BTN = 291  # Right answer (index 1)
-B_BTN = 290  # Bottom answer (index 2)
-Y_BTN = 289  # Left answer (index 3)
+# Button code mapping (User: X=288, B=290, A=291, Y=289)
+X_BTN = 288  # Trigger/Left (Index 3)
+Y_BTN = 289  # Thumb/Top (Index 0)
+B_BTN = 290  # Thumb2/Right (Index 1)
+A_BTN = 291  # Top/Bottom (Index 2)
 
 # Map button codes to answer indices (diamond layout positions)
 BUTTON_TO_ANSWER = {
-    X_BTN: 0,  # Top
-    A_BTN: 1,  # Right
-    B_BTN: 2,  # Bottom
-    Y_BTN: 3,  # Left
+    Y_BTN: 0,  # Top
+    B_BTN: 1,  # Right
+    A_BTN: 2,  # Bottom
+    X_BTN: 3,  # Left
 }
 
 
