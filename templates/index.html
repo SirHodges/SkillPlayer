@@ -1866,11 +1866,13 @@
         });
 
         // Gamepad bound handler - triggered when a controller claims the session
+        // Gamepad bound handler - triggered when a controller claims the session
         socket.on('gamepad_bound', (data) => {
             console.log('[Gamepad] Controller bound:', data);
-            // If we're on the binding screen, start the countdown
-            const bindingScreen = document.getElementById('quiz-binding-screen');
-            if (bindingScreen && bindingScreen.classList.contains('active')) {
+
+            // If we are in gamepad mode, we should proceed, regardless of exact screen state
+            // This is safer than checking for .active class which might be in flux
+            if (inputMode === 'gamepad') {
                 showQuizScreen('countdown');
                 runCountdown();
             }
