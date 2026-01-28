@@ -1857,10 +1857,22 @@
         socket.on('gamepad_button', (data) => {
             console.log('[Gamepad] Button received:', data);
             // Only handle gamepad input when in gamepad mode, quiz mode, and game is active
-            if (inputMode === 'gamepad' && currentAppMode === 'quiz' && quizIsGameActive && !quizIsAnswerLocked) {
-                const answerIndex = data.answer_index;
-                if (answerIndex >= 0 && answerIndex <= 3) {
-                    selectQuizAnswer(answerIndex);
+            if (inputMode === 'gamepad' && currentAppMode === 'quiz') {
+                // FAILSAFE: If we receive a button press but are still on the binding screen,
+                // it means we missed the bound event. Force start now.
+                const bindingScreen = document.getElementById('quiz-binding-screen');
+                if (bindingScreen && bindingScreen.classList.contains('active')) {
+                    console.log('[Gamepad] Button received on binding screen - forcing start');
+                    showQuizScreen('countdown');
+                    runCountdown();
+                    return; // Don't process this first button press as an answer
+                }
+
+                if (quizIsGameActive && !quizIsAnswerLocked) {
+                    const answerIndex = data.answer_index;
+                    if (answerIndex >= 0 && answerIndex <= 3) {
+                        selectQuizAnswer(answerIndex);
+                    }
                 }
             }
         });
