@@ -1856,6 +1856,14 @@
         // Gamepad button handler
         socket.on('gamepad_button', (data) => {
             console.log('[Gamepad] Button received:', data);
+
+            // DEBUG: Update onscreen counter
+            const statusText = document.getElementById('binding-status-text');
+            if (statusText && inputMode === 'gamepad') {
+                statusText.textContent = `Received Input! (Idx: ${data.answer_index})`;
+                statusText.style.color = "cyan";
+            }
+
             // Only handle gamepad input when in gamepad mode, quiz mode, and game is active
             if (inputMode === 'gamepad' && currentAppMode === 'quiz') {
                 // FAILSAFE: If we receive a button press but are still on the binding screen,
