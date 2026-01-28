@@ -1,5 +1,10 @@
 [
     {
+        "version": "2.2",
+        "date": "2026-01-28 11:50",
+        "desc": "Added single player USB gamepad support with diamond layout for quiz answers"
+    },
+    {
         "version": "2.1",
         "date": "2026-01-27 18:25",
         "desc": "Added Admin Menu with Update, Reset Scores, and Version History"
