@@ -1974,7 +1974,7 @@
 
         async function loadChangelog() {
             try {
-                const response = await fetch('/static/changelog.json');
+                const response = await fetch('/static/changelog.json?t=' + Date.now());
                 const changelogData = await response.json();
 
                 // Update version label
@@ -2139,14 +2139,22 @@
 
         // Canvas / 2-Player Mode Logic
         // Force Gamepad selection when 2P is chosen
+        // Canvas / 2-Player Mode Logic
+        // Force Gamepad selection when 2P is chosen
         document.querySelectorAll('input[name="player-mode"]').forEach(input => {
             input.addEventListener('change', (e) => {
                 const mouseBtn = document.querySelector('.input-toggle-btn[data-mode="mouse"]');
                 if (e.target.value === '2') {
                     setInputMode('gamepad');
-                    if (mouseBtn) mouseBtn.style.display = 'none';
+                    if (mouseBtn) {
+                        mouseBtn.classList.add('disabled');
+                        mouseBtn.title = "Mouse disabled in 2-Player Mode";
+                    }
                 } else {
-                    if (mouseBtn) mouseBtn.style.display = 'inline-flex';
+                    if (mouseBtn) {
+                        mouseBtn.classList.remove('disabled');
+                        mouseBtn.title = "Mouse Mode";
+                    }
                 }
             });
         });
