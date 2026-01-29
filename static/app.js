@@ -455,6 +455,9 @@ function resetQuiz() {
 
     // Show start screen
     showQuizScreen('start');
+
+    // Reset UI Elements that might be hidden
+    document.querySelectorAll('.input-toggle-btn').forEach(btn => btn.style.display = 'flex');
 }
 
 function showQuizStartScreen() {
@@ -814,7 +817,7 @@ async function selectQuizAnswer(answerIndex, playerIndex = 1) {
                 // Highlight winner box
                 const pContainer = document.getElementById(pKey + '-score-container');
                 if (pContainer) pContainer.classList.add('active-turn');
-                showQuizFeedback(`P${playerIndex} +1 Point!`, 'correct', playerIndex);
+                showQuizFeedback(`+1 Point!`, 'correct', playerIndex);
             } else {
                 // 1P Logic
                 const streakBonus = quizStreak >= 2 ? Math.min(quizStreak - 1, 5) : 0;
@@ -1201,6 +1204,7 @@ function endQuiz() {
         quizElements.nameEntry.classList.add('hidden');
 
         // Display Winner
+        document.querySelector('.quiz-score-label').textContent = 'RESULT';
         quizElements.finalScore.textContent = winnerText;
         quizElements.finalScore.style.color = winnerColor;
         quizElements.finalScore.style.textShadow = "0 0 20px " + winnerColor;
@@ -1209,6 +1213,7 @@ function endQuiz() {
 
     } else {
         // 1-Player Standard Logic
+        document.querySelector('.quiz-score-label').textContent = 'Your Score';
         document.getElementById('quiz-end-leaderboard').classList.remove('hidden');
         quizElements.finalScore.style.color = "";
         quizElements.finalScore.style.textShadow = "";
