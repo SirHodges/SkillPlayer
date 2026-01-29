@@ -2590,6 +2590,49 @@ body {
     transition: stroke-dashoffset 0.1s linear;
 }
 
+/* ========================================
+   Lockout Visuals Fix (Bar)
+   ======================================== */
+.lockout-bar {
+    width: 100%;
+    background: #ef4444;
+    color: white;
+    font-size: 0.9rem;
+    font-weight: 800;
+    text-align: center;
+    padding: 6px 0;
+    margin-bottom: 8px;
+    border-radius: 6px 6px 0 0;
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+    animation: pulseRed 0.5s infinite alternate;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 10;
+}
+
+/* Adjust container padding to accommodate bar */
+.player-score-container.locked {
+    padding-top: 36px !important;
+    border-color: #ef4444;
+}
+
+.lockout-bar.hidden {
+    display: none;
+}
+
+@keyframes pulseRed {
+    from {
+        background: #ef4444;
+    }
+
+    to {
+        background: #b91c1c;
+    }
+}
+
 /* Timer Bar Fix */
 .quiz-timer-container {
     width: 100%;

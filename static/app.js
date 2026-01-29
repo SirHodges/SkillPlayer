@@ -677,6 +677,7 @@ function displayQuizQuestion() {
     // Reset Locks for 2-Player
     quizLocks = { p1: false, p2: false };
     document.querySelectorAll('.lock-overlay').forEach(el => el.classList.add('hidden'));
+    document.querySelectorAll('.lockout-bar').forEach(el => el.classList.add('hidden')); // Clear bars
     document.querySelectorAll('.player-score-container').forEach(el => el.classList.remove('locked', 'active-turn'));
 
     // Update Scores
@@ -851,7 +852,10 @@ async function selectQuizAnswer(answerIndex, playerIndex = 1) {
 
                 const pOverlay = document.getElementById(pKey + '-lock-overlay');
                 const pContainer = document.getElementById(pKey + '-score-container');
+                const pLockBar = document.getElementById(pKey + '-lock-bar'); // New Bar
+
                 if (pOverlay) pOverlay.classList.remove('hidden');
+                if (pLockBar) pLockBar.classList.remove('hidden'); // Show Bar
                 if (pContainer) pContainer.classList.add('locked');
 
                 // Visual feedback
@@ -914,6 +918,7 @@ async function selectQuizAnswer(answerIndex, playerIndex = 1) {
                             clearInterval(lockInterval);
                             quizLocks[pKey] = false;
                             if (pOverlay) pOverlay.classList.add('hidden');
+                            if (pLockBar) pLockBar.classList.add('hidden'); // Hide Bar
                             if (pContainer) pContainer.classList.remove('locked');
                         }
                     }, intervalStep);
