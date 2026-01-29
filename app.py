@@ -54,17 +54,23 @@ gamepad_handler = None
 # SocketIO event handlers for gamepad session control
 if SOCKETIO_AVAILABLE and socketio:
     @socketio.on('start_gamepad_binding')
-    def handle_start_binding():
+    def handle_start_binding(data=None):
         """Frontend requests to enter binding mode."""
+        player_count = 1
+        if data and 'player_count' in data:
+            player_count = data['player_count']
+
         global gamepad_handler
         if gamepad_handler:
-            gamepad_handler.start_binding_mode()
+            # Start binding for Player 1 (multi=True if 2 players)
+            gamepad_handler.start_binding_mode('P1', multi=(player_count > 1))
+            
             count = len(gamepad_handler.active_listeners)
-            print(f"[SocketIO] Binding mode started. Devices found: {count}")
+            print(f"[SocketIO] Binding mode started for {player_count} player(s). Devices found: {count}")
             socketio.emit('binding_status', {
-                'status': 'listening', 
+                'status': 'listening_p1', 
                 'device_count': count,
-                'message': f'Listening on {count} device(s)...'
+                'message': f'Waiting for Player 1...'
             })
         else:
             print("[SocketIO] Gamepad handler not availble")

@@ -31,6 +31,7 @@ SF30_B = 304
 SF30_Y = 306
 
 # Map button codes to answer indices (diamond layout positions)
+# Note: Layout is generic, works for both 1P and 2P
 BUTTON_TO_ANSWER = {
     # USB Gamepad Mappings
     X_BTN: 0,  # Top
@@ -69,7 +70,7 @@ def find_all_gamepad_devices():
 
 class GamepadHandler:
     """
-    Handles USB gamepad input with session binding.
+    Handles USB gamepad input for 1 or 2 players.
     """
     
     def __init__(self, socketio):
@@ -77,9 +78,11 @@ class GamepadHandler:
         self.running = True
         
         # Session binding state
-        self.waiting_for_bind = False
-        self.active_device_path = None
+        # players = {1: device_path, 2: device_path}
+        self.players = {1: None, 2: None}
+        self.binding_mode = False # False, 'P1', or 'P2'
         self.session_active = False
+        self.multimode = False # True if looking for 2 players
         
         # Track active device paths to avoid duplicate listeners
         self.active_listeners = set()
@@ -92,18 +95,22 @@ class GamepadHandler:
         self.rescan_thread = threading.Thread(target=self._rescan_loop, daemon=True)
         self.rescan_thread.start()
     
-    def start_binding_mode(self):
-        """Enter binding mode - waiting for any gamepad button press."""
-        print("[Gamepad] Entering binding mode - waiting for any button press")
-        self.waiting_for_bind = True
-        self.active_device_path = None
-        self.session_active = False
-    
+    def start_binding_mode(self, player_target='P1', multi=False):
+        """Enter binding mode for a specific player target."""
+        print(f"[Gamepad] Entering binding mode for {player_target} (Multi: {multi})")
+        self.binding_mode = player_target
+        self.multimode = multi
+        
+        # Reset if starting fresh P1 bind
+        if player_target == 'P1':
+            self.players = {1: None, 2: None}
+            self.session_active = False
+            
     def end_session(self):
         """End the current session and reset binding."""
         print("[Gamepad] Session ended")
-        self.waiting_for_bind = False
-        self.active_device_path = None
+        self.binding_mode = False
+        self.players = {1: None, 2: None}
         self.session_active = False
     
     def _scan_and_start_listeners(self):
@@ -143,7 +150,7 @@ class GamepadHandler:
                 
                 # Log EV_KEY for debugging
                 if event.type == ecodes.EV_KEY:
-                    print(f"[Gamepad] Raw: {event.code}, Val: {event.value}, Bound: {self.active_device_path}, Waiting: {self.waiting_for_bind}", flush=True)
+                    print(f"[Gamepad] Raw: {event.code}, Val: {event.value}, Mode: {self.binding_mode}, Players: {self.players}", flush=True)
 
                 # Handle button presses (value=1)
                 if event.type == ecodes.EV_KEY and event.value == 1:
@@ -163,31 +170,59 @@ class GamepadHandler:
     def _handle_button_press(self, device_path, button_code):
         """Handle a button press from any device."""
         
-        # Mode 1: Waiting for binding
-        if self.waiting_for_bind:
-            print(f"[Gamepad] Device {device_path} claimed session with button {button_code}")
-            self.active_device_path = device_path
-            self.waiting_for_bind = False
-            self.session_active = True
-            
-            self.socketio.emit('gamepad_bound', {
-                'device_path': device_path
-            })
-            return
-        
-        # Mode 2: Session active
-        if self.session_active:
-            if device_path != self.active_device_path:
-                return # Ignore other devices
-            
-            # Forward mapped buttons
-            if button_code in BUTTON_TO_ANSWER:
-                answer_index = BUTTON_TO_ANSWER[button_code]
-                print(f"[Gamepad] Button {button_code} -> Answer {answer_index}")
+        # --- BINDING LOGIC ---
+        if self.binding_mode:
+            # Check for P1 Binding
+            if self.binding_mode == 'P1':
+                print(f"[Gamepad] Device {device_path} claimed Player 1")
+                self.players[1] = device_path
+                self.socketio.emit('gamepad_bound', {'player': 1, 'device_path': device_path})
                 
-                self.socketio.emit('gamepad_button', {
-                    'answer_index': answer_index
-                })
+                if self.multimode:
+                    # Switch to waiting for P2
+                    self.binding_mode = 'P2'
+                    print("[Gamepad] Now waiting for Player 2...")
+                else:
+                    # Single player done
+                    self.binding_mode = False
+                    self.session_active = True
+                return
+
+            # Check for P2 Binding
+            elif self.binding_mode == 'P2':
+                # Prevent P1 device from claiming P2 slot
+                if device_path == self.players[1]:
+                    print("[Gamepad] Ignored P1 device for P2 slot")
+                    return
+                
+                print(f"[Gamepad] Device {device_path} claimed Player 2")
+                self.players[2] = device_path
+                self.socketio.emit('gamepad_bound', {'player': 2, 'device_path': device_path})
+                
+                # All done
+                self.binding_mode = False
+                self.session_active = True
+                return
+
+        # --- GAMEPLAY LOGIC ---
+        if self.session_active:
+            # Identify player
+            player_id = 0
+            if device_path == self.players[1]:
+                player_id = 1
+            elif device_path == self.players[2]:
+                player_id = 2
+            
+            if player_id > 0:
+                # Forward mapped buttons
+                if button_code in BUTTON_TO_ANSWER:
+                    answer_index = BUTTON_TO_ANSWER[button_code]
+                    print(f"[Gamepad] Player {player_id} pressed Button {button_code} -> Answer {answer_index}")
+                    
+                    self.socketio.emit('gamepad_button', {
+                        'player': player_id,
+                        'answer_index': answer_index
+                    })
     
     def stop(self):
         """Stop the gamepad handler."""

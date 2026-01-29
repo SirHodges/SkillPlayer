@@ -178,6 +178,16 @@
                         </div>
                         <p class="quiz-hint">💡 Hint: Skipping an answer you don't know penalizes less than a wrong
                             answer!</p>
+                        <div class="player-mode-selector">
+                            <label class="mode-option">
+                                <input type="radio" name="player-mode" value="1" checked>
+                                <span class="mode-label">1 Player</span>
+                            </label>
+                            <label class="mode-option">
+                                <input type="radio" name="player-mode" value="2">
+                                <span class="mode-label">2 Players</span>
+                            </label>
+                        </div>
                         <button id="quiz-start-btn" class="quiz-btn-primary" onclick="startQuiz()">Start Quiz</button>
                     </div>
 
@@ -222,7 +232,14 @@
                     <!-- Game Screen -->
                     <div id="quiz-game-screen" class="quiz-screen">
                         <div class="quiz-game-header">
-                            <div class="quiz-controls-left">
+                            <!-- Player 1 Score (2P Mode) -->
+                            <div id="p1-score-container" class="player-score-container hidden">
+                                <span class="player-badge p1">P1</span>
+                                <span id="p1-score-val" class="player-score-val">0</span>
+                                <div id="p1-lock-overlay" class="lock-overlay hidden">🔒</div>
+                            </div>
+
+                            <div class="quiz-controls-center">
                                 <div class="volume-control">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
                                         fill="currentColor" class="volume-icon">
@@ -239,9 +256,18 @@
                                     <span id="quiz-timer-text" class="quiz-timer-text">3:00</span>
                                 </div>
                             </div>
-                            <div class="quiz-score-display">
+
+                            <!-- Single Player Score (Default) -->
+                            <div id="single-player-score-container" class="quiz-score-display">
                                 Score: <span id="quiz-score">0</span>
                                 <span id="floating-score" class="floating-score"></span>
+                            </div>
+
+                            <!-- Player 2 Score (2P Mode) -->
+                            <div id="p2-score-container" class="player-score-container hidden">
+                                <span class="player-badge p2">P2</span>
+                                <span id="p2-score-val" class="player-score-val">0</span>
+                                <div id="p2-lock-overlay" class="lock-overlay hidden">🔒</div>
                             </div>
                         </div>
 
@@ -478,6 +504,11 @@
         let quizQuestions = [];
         let quizCurrentQuestionIndex = 0;
         let quizScore = 0;
+        // 2-Player State
+        let quizPlayerCount = 1;
+        let quizScores = { p1: 0, p2: 0 };
+        let quizLocks = { p1: false, p2: false };
+
         let quizTimeRemaining = 60; // 1 minute
         let quizTimerInterval = null;
         let quizIsGameActive = false;
@@ -915,11 +946,24 @@
 
 
                     // If in gamepad mode, show binding screen first
+                    // If in gamepad mode, show binding screen first
                     if (inputMode === 'gamepad') {
+                        // Check player mode
+                        const playerMode = document.querySelector('input[name="player-mode"]:checked');
+                        const playerCount = playerMode ? parseInt(playerMode.value) : 1;
+
                         showQuizScreen('binding');
-                        // Tell backend to start listening for any button
+
+                        // Update binding text based on mode
+                        const statusText = document.getElementById('binding-status-text');
+                        if (statusText) {
+                            statusText.textContent = playerCount > 1 ? "Waiting for Player 1..." : "Press any button to start...";
+                            statusText.style.color = "white"; // Reset color
+                        }
+
+                        // Tell backend to start listening
                         if (socket && socket.connected) {
-                            socket.emit('start_gamepad_binding');
+                            socket.emit('start_gamepad_binding', { player_count: playerCount });
                         }
                     } else {
                         // Show countdown screen directly for mouse mode
@@ -997,10 +1041,39 @@
             showQuizFeedback(`-${seconds} seconds!`, 'penalty');
         }
 
+        function updateScoreDisplay() {
+            if (quizPlayerCount > 1) {
+                // 2-Player UI
+                document.getElementById('p1-score-container').classList.remove('hidden');
+                document.getElementById('p2-score-container').classList.remove('hidden');
+                document.getElementById('single-player-score-container').classList.add('hidden');
+
+                document.getElementById('p1-score-val').textContent = quizScores.p1;
+                document.getElementById('p2-score-val').textContent = quizScores.p2;
+            } else {
+                // 1-Player UI
+                document.getElementById('p1-score-container').classList.add('hidden');
+                document.getElementById('p2-score-container').classList.add('hidden');
+                document.getElementById('single-player-score-container').classList.remove('hidden');
+
+                quizElements.score.textContent = quizScore;
+            }
+        }
+
         function displayQuizQuestion() {
             if (quizCurrentQuestionIndex >= quizQuestions.length) {
-                quizCurrentQuestionIndex = 0;
+                // End of quiz
+                endQuiz();
+                return;
             }
+
+            // Reset Locks for 2-Player
+            quizLocks = { p1: false, p2: false };
+            document.querySelectorAll('.lock-overlay').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.player-score-container').forEach(el => el.classList.remove('locked', 'active-turn'));
+
+            // Update Scores
+            updateScoreDisplay();
 
             const question = quizQuestions[quizCurrentQuestionIndex];
             quizElements.questionNum.textContent = quizCurrentQuestionIndex + 1;
@@ -1053,7 +1126,7 @@
                 const btn = document.createElement('button');
                 btn.className = 'quiz-answer-btn answer-hidden';
                 btn.innerHTML = `<span class="answer-letter ${colorClass}">${label}</span> ${answer}`;
-                btn.addEventListener('click', () => selectQuizAnswer(index));
+                btn.addEventListener('click', () => selectQuizAnswer(index, 1));
                 quizElements.answersContainer.appendChild(btn);
             });
 
@@ -1077,14 +1150,23 @@
             }, 2000);
         }
 
-        async function selectQuizAnswer(answerIndex) {
-            if (!quizIsGameActive || quizIsAnswerLocked) return;
+        async function selectQuizAnswer(answerIndex, playerIndex = 1) {
+            const pKey = 'p' + playerIndex;
 
-            quizIsAnswerLocked = true;
+            // Checks
+            if (!quizIsGameActive) return;
+            if (quizPlayerCount > 1) {
+                if (quizLocks[pKey]) return; // This player is locked
+                if (quizIsAnswerLocked) return; // Game is transitioning
+            } else {
+                if (quizIsAnswerLocked) return;
+            }
 
-            // Disable all buttons temporarily
+            // In 1P mode, lock immediately. In 2P, we wait for result to lock specific player or game.
+            if (quizPlayerCount === 1) quizIsAnswerLocked = true;
+
+            // Disable all buttons visual feedback if 1P? No, keep it dynamic.
             const buttons = quizElements.answersContainer.querySelectorAll('.quiz-answer-btn');
-            buttons.forEach(btn => btn.disabled = true);
 
             try {
                 // Calculate time to answer
@@ -1104,65 +1186,116 @@
 
                 const data = await response.json();
 
-                // Highlight correct/wrong answers
-                buttons.forEach((btn, idx) => {
-                    if (idx === data.correct_index) {
-                        btn.classList.add('correct');
-                    } else if (idx === answerIndex && !data.correct) {
-                        btn.classList.add('wrong');
-                    }
-                });
-
                 if (data.correct) {
-                    // Play correct sound
+                    // ANSWER CORRECT
+                    // Lock game immediately
+                    quizIsAnswerLocked = true;
+
+                    // Highlight Correct Button
+                    if (buttons[data.correct_index]) buttons[data.correct_index].classList.add('correct');
+
+                    // Play Sound
                     soundRight.currentTime = 0;
                     soundRight.play().catch(() => { });
-                    // Calculate points: 10 base + streak bonus only at 3+ streak
-                    // quizStreak is the count BEFORE increment, so 2 means we're about to hit 3
-                    const streakBonus = quizStreak >= 2 ? Math.min(quizStreak - 1, 5) : 0;
-                    const pointsEarned = 10 + streakBonus;
-                    quizScore += pointsEarned;
-                    quizElements.score.textContent = quizScore;
 
-                    // Show floating score animation
-                    showFloatingScore(pointsEarned);
+                    // Update Score
+                    if (quizPlayerCount > 1) {
+                        quizScores[pKey]++;
+                        updateScoreDisplay();
+                        // Highlight winner box
+                        const pContainer = document.getElementById(pKey + '-score-container');
+                        if (pContainer) pContainer.classList.add('active-turn');
+                        showQuizFeedback(`Player ${playerIndex} Point!`, 'correct');
+                    } else {
+                        // 1P Logic
+                        const streakBonus = quizStreak >= 2 ? Math.min(quizStreak - 1, 5) : 0;
+                        const pointsEarned = 10 + streakBonus;
+                        quizScore += pointsEarned;
+                        quizElements.score.textContent = quizScore;
+                        showFloatingScore(pointsEarned);
+                        quizTimeRemaining = Math.min(quizTimeRemaining + 2, 120);
+                        updateQuizTimerDisplay();
+                        showQuizFeedback('Correct! +2 seconds', 'correct');
+                        updateStreak(true);
+                    }
 
-                    // Add 2 seconds bonus for correct answer
-                    quizTimeRemaining = Math.min(quizTimeRemaining + 2, 120); // Cap at 2 minutes max
-                    updateQuizTimerDisplay();
-                    showQuizFeedback('Correct! +2 seconds', 'correct');
-
-                    // Update streak
-                    updateStreak(true);
-
-                    // Move to next question after short delay
+                    // Next Question Delay
                     setTimeout(() => {
                         if (quizIsGameActive) {
                             quizCurrentQuestionIndex++;
                             quizIsAnswerLocked = false;
                             displayQuizQuestion();
                         }
-                    }, 300);
+                    }, 1000);
+
                 } else {
-                    // Wrong answer - apply 5 second penalty
-                    gameStats.wrong++;
-                    showQuizFeedback('Wrong! -5 seconds penalty', 'penalty');
-                    applyQuizPenalty(5);
+                    // ANSWER WRONG
+                    if (quizPlayerCount > 1) {
+                        // Lock THIS player
+                        quizLocks[pKey] = true;
+                        const pOverlay = document.getElementById(pKey + '-lock-overlay');
+                        const pContainer = document.getElementById(pKey + '-score-container');
+                        if (pOverlay) pOverlay.classList.remove('hidden');
+                        if (pContainer) pContainer.classList.add('locked');
 
-                    // Break streak
-                    updateStreak(false);
+                        // Visual feedback
+                        if (buttons[answerIndex]) buttons[answerIndex].classList.add('wrong');
 
-                    setTimeout(() => {
-                        if (quizIsGameActive) {
-                            quizCurrentQuestionIndex++;
-                            quizIsAnswerLocked = false;
-                            displayQuizQuestion();
+                        // Check if BOTH are locked
+                        if (quizLocks.p1 && quizLocks.p2) {
+                            showQuizFeedback("Both Players Locked! Moving on...", 'penalty');
+                            quizIsAnswerLocked = true; // Stop inputs
+
+                            // Reveal correct answer
+                            if (buttons[data.correct_index]) buttons[data.correct_index].classList.add('correct');
+
+                            setTimeout(() => {
+                                if (quizIsGameActive) {
+                                    quizCurrentQuestionIndex++;
+                                    quizIsAnswerLocked = false;
+                                    displayQuizQuestion();
+                                }
+                            }, 1500);
+                        } else {
+                            // Just this player locked
+                            showQuizFeedback(`Player ${playerIndex} Locked (3s)!`, 'penalty');
+
+                            const currentQIndex = quizCurrentQuestionIndex;
+                            // 3 Second Unlock Timer
+                            setTimeout(() => {
+                                // Only unlock if we are still on the SAME question
+                                if (quizIsGameActive && quizCurrentQuestionIndex === currentQIndex) {
+                                    quizLocks[pKey] = false;
+                                    if (pOverlay) pOverlay.classList.add('hidden');
+                                    if (pContainer) pContainer.classList.remove('locked');
+                                }
+                            }, 3000);
                         }
-                    }, 800);
+
+                    } else {
+                        // 1P Logic (Penalty)
+                        gameStats.wrong++;
+                        showQuizFeedback('Wrong! -5 seconds penalty', 'penalty');
+                        applyQuizPenalty(5);
+                        updateStreak(false);
+
+                        if (buttons[answerIndex]) buttons[answerIndex].classList.add('wrong');
+                        if (buttons[data.correct_index]) buttons[data.correct_index].classList.add('correct');
+
+                        quizIsAnswerLocked = true;
+                        setTimeout(() => {
+                            if (quizIsGameActive) {
+                                quizCurrentQuestionIndex++;
+                                quizIsAnswerLocked = false;
+                                displayQuizQuestion();
+                            }
+                        }, 800);
+                    }
                 }
 
             } catch (error) {
                 console.error('Failed to check answer:', error);
+                quizIsAnswerLocked = false;
             }
         }
 
@@ -1378,10 +1511,41 @@
                 socket.emit('end_gamepad_session');
             }
 
-            quizElements.finalScore.textContent = quizScore;
-            showQuizScreen('end');
+            if (quizPlayerCount > 1) {
+                // 2-Player End Screen
+                let winnerText = "It's a Tie!";
+                let winnerColor = "white";
 
-            checkQuizTopScore();
+                if (quizScores.p1 > quizScores.p2) {
+                    winnerText = "PLAYER 1 WINS!";
+                    winnerColor = "#2196F3"; // Blue
+                } else if (quizScores.p2 > quizScores.p1) {
+                    winnerText = "PLAYER 2 WINS!";
+                    winnerColor = "#F44336"; // Red
+                }
+
+                // Hide Leaderboard & Init Elements that might confuse
+                document.getElementById('quiz-end-leaderboard').classList.add('hidden');
+                quizElements.nameEntry.classList.add('hidden');
+
+                // Display Winner
+                quizElements.finalScore.textContent = winnerText;
+                quizElements.finalScore.style.color = winnerColor;
+                quizElements.finalScore.style.textShadow = "0 0 20px " + winnerColor;
+
+                showQuizScreen('end');
+
+            } else {
+                // 1-Player Standard Logic
+                document.getElementById('quiz-end-leaderboard').classList.remove('hidden');
+                quizElements.finalScore.style.color = "";
+                quizElements.finalScore.style.textShadow = "";
+
+                quizElements.finalScore.textContent = quizScore;
+                showQuizScreen('end');
+
+                checkQuizTopScore();
+            }
         }
 
         async function checkQuizTopScore() {
@@ -1895,7 +2059,8 @@
                 if (quizIsGameActive && !quizIsAnswerLocked) {
                     const answerIndex = data.answer_index;
                     if (answerIndex >= 0 && answerIndex <= 3) {
-                        selectQuizAnswer(answerIndex);
+                        const player = data.player || 1;
+                        selectQuizAnswer(answerIndex, player);
                     }
                 }
             }
@@ -1905,23 +2070,47 @@
         // Gamepad bound handler - triggered when a controller claims the session
         socket.on('gamepad_bound', (data) => {
             console.log('[Gamepad] Controller bound:', data);
-
-            // Visual feedback
             const statusText = document.getElementById('binding-status-text');
-            if (statusText) {
-                statusText.textContent = "GAMEPAD BOUND! STARTING...";
-                statusText.style.color = "#00ff00"; // Green
-                statusText.style.fontSize = "24px";
-                statusText.style.fontWeight = "bold";
-            }
+            const player = data.player || 1;
 
-            // If we are in gamepad mode, we should proceed, regardless of exact screen state
-            // This is safer than checking for .active class which might be in flux
-            if (inputMode === 'gamepad') {
-                setTimeout(() => {
-                    showQuizScreen('countdown');
-                    runCountdown();
-                }, 500); // Small delay to see the success message
+            if (quizPlayerCount > 1) {
+                // 2-Player Logic
+                if (player === 1) {
+                    if (statusText) {
+                        statusText.textContent = "PLAYER 1 READY! Waiting for Player 2...";
+                        statusText.style.color = "#2196F3"; // Blue
+                        statusText.style.fontSize = "24px";
+                        statusText.style.fontWeight = "bold";
+                    }
+                    // Do NOT start yet, wait for P2
+                } else if (player === 2) {
+                    if (statusText) {
+                        statusText.textContent = "PLAYER 2 READY! STARTING...";
+                        statusText.style.color = "#F44336"; // Red
+                    }
+                    // Both ready, start
+                    if (inputMode === 'gamepad') {
+                        setTimeout(() => {
+                            showQuizScreen('countdown');
+                            runCountdown();
+                        }, 1000);
+                    }
+                }
+            } else {
+                // 1-Player Logic (Legacy)
+                if (statusText) {
+                    statusText.textContent = "GAMEPAD BOUND! STARTING...";
+                    statusText.style.color = "#00ff00"; // Green
+                    statusText.style.fontSize = "24px";
+                    statusText.style.fontWeight = "bold";
+                }
+
+                if (inputMode === 'gamepad') {
+                    setTimeout(() => {
+                        showQuizScreen('countdown');
+                        runCountdown();
+                    }, 500);
+                }
             }
         });
 
