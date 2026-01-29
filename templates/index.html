@@ -234,9 +234,14 @@
                         <div class="quiz-game-header">
                             <!-- Player 1 Score (2P Mode) -->
                             <div id="p1-score-container" class="player-score-container hidden">
-                                <span class="player-badge p1">P1</span>
+                                <div class="player-info-row">
+                                    <span class="player-badge p1">P1</span>
+                                    <span id="p1-timer" class="player-timer">60</span>
+                                </div>
                                 <span id="p1-score-val" class="player-score-val">0</span>
+                                <div id="p1-streak" class="player-streak hidden">🔥 0</div>
                                 <div id="p1-lock-overlay" class="lock-overlay hidden">🔒</div>
+                                <div id="p1-feedback" class="player-feedback"></div>
                             </div>
 
                             <div class="quiz-controls-center">
@@ -265,9 +270,14 @@
 
                             <!-- Player 2 Score (2P Mode) -->
                             <div id="p2-score-container" class="player-score-container hidden">
-                                <span class="player-badge p2">P2</span>
+                                <div class="player-info-row">
+                                    <span class="player-badge p2">P2</span>
+                                    <span id="p2-timer" class="player-timer">60</span>
+                                </div>
                                 <span id="p2-score-val" class="player-score-val">0</span>
+                                <div id="p2-streak" class="player-streak hidden">🔥 0</div>
                                 <div id="p2-lock-overlay" class="lock-overlay hidden">🔒</div>
+                                <div id="p2-feedback" class="player-feedback"></div>
                             </div>
                         </div>
 
@@ -508,8 +518,12 @@
         let quizPlayerCount = 1;
         let quizScores = { p1: 0, p2: 0 };
         let quizLocks = { p1: false, p2: false };
+        let quizTimers = { p1: 60, p2: 60 };
+        let quizStreaks = { p1: 0, p2: 0 };
 
-        let quizTimeRemaining = 60; // 1 minute
+        // Legacy/Global (used for 1P or tracking)
+        let quizTimeRemaining = 60;
+
         let quizTimerInterval = null;
         let quizIsGameActive = false;
         let quizIsAnswerLocked = false;
@@ -923,10 +937,30 @@
                 const data = await response.json();
 
                 if (data.success) {
+                    // Check player mode & count first
+                    const playerModeInput = document.querySelector('input[name="player-mode"]:checked');
+                    quizPlayerCount = playerModeInput ? parseInt(playerModeInput.value) : 1;
+
+                    // FORCE GAMEPAD FOR 2-PLAYER
+                    if (quizPlayerCount > 1) {
+                        setInputMode('gamepad');
+                        // Hide toggles to prevent switching
+                        document.querySelectorAll('.input-toggle-btn').forEach(btn => btn.style.display = 'none');
+
+                        // Initialize 2-Player State
+                        quizScores = { p1: 0, p2: 0 };
+                        quizTimers = { p1: 60, p2: 60 };
+                        quizStreaks = { p1: 0, p2: 0 };
+                        quizLocks = { p1: false, p2: false };
+                    } else {
+                        // 1-Player State
+                        document.querySelectorAll('.input-toggle-btn').forEach(btn => btn.style.display = 'flex');
+                        quizTimeRemaining = 60;
+                        quizStreak = 0;
+                    }
+
                     quizQuestions = data.questions;
                     quizCurrentQuestionIndex = 0;
-                    quizScore = 0;
-                    quizTimeRemaining = 60; // 1 minute
                     quizIsGameActive = true;
                     quizIsAnswerLocked = false;
 
@@ -941,29 +975,24 @@
                     currentStreakLevel = 0;
 
                     quizElements.totalQuestions.textContent = quizQuestions.length;
-                    quizElements.score.textContent = '0';
 
+                    // Reset Score Displays
+                    updateScoreDisplay(); // Will handle hiding/showing p1/p2 containers
 
-
-                    // If in gamepad mode, show binding screen first
-                    // If in gamepad mode, show binding screen first
+                    // If in gamepad mode (which is forced for 2P), show binding screen first
                     if (inputMode === 'gamepad') {
-                        // Check player mode
-                        const playerMode = document.querySelector('input[name="player-mode"]:checked');
-                        const playerCount = playerMode ? parseInt(playerMode.value) : 1;
-
                         showQuizScreen('binding');
 
                         // Update binding text based on mode
                         const statusText = document.getElementById('binding-status-text');
                         if (statusText) {
-                            statusText.textContent = playerCount > 1 ? "Waiting for Player 1..." : "Press any button to start...";
+                            statusText.textContent = quizPlayerCount > 1 ? "Waiting for Player 1..." : "Press any button to start...";
                             statusText.style.color = "white"; // Reset color
                         }
 
                         // Tell backend to start listening
                         if (socket && socket.connected) {
-                            socket.emit('start_gamepad_binding', { player_count: playerCount });
+                            socket.emit('start_gamepad_binding', { player_count: quizPlayerCount });
                         }
                     } else {
                         // Show countdown screen directly for mouse mode
@@ -1007,38 +1036,80 @@
 
         function startQuizTimer() {
             updateQuizTimerDisplay();
+            updateScoreDisplay(); // Refresh UI state
 
             quizTimerInterval = setInterval(() => {
-                if (quizTimeRemaining > 0) {
-                    quizTimeRemaining--;
-                    updateQuizTimerDisplay();
+                if (!quizIsGameActive) return;
+
+                if (quizPlayerCount > 1) {
+                    // 2-Player Logic
+                    let p1Active = quizTimers.p1 > 0;
+                    let p2Active = quizTimers.p2 > 0;
+
+                    if (p1Active) quizTimers.p1--;
+                    if (p2Active) quizTimers.p2--;
+
+                    if (!p1Active && !p2Active) {
+                        endQuiz();
+                    } else {
+                        updateQuizTimerDisplay();
+                    }
                 } else {
-                    endQuiz();
+                    // 1-Player Logic
+                    if (quizTimeRemaining > 0) {
+                        quizTimeRemaining--;
+                        updateQuizTimerDisplay();
+                    } else {
+                        endQuiz();
+                    }
                 }
             }, 1000);
         }
 
         function updateQuizTimerDisplay() {
-            const minutes = Math.floor(quizTimeRemaining / 60);
-            const seconds = quizTimeRemaining % 60;
-            quizElements.timerText.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
-
-            // Update timer bar
-            const percentage = (quizTimeRemaining / 60) * 100;
-            quizElements.timerFill.style.width = `${percentage}%`;
-
-            // Change color when low (under 30 seconds)
-            if (quizTimeRemaining <= 30) {
-                quizElements.timerFill.classList.add('low');
+            if (quizPlayerCount > 1) {
+                // 2-Player Display
+                ['p1', 'p2'].forEach(p => {
+                    const t = quizTimers[p];
+                    const el = document.getElementById(`${p}-timer`);
+                    if (el) {
+                        const m = Math.floor(t / 60);
+                        const s = t % 60;
+                        el.textContent = `${m}:${s.toString().padStart(2, '0')}`;
+                        if (t < 10) el.style.color = 'red';
+                        else el.style.color = '';
+                    }
+                });
             } else {
-                quizElements.timerFill.classList.remove('low');
+                // 1-Player Display
+                const minutes = Math.floor(quizTimeRemaining / 60);
+                const seconds = quizTimeRemaining % 60;
+                quizElements.timerText.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+
+                // Update timer bar
+                const percentage = (quizTimeRemaining / 60) * 100;
+                quizElements.timerFill.style.width = `${percentage}%`;
+
+                // Change color when low (under 30 seconds)
+                if (quizTimeRemaining <= 30) {
+                    quizElements.timerFill.classList.add('low');
+                } else {
+                    quizElements.timerFill.classList.remove('low');
+                }
             }
         }
 
-        function applyQuizPenalty(seconds) {
-            quizTimeRemaining = Math.max(0, quizTimeRemaining - seconds);
-            updateQuizTimerDisplay();
-            showQuizFeedback(`-${seconds} seconds!`, 'penalty');
+        function applyQuizPenalty(seconds, playerIndex = 1) {
+            if (quizPlayerCount > 1) {
+                const pKey = 'p' + playerIndex;
+                quizTimers[pKey] = Math.max(0, quizTimers[pKey] - seconds);
+                updateQuizTimerDisplay();
+                showQuizFeedback(`-${seconds}s`, 'penalty', playerIndex);
+            } else {
+                quizTimeRemaining = Math.max(0, quizTimeRemaining - seconds);
+                updateQuizTimerDisplay();
+                showQuizFeedback(`-${seconds} seconds!`, 'penalty');
+            }
         }
 
         function updateScoreDisplay() {
@@ -1201,11 +1272,16 @@
                     // Update Score
                     if (quizPlayerCount > 1) {
                         quizScores[pKey]++;
+                        // Bonus time for 2P
+                        applyQuizPenalty(-2, playerIndex); // Negative penalty = bonus
+                        updateStreak(true, playerIndex);
+
                         updateScoreDisplay();
+
                         // Highlight winner box
                         const pContainer = document.getElementById(pKey + '-score-container');
                         if (pContainer) pContainer.classList.add('active-turn');
-                        showQuizFeedback(`Player ${playerIndex} Point!`, 'correct');
+                        showQuizFeedback(`P${playerIndex} Point! +2s`, 'correct', playerIndex);
                     } else {
                         // 1P Logic
                         const streakBonus = quizStreak >= 2 ? Math.min(quizStreak - 1, 5) : 0;
@@ -1233,6 +1309,11 @@
                     if (quizPlayerCount > 1) {
                         // Lock THIS player
                         quizLocks[pKey] = true;
+
+                        // Penalty time & Streak reset
+                        applyQuizPenalty(5, playerIndex);
+                        updateStreak(false, playerIndex);
+
                         const pOverlay = document.getElementById(pKey + '-lock-overlay');
                         const pContainer = document.getElementById(pKey + '-score-container');
                         if (pOverlay) pOverlay.classList.remove('hidden');
@@ -1258,7 +1339,7 @@
                             }, 1500);
                         } else {
                             // Just this player locked
-                            showQuizFeedback(`Player ${playerIndex} Locked (3s)!`, 'penalty');
+                            showQuizFeedback(`P${playerIndex} Locked (3s)!`, 'penalty', playerIndex);
 
                             const currentQIndex = quizCurrentQuestionIndex;
                             // 3 Second Unlock Timer
@@ -1309,9 +1390,25 @@
             }
         }
 
-        function showQuizFeedback(message, type) {
-            quizElements.feedback.textContent = message;
-            quizElements.feedback.className = `quiz-feedback ${type}`;
+        function showQuizFeedback(message, type, playerIndex = null) {
+            // If playerIndex provided and valid, show there
+            if (quizPlayerCount > 1 && playerIndex) {
+                const pKey = 'p' + playerIndex;
+                const el = document.getElementById(`${pKey}-feedback`);
+                if (el) {
+                    el.textContent = message;
+                    el.className = `player-feedback ${type}`;
+                    // Clear after delay
+                    setTimeout(() => {
+                        el.textContent = '';
+                        el.className = 'player-feedback';
+                    }, 2000);
+                }
+            } else {
+                // Global feedback (1P or fallback)
+                quizElements.feedback.textContent = message;
+                quizElements.feedback.className = `quiz-feedback ${type}`;
+            }
         }
 
         // ===========================================
@@ -1364,46 +1461,58 @@
             return 'basic';
         }
 
-        function updateStreak(correct) {
-            if (correct) {
-                quizStreak++;
-                gameStats.correct++;
-
-                // Track best streak
-                if (quizStreak > gameStats.bestStreak) {
-                    gameStats.bestStreak = quizStreak;
+        function updateStreak(correct, playerIndex = 1) {
+            if (quizPlayerCount > 1) {
+                // 2-Player Streak Logic
+                const pKey = 'p' + playerIndex;
+                if (correct) {
+                    quizStreaks[pKey]++;
+                } else {
+                    quizStreaks[pKey] = 0;
                 }
-
-                // Track streak occurrences (simple approach: count when we hit 3)
-                if (quizStreak === 3) {
-                    gameStats.streakCount++;
-                }
-
-                // Only show indicator at streak of 3 or more
-                if (quizStreak >= 3) {
-                    const indicator = document.getElementById('streak-indicator');
-                    const streakText = document.getElementById('streak-text');
-                    const ringProgress = document.getElementById('streak-ring-progress');
-
-                    if (indicator && streakText) {
-                        // Update text
-                        streakText.textContent = getStreakText(quizStreak);
-
-                        // Update visual level
-                        indicator.className = `streak-indicator streak-${getStreakLevel(quizStreak)}`;
-
-                        // Trigger pop animation
-                        indicator.classList.remove('streak-pop');
-                        void indicator.offsetWidth; // Force reflow
-                        indicator.classList.add('streak-pop');
-
-                        // Reset and start the expiry timer
-                        startStreakTimer();
-                    }
-                }
+                // Update UI handled by updateScoreDisplay() called in selectQuizAnswer
             } else {
-                // Wrong answer or skip breaks streak
-                resetStreak();
+                // 1-Player Standard Logic
+                if (correct) {
+                    quizStreak++;
+                    gameStats.correct++;
+
+                    // Track best streak
+                    if (quizStreak > gameStats.bestStreak) {
+                        gameStats.bestStreak = quizStreak;
+                    }
+
+                    // Track streak occurrences (simple approach: count when we hit 3)
+                    if (quizStreak === 3) {
+                        gameStats.streakCount++;
+                    }
+
+                    // Only show indicator at streak of 3 or more
+                    if (quizStreak >= 3) {
+                        const indicator = document.getElementById('streak-indicator');
+                        const streakText = document.getElementById('streak-text');
+                        const ringProgress = document.getElementById('streak-ring-progress');
+
+                        if (indicator && streakText) {
+                            // Update text
+                            streakText.textContent = getStreakText(quizStreak);
+
+                            // Update visual level
+                            indicator.className = `streak-indicator streak-${getStreakLevel(quizStreak)}`;
+
+                            // Trigger pop animation
+                            indicator.classList.remove('streak-pop');
+                            void indicator.offsetWidth; // Force reflow
+                            indicator.classList.add('streak-pop');
+
+                            // Reset and start the expiry timer
+                            startStreakTimer();
+                        }
+                    }
+                } else {
+                    // Wrong answer or skip breaks streak
+                    resetStreak();
+                }
             }
         }
 
