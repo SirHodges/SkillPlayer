@@ -1333,33 +1333,45 @@
 
                             const currentQIndex = quizCurrentQuestionIndex;
 
-                            // Initialize Lock Visual
+                            // Initialize Lock Visual (SVG Ring)
                             if (pOverlay) {
                                 pOverlay.innerHTML = `
                                     <div class="lock-icon-wrapper">
-                                        <div class="lock-active-ring"></div>
+                                        <svg class="lock-svg-ring" viewBox="0 0 100 100">
+                                            <circle class="lock-ring-circle" cx="50" cy="50" r="45"></circle>
+                                        </svg>
                                         <div style="font-size: 3rem; z-index: 2;">🔒</div>
                                     </div>
                                 `;
                             }
 
-                            // Countdown Timer (Internal logic only, visual handled by CSS animation)
-                            let lockTime = 3;
+                            // Trigger reflow to ensure animation starts from full
+                            const ring = pOverlay.querySelector('.lock-ring-circle');
+                            if (ring) {
+                                ring.style.strokeDashoffset = '0';
+                                // Start animation
+                                setTimeout(() => {
+                                    ring.style.strokeDashoffset = '283';
+                                }, 50);
+                            }
+
+                            // Countdown Timer (Logic + sync check)
+                            let lockTime = 3000; // ms
+                            const intervalStep = 100;
                             const lockInterval = setInterval(() => {
-                                // Safety check: if question changed or game ended, abort
                                 if (!quizIsGameActive || quizCurrentQuestionIndex !== currentQIndex) {
                                     clearInterval(lockInterval);
                                     return;
                                 }
 
-                                lockTime--;
+                                lockTime -= intervalStep;
                                 if (lockTime <= 0) {
                                     clearInterval(lockInterval);
                                     quizLocks[pKey] = false;
                                     if (pOverlay) pOverlay.classList.add('hidden');
                                     if (pContainer) pContainer.classList.remove('locked');
                                 }
-                            }, 1000);
+                            }, intervalStep);
                         }
 
                     } else {
