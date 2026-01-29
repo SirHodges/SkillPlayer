@@ -211,7 +211,7 @@
                             <button id="binding-cancel-btn" class="quiz-btn-secondary"
                                 style="margin-top: 40px; width: auto; position: relative; z-index: 10;"
                                 onclick="cancelBinding()">
-                                Cancel / Use Mouse
+                                Cancel
                             </button>
                         </div>
                     </div>
@@ -984,11 +984,9 @@
                             statusText.textContent = quizPlayerCount > 1 ? "Waiting for Player 1..." : "Press any button to start...";
                             statusText.style.color = "white"; // Reset color
 
-                            // Hide cancel button in 2-Player mode (mandatory controller)
+                            // Cancel button stays visible to allow going back
                             const cancelBtn = document.getElementById('binding-cancel-btn');
-                            if (cancelBtn) {
-                                cancelBtn.style.display = quizPlayerCount > 1 ? 'none' : 'inline-block';
-                            }
+                            if (cancelBtn) cancelBtn.style.display = 'inline-block';
                         }
                     }
 
@@ -2341,6 +2339,10 @@
 
         socket.on('p1_click', () => handleVirtualClick('p1', lastP1Pos));
         socket.on('p2_click', () => handleVirtualClick('p2', lastP2Pos));
+
+        function cancelBinding() {
+            showQuizStartScreen();
+        }
 
     </script>
 </body>
