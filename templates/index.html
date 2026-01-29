@@ -1033,10 +1033,26 @@
 
             // Create answer buttons with letter prefixes (hidden initially)
             const letters = ['A', 'B', 'C', 'D'];
+
             question.answers.forEach((answer, index) => {
+                let label = letters[index];
+                let colorClass = '';
+
+                // Custom Gamepad Mapping:
+                // Top(0): X (Blue)
+                // Right(1): A (Red)
+                // Bottom(2): B (Yellow)
+                // Left(3): Y (Green)
+                if (inputMode === 'gamepad') {
+                    if (index === 0) { label = 'X'; colorClass = 'blue'; }
+                    if (index === 1) { label = 'A'; colorClass = 'red'; }
+                    if (index === 2) { label = 'B'; colorClass = 'yellow'; }
+                    if (index === 3) { label = 'Y'; colorClass = 'green'; }
+                }
+
                 const btn = document.createElement('button');
                 btn.className = 'quiz-answer-btn answer-hidden';
-                btn.innerHTML = `<span class="answer-letter">${letters[index]}</span> ${answer}`;
+                btn.innerHTML = `<span class="answer-letter ${colorClass}">${label}</span> ${answer}`;
                 btn.addEventListener('click', () => selectQuizAnswer(index));
                 quizElements.answersContainer.appendChild(btn);
             });

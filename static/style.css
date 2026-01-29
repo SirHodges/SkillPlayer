@@ -1420,6 +1420,27 @@ body {
     font-size: 0.95rem;
 }
 
+.quiz-answer-btn .answer-letter.blue {
+    background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
+    box-shadow: 0 2px 8px rgba(33, 150, 243, 0.3);
+}
+
+.quiz-answer-btn .answer-letter.red {
+    background: linear-gradient(135deg, #F44336 0%, #D32F2F 100%);
+    box-shadow: 0 2px 8px rgba(244, 67, 54, 0.3);
+}
+
+.quiz-answer-btn .answer-letter.yellow {
+    background: linear-gradient(135deg, #FFEB3B 0%, #FBC02D 100%);
+    color: #000;
+    box-shadow: 0 2px 8px rgba(251, 192, 45, 0.3);
+}
+
+.quiz-answer-btn .answer-letter.green {
+    background: linear-gradient(135deg, #4CAF50 0%, #388E3C 100%);
+    box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
+}
+
 .quiz-answer-btn.correct {
     background: rgba(34, 197, 94, 0.2);
     border-color: #22c55e;
