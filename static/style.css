@@ -1209,11 +1209,12 @@ body {
 }
 
 .quiz-timer-bar {
-    height: 12px;
+    height: 16px;
     background: rgba(255, 255, 255, 0.1);
-    border-radius: 6px;
+    border-radius: 8px;
     overflow: hidden;
     margin-bottom: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .quiz-timer-fill {
@@ -2550,8 +2551,7 @@ body {
 }
 
 .input-toggle-btn.active img {
-    filter: none;
-    drop-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+    filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.5));
 }
 
 .input-toggle-btn:hover {
