@@ -77,25 +77,6 @@
                 </svg>
                 <span>Switch between SkillPlayer and Quiz</span>
 
-                <!-- Input Mode Toggle -->
-                <div class="input-mode-toggle" id="input-mode-toggle">
-                    <button class="input-toggle-btn active" data-mode="mouse" onclick="setInputMode('mouse')"
-                        title="Mouse Mode">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
-                            fill="currentColor">
-                            <path
-                                d="M13 1.07V9h7c0-4.08-3.05-7.44-7-7.93zM4 15c0 4.42 3.58 8 8 8s8-3.58 8-8v-4H4v4zm7-13.93C7.05 1.56 4 4.92 4 9h7V1.07z" />
-                        </svg>
-                    </button>
-                    <button class="input-toggle-btn" data-mode="gamepad" onclick="setInputMode('gamepad')"
-                        title="Gamepad Mode">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
-                            fill="currentColor">
-                            <path
-                                d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-10 7H8v3H6v-3H3v-2h3V8h2v3h3v2zm4.5 2c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm4-3c-.83 0-1.5-.67-1.5-1.5S18.67 9 19.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z" />
-                        </svg>
-                    </button>
-                </div>
             </div>
             <!-- SkillPlayer Mode Content -->
             <div id="skillplayer-content" class="app-mode-content active">
@@ -188,6 +169,26 @@
                                 <span class="mode-label">2 Players</span>
                             </label>
                         </div>
+
+                        <!-- Moved Input Mode Toggle -->
+                        <div class="input-mode-toggle" id="input-mode-toggle" style="margin-bottom: 2rem;">
+                            <button class="input-toggle-btn active" data-mode="mouse" onclick="setInputMode('mouse')"
+                                title="Mouse Mode">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                    fill="currentColor">
+                                    <path
+                                        d="M13 1.07V9h7c0-4.08-3.05-7.44-7-7.93zM4 15c0 4.42 3.58 8 8 8s8-3.58 8-8v-4H4v4zm7-13.93C7.05 1.56 4 4.92 4 9h7V1.07z" />
+                                </svg> Mouse
+                            </button>
+                            <button class="input-toggle-btn" data-mode="gamepad" onclick="setInputMode('gamepad')"
+                                title="Gamepad Mode">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                    fill="currentColor">
+                                    <path
+                                        d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-10 7H8v3H6v-3H3v-2h3V8h2v3h3v2zm4.5 2c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm4-3c-.83 0-1.5-.67-1.5-1.5S18.67 9 19.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z" />
+                                </svg> Gamepad
+                            </button>
+                        </div>
                         <button id="quiz-start-btn" class="quiz-btn-primary" onclick="startQuiz()">Start Quiz</button>
                     </div>
 
@@ -213,7 +214,7 @@
                                 style="margin-bottom: 20px; color: yellow;">Waiting for gamepads...</p>
                             <div class="binding-pulse"></div>
 
-                            <button class="quiz-btn-secondary"
+                            <button id="binding-cancel-btn" class="quiz-btn-secondary"
                                 style="margin-top: 40px; width: auto; position: relative; z-index: 10;"
                                 onclick="cancelBinding()">
                                 Cancel / Use Mouse
@@ -988,17 +989,23 @@
                         if (statusText) {
                             statusText.textContent = quizPlayerCount > 1 ? "Waiting for Player 1..." : "Press any button to start...";
                             statusText.style.color = "white"; // Reset color
-                        }
 
-                        // Tell backend to start listening
-                        if (socket && socket.connected) {
-                            socket.emit('start_gamepad_binding', { player_count: quizPlayerCount });
+                            // Hide cancel button in 2-Player mode (mandatory controller)
+                            const cancelBtn = document.getElementById('binding-cancel-btn');
+                            if (cancelBtn) {
+                                cancelBtn.style.display = quizPlayerCount > 1 ? 'none' : 'inline-block';
+                            }
                         }
-                    } else {
-                        // Show countdown screen directly for mouse mode
-                        showQuizScreen('countdown');
-                        runCountdown();
                     }
+
+                    // Tell backend to start listening
+                    if (socket && socket.connected) {
+                        socket.emit('start_gamepad_binding', { player_count: quizPlayerCount });
+                    }
+                } else {
+                    // Show countdown screen directly for mouse mode
+                    showQuizScreen('countdown');
+                    runCountdown();
                 }
             } catch (error) {
                 console.error('Failed to start quiz:', error);
@@ -1201,24 +1208,21 @@
                 quizElements.answersContainer.appendChild(btn);
             });
 
-            // After 1 second, start fade in
+            // After 1 second, start fade in AND unlock (reduced delay)
             setTimeout(() => {
                 const buttons = quizElements.answersContainer.querySelectorAll('.quiz-answer-btn');
                 buttons.forEach(btn => {
                     btn.classList.remove('answer-hidden');
                     btn.classList.add('answer-fade-in');
                 });
-            }, 1000);
 
-            // After 2 seconds total, unlock answers and show skip button
-            setTimeout(() => {
                 quizIsAnswerLocked = false;
                 const skipBtn = document.getElementById('quiz-skip-btn');
                 if (skipBtn) {
                     skipBtn.classList.remove('skip-hidden');
                     skipBtn.classList.add('skip-fade-in');
                 }
-            }, 2000);
+            }, 1000);
         }
 
         async function selectQuizAnswer(answerIndex, playerIndex = 1) {
@@ -1342,15 +1346,31 @@
                             showQuizFeedback(`P${playerIndex} Locked (3s)!`, 'penalty', playerIndex);
 
                             const currentQIndex = quizCurrentQuestionIndex;
-                            // 3 Second Unlock Timer
-                            setTimeout(() => {
-                                // Only unlock if we are still on the SAME question
-                                if (quizIsGameActive && quizCurrentQuestionIndex === currentQIndex) {
+
+                            // Initialize Lock Visual
+                            if (pOverlay) {
+                                pOverlay.innerHTML = '🔒<br><span style="font-size: 0.5em">3</span>';
+                            }
+
+                            // Countdown Timer
+                            let lockTime = 3;
+                            const lockInterval = setInterval(() => {
+                                // Safety check: if question changed or game ended, abort
+                                if (!quizIsGameActive || quizCurrentQuestionIndex !== currentQIndex) {
+                                    clearInterval(lockInterval);
+                                    return;
+                                }
+
+                                lockTime--;
+                                if (lockTime > 0) {
+                                    if (pOverlay) pOverlay.innerHTML = `🔒<br><span style="font-size: 0.5em">${lockTime}</span>`;
+                                } else {
+                                    clearInterval(lockInterval);
                                     quizLocks[pKey] = false;
                                     if (pOverlay) pOverlay.classList.add('hidden');
                                     if (pContainer) pContainer.classList.remove('locked');
                                 }
-                            }, 3000);
+                            }, 1000);
                         }
 
                     } else {
@@ -2116,6 +2136,20 @@
         loadTotalViews();
         loadChangelog();
         loadQuizLeaderboard();
+
+        // Canvas / 2-Player Mode Logic
+        // Force Gamepad selection when 2P is chosen
+        document.querySelectorAll('input[name="player-mode"]').forEach(input => {
+            input.addEventListener('change', (e) => {
+                const mouseBtn = document.querySelector('.input-toggle-btn[data-mode="mouse"]');
+                if (e.target.value === '2') {
+                    setInputMode('gamepad');
+                    if (mouseBtn) mouseBtn.style.display = 'none';
+                } else {
+                    if (mouseBtn) mouseBtn.style.display = 'inline-flex';
+                }
+            });
+        });
 
         // ===========================================
         // SocketIO & Virtual Input (2-Player)

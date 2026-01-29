@@ -1,5 +1,10 @@
 [
     {
+        "version": "2.3",
+        "date": "2026-01-29 11:50",
+        "desc": "Added support for two player head to head competition with split screen and independent timers"
+    },
+    {
         "version": "2.2",
         "date": "2026-01-28 11:50",
         "desc": "Added single player USB gamepad support with diamond layout for quiz answers"
