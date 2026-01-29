@@ -17,28 +17,37 @@ except ImportError:
     print("[Gamepad] evdev not available (Windows). Gamepad support disabled.")
 
 # Button code mapping (User: X=288, B=290, A=291, Y=289)
+# Primary (USB Gamepad)
 X_BTN = 288  # Trigger/Left
 Y_BTN = 289  # Thumb/Top
 B_BTN = 290  # Thumb2/Right
 A_BTN = 291  # Top/Bottom
 
+# Secondary (8Bitdo SF30 Pro)
+# User Report: X=307, A=305, B=304, Y=306
+SF30_X = 307
+SF30_A = 305
+SF30_B = 304
+SF30_Y = 306
+
 # Map button codes to answer indices (diamond layout positions)
-# User Report: Top->Left(3), Right->Top(0), Bottom->Right(1), Left->Bottom(2)
-# Logic:
-# Top sends 288 (was mapped to 3/Left). New Map: 288->0
-# Right sends 289 (was mapped to 0/Top). New Map: 289->1
-# Bottom sends 290 (was mapped to 1/Right). New Map: 290->2
-# Left sends 291 (was mapped to 2/Bottom). New Map: 291->3
 BUTTON_TO_ANSWER = {
+    # USB Gamepad Mappings
     X_BTN: 0,  # Top
     Y_BTN: 1,  # Right
     B_BTN: 2,  # Bottom
     A_BTN: 3,  # Left
+    
+    # 8Bitdo SF30 Pro Mappings
+    SF30_X: 0, # Top
+    SF30_A: 1, # Right
+    SF30_B: 2, # Bottom
+    SF30_Y: 3, # Left
 }
 
 
 def find_all_gamepad_devices():
-    """Find ALL gamepad devices named 'usb gamepad'."""
+    """Find ALL gamepad devices named 'usb gamepad' or similar."""
     if not EVDEV_AVAILABLE:
         return []
     
@@ -49,7 +58,7 @@ def find_all_gamepad_devices():
             # Only look for devices with "usb gamepad" in name (case insensitive)
             # Also check for common keywords in case the name is different
             name_lower = device.name.lower()
-            if 'usb gamepad' in name_lower or 'joystick' in name_lower or 'controller' in name_lower or 'game' in name_lower:
+            if 'usb gamepad' in name_lower or 'joystick' in name_lower or 'controller' in name_lower or 'game' in name_lower or '8bitdo' in name_lower:
                 gamepads.append(device.path)
         
         return gamepads
