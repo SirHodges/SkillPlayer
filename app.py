@@ -531,8 +531,6 @@ def quiz_track_skip():
 def system_update_and_reboot():
     """Trigger git pull and reboot (Linux/Pi only)."""
     import subprocess
-    import platform
-    
     if platform.system() != 'Linux':
         return jsonify({
             "success": False,
