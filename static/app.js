@@ -878,30 +878,14 @@ async function selectQuizAnswer(answerIndex, playerIndex = 1) {
                     }, 1500);
                 } else {
                     // Just this player locked
-                    showQuizFeedback(`P${playerIndex} Locked (3s)!`, 'penalty', playerIndex);
+                    // Just this player locked
+                    showQuizFeedback(`LOCKED (3s)!`, 'penalty', playerIndex);
 
                     const currentQIndex = quizCurrentQuestionIndex;
 
-                    // Initialize Lock Visual (SVG Ring)
+                    // Initialize Lock Visual (Countdown)
                     if (pOverlay) {
-                        pOverlay.innerHTML = `
-                                    <div class="lock-icon-wrapper">
-                                        <svg class="lock-svg-ring" viewBox="0 0 100 100">
-                                            <circle class="lock-ring-circle" cx="50" cy="50" r="45"></circle>
-                                        </svg>
-                                        <div style="font-size: 3rem; z-index: 2;">🔒</div>
-                                    </div>
-                                `;
-                    }
-
-                    // Trigger reflow to ensure animation starts from full
-                    const ring = pOverlay.querySelector('.lock-ring-circle');
-                    if (ring) {
-                        ring.style.strokeDashoffset = '0';
-                        // Start animation
-                        setTimeout(() => {
-                            ring.style.strokeDashoffset = '283';
-                        }, 50);
+                        pOverlay.innerHTML = `<div class="lock-countdown">3</div>`;
                     }
 
                     // Countdown Timer (Logic + sync check)
@@ -914,6 +898,14 @@ async function selectQuizAnswer(answerIndex, playerIndex = 1) {
                         }
 
                         lockTime -= intervalStep;
+
+                        // Update Countdown Text
+                        if (pOverlay) {
+                            const seconds = Math.ceil(lockTime / 1000);
+                            const cntEl = pOverlay.querySelector('.lock-countdown');
+                            if (cntEl) cntEl.textContent = Math.max(1, seconds);
+                        }
+
                         if (lockTime <= 0) {
                             clearInterval(lockInterval);
                             quizLocks[pKey] = false;

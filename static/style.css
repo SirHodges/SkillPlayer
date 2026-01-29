@@ -2307,15 +2307,12 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(30, 30, 30, 0.85);
+    background: rgba(0, 0, 0, 0.6);
     border-radius: 10px;
-    /* Slightly less than container to fit inside border */
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 2.5rem;
-    backdrop-filter: blur(2px);
-    z-index: 10;
+    z-index: 9;
     animation: fadeIn 0.3s ease;
 }
 
@@ -2613,10 +2610,38 @@ body {
     z-index: 10;
 }
 
-/* Adjust container padding to accommodate bar */
+/* Lockout State Styling */
 .player-score-container.locked {
-    padding-top: 36px !important;
     border-color: #ef4444;
+    position: relative;
+}
+
+/* Grayscale content when locked (except bar/overlay) */
+.player-score-container.locked>*:not(.lockout-bar):not(.lock-overlay) {
+    filter: grayscale(1) opacity(0.6);
+    transition: all 0.3s ease;
+}
+
+.lock-countdown {
+    font-size: 4rem;
+    font-weight: 800;
+    color: white;
+    text-shadow: 0 0 15px #ef4444;
+    font-family: 'Outfit', sans-serif;
+    z-index: 20;
+    animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes popIn {
+    from {
+        transform: scale(0);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
 }
 
 .lockout-bar.hidden {
