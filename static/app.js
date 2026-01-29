@@ -615,7 +615,7 @@ function updateQuizTimerDisplay() {
     quizElements.timerText.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
 
     // Update timer bar
-    const percentage = (quizTimeRemaining / 60) * 100;
+    const percentage = Math.max(0, Math.min(100, (quizTimeRemaining / 60) * 100));
     quizElements.timerFill.style.width = `${percentage}%`;
 
     // Change color when low (under 30 seconds)
@@ -814,7 +814,7 @@ async function selectQuizAnswer(answerIndex, playerIndex = 1) {
                 // Highlight winner box
                 const pContainer = document.getElementById(pKey + '-score-container');
                 if (pContainer) pContainer.classList.add('active-turn');
-                showQuizFeedback(`P${playerIndex} +1 Point & +2s!`, 'correct', playerIndex);
+                showQuizFeedback(`P${playerIndex} +1 Point!`, 'correct', playerIndex);
             } else {
                 // 1P Logic
                 const streakBonus = quizStreak >= 2 ? Math.min(quizStreak - 1, 5) : 0;
