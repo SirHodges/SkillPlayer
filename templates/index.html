@@ -244,7 +244,9 @@
                                     <div class="quiz-timer-bar">
                                         <div id="quiz-timer-fill" class="quiz-timer-fill"></div>
                                     </div>
-                                    <span id="quiz-timer-text" class="quiz-timer-text">3:00</span>
+                                    <div class="timer-text-wrapper">
+                                        <span id="quiz-timer-text" class="quiz-timer-text">3:00</span>
+                                    </div>
                                 </div>
                             </div>
 
@@ -935,9 +937,10 @@
 
                         // Initialize 2-Player State
                         quizScores = { p1: 0, p2: 0 };
-                        quizTimers = { p1: 60, p2: 60 };
+                        quizTimers = { p1: 60, p2: 60 }; // Kept for legacy ref, but main timer used
                         quizStreaks = { p1: 0, p2: 0 };
                         quizLocks = { p1: false, p2: false };
+                        quizTimeRemaining = 60; // Use shared timer
                     } else {
                         // 1-Player State
                         document.querySelectorAll('.input-toggle-btn').forEach(btn => btn.style.display = 'flex');
@@ -1031,62 +1034,41 @@
             quizTimerInterval = setInterval(() => {
                 if (!quizIsGameActive) return;
 
-                if (quizPlayerCount > 1) {
-                    // 2-Player Logic
-                    let p1Active = quizTimers.p1 > 0;
-                    let p2Active = quizTimers.p2 > 0;
-
-                    if (p1Active) quizTimers.p1--;
-                    if (p2Active) quizTimers.p2--;
-
-                    if (!p1Active && !p2Active) {
-                        endQuiz();
-                    } else {
-                        updateQuizTimerDisplay();
-                    }
+                // Shared Timer Logic for both modes
+                if (quizTimeRemaining > 0) {
+                    quizTimeRemaining--;
+                    updateQuizTimerDisplay();
                 } else {
-                    // 1-Player Logic
-                    if (quizTimeRemaining > 0) {
-                        quizTimeRemaining--;
-                        updateQuizTimerDisplay();
-                    } else {
-                        endQuiz();
-                    }
+                    endQuiz();
                 }
+
+                // Legacy: if we want individual timers for something else, we can keep them, 
+                // but user requested a shared top timer.
             }, 1000);
         }
 
         function updateQuizTimerDisplay() {
-            if (quizPlayerCount > 1) {
-                // 2-Player Display
-                ['p1', 'p2'].forEach(p => {
-                    const t = quizTimers[p];
-                    const el = document.getElementById(`${p}-timer`);
-                    if (el) {
-                        const m = Math.floor(t / 60);
-                        const s = t % 60;
-                        el.textContent = `${m}:${s.toString().padStart(2, '0')}`;
-                        if (t < 10) el.style.color = 'red';
-                        else el.style.color = '';
-                    }
-                });
+            // SHARED TIMER DISPLAY (For both 1P and 2P)
+            const minutes = Math.floor(quizTimeRemaining / 60);
+            const seconds = quizTimeRemaining % 60;
+            quizElements.timerText.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+
+            // Update timer bar
+            const percentage = (quizTimeRemaining / 60) * 100;
+            quizElements.timerFill.style.width = `${percentage}%`;
+
+            // Change color when low (under 30 seconds)
+            if (quizTimeRemaining <= 30) {
+                quizElements.timerFill.classList.add('low');
             } else {
-                // 1-Player Display
-                const minutes = Math.floor(quizTimeRemaining / 60);
-                const seconds = quizTimeRemaining % 60;
-                quizElements.timerText.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
-
-                // Update timer bar
-                const percentage = (quizTimeRemaining / 60) * 100;
-                quizElements.timerFill.style.width = `${percentage}%`;
-
-                // Change color when low (under 30 seconds)
-                if (quizTimeRemaining <= 30) {
-                    quizElements.timerFill.classList.add('low');
-                } else {
-                    quizElements.timerFill.classList.remove('low');
-                }
+                quizElements.timerFill.classList.remove('low');
             }
+
+            // Hide individual player timers if they exist
+            ['p1', 'p2'].forEach(p => {
+                const el = document.getElementById(`${p}-timer`);
+                if (el) el.style.display = 'none';
+            });
         }
 
         function applyQuizPenalty(seconds, playerIndex = 1) {
@@ -1259,8 +1241,7 @@
                     // Update Score
                     if (quizPlayerCount > 1) {
                         quizScores[pKey]++;
-                        // Bonus time for 2P
-                        applyQuizPenalty(-2, playerIndex); // Negative penalty = bonus
+                        // NO TIME BONUS for 2P as requested
                         updateStreak(true, playerIndex);
 
                         updateScoreDisplay();
@@ -1268,7 +1249,7 @@
                         // Highlight winner box
                         const pContainer = document.getElementById(pKey + '-score-container');
                         if (pContainer) pContainer.classList.add('active-turn');
-                        showQuizFeedback(`P${playerIndex} Point! +2s`, 'correct', playerIndex);
+                        showQuizFeedback(`P${playerIndex} Point!`, 'correct', playerIndex);
                     } else {
                         // 1P Logic
                         const streakBonus = quizStreak >= 2 ? Math.min(quizStreak - 1, 5) : 0;
@@ -1297,8 +1278,7 @@
                         // Lock THIS player
                         quizLocks[pKey] = true;
 
-                        // Penalty time & Streak reset
-                        applyQuizPenalty(5, playerIndex);
+                        // NO TIME PENALTY for 2P as requested (Locked timer remains)
                         updateStreak(false, playerIndex);
 
                         const pOverlay = document.getElementById(pKey + '-lock-overlay');
@@ -1332,10 +1312,15 @@
 
                             // Initialize Lock Visual
                             if (pOverlay) {
-                                pOverlay.innerHTML = '🔒<br><span style="font-size: 0.5em">3</span>';
+                                pOverlay.innerHTML = `
+                                    <div class="lock-icon-wrapper">
+                                        <div class="lock-active-ring"></div>
+                                        <div style="font-size: 3rem; z-index: 2;">🔒</div>
+                                    </div>
+                                `;
                             }
 
-                            // Countdown Timer
+                            // Countdown Timer (Internal logic only, visual handled by CSS animation)
                             let lockTime = 3;
                             const lockInterval = setInterval(() => {
                                 // Safety check: if question changed or game ended, abort
@@ -1345,9 +1330,7 @@
                                 }
 
                                 lockTime--;
-                                if (lockTime > 0) {
-                                    if (pOverlay) pOverlay.innerHTML = `🔒<br><span style="font-size: 0.5em">${lockTime}</span>`;
-                                } else {
+                                if (lockTime <= 0) {
                                     clearInterval(lockInterval);
                                     quizLocks[pKey] = false;
                                     if (pOverlay) pOverlay.classList.add('hidden');
