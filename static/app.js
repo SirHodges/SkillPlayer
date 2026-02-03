@@ -2025,15 +2025,20 @@ async function selectCalibrationAnswer(answerIndex) {
             if (buttons[data.correct_index]) buttons[data.correct_index].classList.add('correct');
         }
 
-        // Show In-Place Feedback
+        // Result shown (Green/Red)
+        // Wait 1s then proceed to next question (Implicit "Just Right")
         setTimeout(() => {
-            showInPlaceFeedback();
-        }, 800);
+            submitCalibration(null);
+        }, 1000);
 
     } catch (error) {
         console.error('Failed to check calibration answer:', error);
         calibrationAnswerLocked = false;
     }
+}
+
+function showInPlaceFeedback() {
+    // Deprecated - Simplified Flow
 }
 
 function showInPlaceFeedback() {
@@ -2160,7 +2165,17 @@ function hideFlagReasonScreen() {
 function markForReview() {
     if (!calibrationMode || calibrationAnswerLocked) return;
     calibrationAnswerLocked = true;
-    showFlagReasonScreen();
+
+    // Simplified: Directly submit with 'review' flag
+    console.log('[Calibration] Marking for review...');
+
+    // Visual feedback?
+    const buttons = document.querySelectorAll('#calibration-answers-container .quiz-answer-btn');
+    buttons.forEach(btn => btn.classList.add('wrong')); // Turn red temporarily
+
+    setTimeout(() => {
+        submitCalibration('review');
+    }, 500);
 }
 
 async function submitCalibration(flagType) {
@@ -2370,25 +2385,10 @@ socket.on('gamepad_button', (data) => {
                 } else if (answerIndex >= 0 && answerIndex <= 3) {
                     selectCalibrationAnswer(answerIndex);
                 }
-            } else if (calibrationState === 'feedback') {
-                if (calibrationFeedbackInputLocked) {
-                    console.log('[Gamepad] Input ignored during feedback grace period');
-                    return;
-                }
-                // X=0, Y=1, B=2, A=3
-                if (answerIndex === 0) submitCalibration('confusing');
-                else if (answerIndex === 1) submitCalibration('outdated');
-                else if (answerIndex === 3) submitCalibration('difficult');
-                else if (answerIndex === 2) submitCalibration('wrong'); // B = Wrong Key
-            } else if (calibrationState === 'flag_reason') {
-                // X=0, Y=1, B=2, A=3
-                if (answerIndex === 0) submitCalibration('confusing');
-                else if (answerIndex === 1) submitCalibration('outdated'); // Y=1 
-                else if (answerIndex === 3) submitCalibration('difficult'); // A=3
-                else if (answerIndex === 2) hideFlagReasonScreen(); // B=2
             }
             return;
         }
+
 
         // FAILSAFE: If we receive a button press but are still on the binding screen,
         const bindingScreen = document.getElementById('quiz-binding-screen');

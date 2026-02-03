@@ -689,7 +689,8 @@ def calibration_submit():
                 "confusing": 0,
                 "outdated": 0,
                 "difficult": 0,
-                "wrong": 0
+                "wrong": 0,
+                "review": 0
             }
             # Migrate old review_count if exists (mapped to 'wrong' as fallback or kept separate? User said remove)
             if "review_count" in source_question:
