@@ -1895,20 +1895,34 @@ async function startCalibration(level) {
         document.getElementById('calibration-level-display').textContent = level;
         document.getElementById('calibration-total-questions').textContent = calibrationQuestions.length;
 
-        // Show calibration game screen
-        document.querySelectorAll('.quiz-screen').forEach(screen => screen.classList.remove('active'));
-        document.getElementById('calibration-game-screen').classList.add('active');
-
         // Apply input mode layout
         const answersContainer = document.getElementById('calibration-answers-container');
         if (inputMode === 'gamepad') {
             answersContainer.classList.add('diamond-layout');
+
+            // Show binding screen for gamepad mode
+            document.querySelectorAll('.quiz-screen').forEach(screen => screen.classList.remove('active'));
+            document.getElementById('quiz-binding-screen').classList.add('active');
+
+            // Update binding text for calibration
+            const statusText = document.getElementById('binding-status-text');
+            if (statusText) {
+                statusText.textContent = "Press any button to start calibration...";
+                statusText.style.color = "white";
+            }
+
+            // Tell backend to start listening (1 player for calibration)
+            if (socket && socket.connected) {
+                socket.emit('start_gamepad_binding', { player_count: 1 });
+            }
         } else {
             answersContainer.classList.remove('diamond-layout');
-        }
 
-        // Display first question
-        displayCalibrationQuestion();
+            // Mouse mode: Go straight to game screen
+            document.querySelectorAll('.quiz-screen').forEach(screen => screen.classList.remove('active'));
+            document.getElementById('calibration-game-screen').classList.add('active');
+            displayCalibrationQuestion();
+        }
 
     } catch (error) {
         console.error('Failed to start calibration:', error);
@@ -2290,7 +2304,7 @@ socket.on('gamepad_bound', (data) => {
             }
         }
     } else {
-        // 1-Player Logic (Legacy)
+        // 1-Player Logic (or Calibration Mode)
         if (statusText) {
             statusText.textContent = "GAMEPAD BOUND! STARTING...";
             statusText.style.color = "#00ff00"; // Green
@@ -2300,8 +2314,16 @@ socket.on('gamepad_bound', (data) => {
 
         if (inputMode === 'gamepad') {
             setTimeout(() => {
-                showQuizScreen('countdown');
-                runCountdown();
+                if (calibrationMode) {
+                    // Start calibration game
+                    document.querySelectorAll('.quiz-screen').forEach(screen => screen.classList.remove('active'));
+                    document.getElementById('calibration-game-screen').classList.add('active');
+                    displayCalibrationQuestion();
+                } else {
+                    // Regular quiz countdown
+                    showQuizScreen('countdown');
+                    runCountdown();
+                }
             }, 500);
         }
     }
