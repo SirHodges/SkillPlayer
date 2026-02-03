@@ -1991,6 +1991,29 @@ body {
     }
 }
 
+/* Steal Indicator Styles */
+.steal-mode .streak-ring-progress {
+    stroke: #ef4444;
+    /* Red */
+    stroke-dasharray: 100;
+    stroke-dashoffset: 0;
+    transition: stroke-dashoffset 1s linear;
+}
+
+.steal-mode .star-icon {
+    color: #ef4444;
+    filter: drop-shadow(0 0 20px rgba(239, 68, 68, 0.7));
+    /* animation: bounceIn 0.5s; Already handled by container toggling? */
+}
+
+.steal-mode .streak-text {
+    color: #ef4444;
+    text-shadow: 0 0 20px rgba(239, 68, 68, 0.7);
+    font-size: 2.5rem;
+    /* Larger as requested */
+    text-align: center;
+}
+
 /* ========================================
    Admin Menu System
    ======================================== */

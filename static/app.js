@@ -142,7 +142,10 @@ const quizElements = {
     nameEntry: document.getElementById('quiz-name-entry'),
     playerName: document.getElementById('quiz-player-name'),
     endScoresList: document.getElementById('quiz-end-scores-list'),
-    sidebarScoresList: document.getElementById('sidebar-scores-list')
+    sidebarScoresList: document.getElementById('sidebar-scores-list'),
+    stealIndicator: document.getElementById('steal-indicator'),
+    stealText: document.getElementById('steal-text'),
+    stealRing: document.getElementById('steal-ring-progress')
 };
 
 // ===========================================
@@ -1180,9 +1183,6 @@ async function skipQuestion(playerIndex = 1) {
     const otherPlayerIndex = playerIndex === 1 ? 2 : 1;
     const otherPKey = 'p' + otherPlayerIndex;
 
-    // Show Feedback "Player X Skipped! STEAL!"
-    showQuizFeedback(`Player ${playerIndex} Skipped! STEAL!`, 'alert');
-
     // Start Steal Timer (4 seconds)
     startStealTimer(4);
 }
@@ -1191,18 +1191,42 @@ function startStealTimer(seconds) {
     // Clear any existing steal timer
     clearInterval(stealTimerInterval);
 
-    // We can use the main feedback area or a specific "Steal" UI
-    // For now, let's pulse the feedback text
-    const feedbackEl = quizElements.feedback;
-    feedbackEl.innerHTML = `STEAL! <span style="font-size: 1.5em; color: yellow;">${seconds}</span>`;
+    const stealEl = quizElements.stealIndicator;
+    const stealText = quizElements.stealText;
+    const stealRing = quizElements.stealRing;
+
+    if (stealEl) {
+        stealEl.classList.remove('hidden');
+        // Reset animation
+        if (stealRing) {
+            stealRing.style.transition = 'none';
+            stealRing.style.strokeDasharray = '100';
+            stealRing.style.strokeDashoffset = '0';
+            // Force reflow
+            void stealRing.offsetWidth;
+            stealRing.style.transition = 'stroke-dashoffset 1s linear';
+        }
+    }
+
+    if (stealText) stealText.innerHTML = `STEAL!<br><span style="font-size:0.8em">${seconds}</span>`;
 
     let time = seconds;
+    const maxTime = seconds;
+
     stealTimerInterval = setInterval(() => {
         time--;
-        feedbackEl.innerHTML = `STEAL! <span style="font-size: 1.5em; color: yellow;">${time}</span>`;
+
+        // Update Visuals
+        if (stealText) stealText.innerHTML = `STEAL!<br><span style="font-size:0.8em">${time}</span>`;
+        if (stealRing) {
+            const invertedOffset = ((maxTime - time) / maxTime) * 100;
+            stealRing.style.strokeDashoffset = invertedOffset;
+        }
 
         if (time <= 0 || !quizIsGameActive) {
             clearInterval(stealTimerInterval);
+            if (stealEl) stealEl.classList.add('hidden');
+
             // Time up! Moving on
             if (quizIsGameActive) {
                 showQuizFeedback("Time's up!", 'penalty');

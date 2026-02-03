@@ -1,5 +1,10 @@
 [
     {
+        "version": "2.4",
+        "date": "2026-02-03 11:30",
+        "desc": "2 player Skip/Steal mechanic added. Debug Terminal added"
+    },
+    {
         "version": "2.3",
         "date": "2026-01-29 11:50",
         "desc": "Added support for two player head to head competition with split screen and independent timers"
