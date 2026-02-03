@@ -15,6 +15,7 @@ quiz_answers.json
 views.json
 data/
 question_skips.json
+questions.json
 content/
 
 # Environment
