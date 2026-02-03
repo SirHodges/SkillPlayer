@@ -1805,17 +1805,9 @@ let calibrationCalibratedCount = 0;
 let calibrationAnswerLocked = false;
 
 function promptCalibrationPassword() {
-    const password = prompt('Enter calibration password:');
-
-    if (password === null) {
-        return; // Cancelled
-    }
-
-    if (password.toLowerCase() === 'calibrate') {
+    if (confirm('Are you sure you want to enter calibration mode?')) {
         closeAdminMenu();
         showCalibrationLevelScreen();
-    } else {
-        alert('❌ Incorrect password');
     }
 }
 
