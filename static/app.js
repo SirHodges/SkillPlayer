@@ -1972,9 +1972,9 @@ function displayCalibrationQuestion() {
 
         if (inputMode === 'gamepad') {
             if (index === 0) { label = 'X'; colorClass = 'blue'; }
-            if (index === 1) { label = 'A'; colorClass = 'red'; }
+            if (index === 1) { label = 'Y'; colorClass = 'green'; } // Python 1 = Y
             if (index === 2) { label = 'B'; colorClass = 'yellow'; }
-            if (index === 3) { label = 'Y'; colorClass = 'green'; }
+            if (index === 3) { label = 'A'; colorClass = 'red'; }   // Python 3 = A
         }
 
         const btn = document.createElement('button');
@@ -2293,11 +2293,11 @@ socket.on('gamepad_button', (data) => {
                     submitCalibration(null);
                 }
             } else if (calibrationState === 'flag_reason') {
-                // X=0, A=1, B=2, Y=3
+                // X=0, Y=1, B=2, A=3
                 if (answerIndex === 0) submitCalibration('confusing');
-                else if (answerIndex === 3) submitCalibration('outdated');
-                else if (answerIndex === 1) submitCalibration('difficult');
-                else if (answerIndex === 2) hideFlagReasonScreen();
+                else if (answerIndex === 1) submitCalibration('outdated'); // Y=1 
+                else if (answerIndex === 3) submitCalibration('difficult'); // A=3
+                else if (answerIndex === 2) hideFlagReasonScreen(); // B=2
             }
             return;
         }
