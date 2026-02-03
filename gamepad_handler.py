@@ -169,9 +169,10 @@ class GamepadHandler:
                     # Use standard print for raw spam, log() for key events
                     print(f"[Gamepad] Raw: {event.code}, Val: {event.value}", flush=True)
 
-                # Handle button presses (value=1)
-                if event.type == ecodes.EV_KEY and event.value == 1:
-                    self._handle_button_press(device_path, event.code)
+                # Handle button events (press=1, release=0, hold=2)
+                if event.type == ecodes.EV_KEY:
+                    if event.value in [0, 1]: # Ignore hold (2) auto-repeat events for now
+                        self._handle_button_event(device_path, event.code, event.value)
             
         except (OSError, FileNotFoundError) as e:
             print(f"[Gamepad] Device {device_path} disconnected: {e}")
@@ -184,11 +185,11 @@ class GamepadHandler:
                     self.active_listeners.remove(device_path)
             print(f"[Gamepad] Listener thread ended for {device_path}")
     
-    def _handle_button_press(self, device_path, button_code):
-        """Handle a button press from any device."""
+    def _handle_button_event(self, device_path, button_code, value):
+        """Handle a button event (press/release) from any device."""
         
-        # --- BINDING LOGIC ---
-        if self.binding_mode:
+        # --- BINDING LOGIC (Press Only) ---
+        if self.binding_mode and value == 1:
             # Check for P1 Binding
             if self.binding_mode == 'P1':
                 print(f"[Gamepad] Device {device_path} claimed Player 1")
@@ -231,20 +232,32 @@ class GamepadHandler:
                 player_id = 2
             
             if player_id > 0:
-                # Forward mapped buttons
-                if button_code in BUTTON_TO_ANSWER:
-                    answer_index = BUTTON_TO_ANSWER[button_code]
-                    self.log(f"[Gamepad] Player {player_id} pressed Button {button_code} -> Answer {answer_index}")
-                    
-                    if answer_index == 'skip':
-                        self.log("[Gamepad] SKIP EVENT EMITTED!")
+                # 1. Handle Special Hold-to-Stop Button (START)
+                if button_code == START_BTN:
+                    if value == 1: # Down
+                         self.log(f"[Gamepad] Player {player_id} START DOWN (Holding...)")
+                         self.socketio.emit('gamepad_start_down', {'player': player_id})
+                    elif value == 0: # Up
+                         self.log(f"[Gamepad] Player {player_id} START UP (Released)")
+                         self.socketio.emit('gamepad_start_up', {'player': player_id})
+                    return # Start button is special, don't map to answers
 
-                    self.socketio.emit('gamepad_button', {
-                        'player': player_id,
-                        'answer_index': answer_index
-                    })
-                else:
-                    print(f"[Gamepad] Unmapped Button Pressed: {button_code}")
+                # 2. Handle Standard Answer Buttons (Press Only)
+                if value == 1:
+                    # Forward mapped buttons
+                    if button_code in BUTTON_TO_ANSWER:
+                        answer_index = BUTTON_TO_ANSWER[button_code]
+                        self.log(f"[Gamepad] Player {player_id} pressed Button {button_code} -> Answer {answer_index}")
+                        
+                        if answer_index == 'skip':
+                            self.log("[Gamepad] SKIP EVENT EMITTED!")
+
+                        self.socketio.emit('gamepad_button', {
+                            'player': player_id,
+                            'answer_index': answer_index
+                        })
+                    else:
+                        print(f"[Gamepad] Unmapped Button Pressed: {button_code}")
     
     def stop(self):
         """Stop the gamepad handler."""

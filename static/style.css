@@ -1740,7 +1740,15 @@ body {
     margin-top: 24px;
 }
 
+.stop-btn-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
 .quiz-btn-stop {
+    position: relative;
     padding: 12px 24px;
     background: rgba(239, 68, 68, 0.2);
     border: 2px solid #ef4444;
@@ -1750,12 +1758,39 @@ body {
     font-size: 0.95rem;
     font-weight: 600;
     cursor: pointer;
+    overflow: hidden;
+    /* For progress bar filling */
     transition: all 0.3s ease;
+    min-width: 140px;
 }
 
 .quiz-btn-stop:hover {
     background: rgba(239, 68, 68, 0.4);
     transform: translateY(-2px);
+}
+
+.stop-progress {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 0%;
+    background: rgba(239, 68, 68, 0.5);
+    z-index: 0;
+    transition: width 0.1s linear;
+    /* Smooth fill */
+}
+
+.stop-label {
+    position: relative;
+    z-index: 1;
+    /* Ensure text is above progress bar */
+}
+
+.stop-hint {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    opacity: 0.7;
 }
 
 /* Virtual Keyboard */

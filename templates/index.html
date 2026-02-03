@@ -332,7 +332,13 @@
                         </div>
 
                         <div class="quiz-stop-container">
-                            <button class="quiz-btn-stop" onclick="stopQuizAttempt()">Stop Attempt</button>
+                            <div class="stop-btn-wrapper">
+                                <button id="quiz-btn-stop" class="quiz-btn-stop" onclick="stopQuizAttempt()">
+                                    <div id="stop-progress" class="stop-progress"></div>
+                                    <span class="stop-label">Stop Attempt</span>
+                                </button>
+                                <span class="stop-hint">Hold START (2s)</span>
+                            </div>
                         </div>
                     </div>
 

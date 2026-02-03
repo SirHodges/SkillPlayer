@@ -22,9 +22,49 @@ function initGamepadSocket() {
                     }
                 }
             });
+
+            // Listen for START button hold events (Stop Attempt)
+            gamepadSocket.on('gamepad_start_down', function (data) {
+                if (currentAppMode === 'quiz' && quizIsGameActive) {
+                    startStopHold();
+                }
+            });
+
+            gamepadSocket.on('gamepad_start_up', function (data) {
+                cancelStopHold();
+            });
         }
     } catch (e) {
         console.log('[Gamepad] SocketIO not available:', e);
+    }
+}
+
+// Stop Hold Logic
+let stopHoldTimeout = null;
+
+function startStopHold() {
+    const bar = document.getElementById('stop-progress');
+    if (!bar) return;
+
+    // Start animation
+    bar.style.transition = 'width 2s linear';
+    bar.style.width = '100%';
+
+    stopHoldTimeout = setTimeout(() => {
+        stopQuizAttempt();
+        cancelStopHold(); // Reset visual
+    }, 2000);
+}
+
+function cancelStopHold() {
+    if (stopHoldTimeout) {
+        clearTimeout(stopHoldTimeout);
+        stopHoldTimeout = null;
+    }
+    const bar = document.getElementById('stop-progress');
+    if (bar) {
+        bar.style.transition = 'width 0.2s ease-out';
+        bar.style.width = '0%';
     }
 }
 
