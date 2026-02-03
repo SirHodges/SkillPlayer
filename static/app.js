@@ -17,7 +17,11 @@ function initGamepadSocket() {
                 // Only handle gamepad input when in gamepad mode, quiz mode, and game is active
                 if (inputMode === 'gamepad' && currentAppMode === 'quiz' && quizIsGameActive && !quizIsAnswerLocked) {
                     const answerIndex = data.answer_index;
-                    if (answerIndex >= 0 && answerIndex <= 3) {
+
+                    if (answerIndex === 'skip') {
+                        console.log('[Gamepad] SKIP command received via primary socket');
+                        skipQuestion(data.player);
+                    } else if (answerIndex >= 0 && answerIndex <= 3) {
                         selectQuizAnswer(answerIndex);
                     }
                 }
@@ -750,6 +754,11 @@ function displayQuizQuestion() {
 
     // Lock answers during delay
     quizIsAnswerLocked = true;
+
+    // Reset Steal UI and Timer
+    clearInterval(stealTimerInterval);
+    if (quizElements.stealIndicator) quizElements.stealIndicator.classList.add('hidden');
+
 
     // Record when question was displayed for timing tracking
     questionDisplayTime = Date.now();
@@ -1971,6 +1980,17 @@ socket.on('gamepad_bound', (data) => {
             }, 500);
         }
     }
+});
+
+// Listen for START button hold events (Stop Attempt) - Global Socket
+socket.on('gamepad_start_down', function (data) {
+    if (currentAppMode === 'quiz' && quizIsGameActive) {
+        startStopHold();
+    }
+});
+
+socket.on('gamepad_start_up', function (data) {
+    cancelStopHold();
 });
 
 // Binding Status Handler
