@@ -629,7 +629,7 @@ def calibration_start():
 
 @app.route('/api/quiz/calibration/answer', methods=['POST'])
 def calibration_answer():
-    """Process a calibration answer - always updates calibration_level and proceeds."""
+    """Process a calibration answer - only returns correctness, does NOT update file."""
     if not calibration_session["active"]:
         return jsonify({"success": False, "error": "No active calibration session"})
     
@@ -643,14 +643,6 @@ def calibration_answer():
     question = calibration_session["questions"][question_index]
     is_correct = answer_index == question["correct_index"]
     
-    # Always update calibration_level regardless of correct/wrong answer
-    all_questions = load_all_questions()
-    source_question = get_question_by_text(all_questions, question["question"])
-    
-    if source_question:
-        source_question["calibration_level"] = calibration_session["level"]
-        save_all_questions(all_questions)
-    
     return jsonify({
         "success": True,
         "correct": is_correct,
@@ -658,34 +650,54 @@ def calibration_answer():
     })
 
 
-@app.route('/api/quiz/calibration/review', methods=['POST'])
-def calibration_mark_review():
-    """Mark a question for review - increments review_count and sets calibration_level."""
+@app.route('/api/quiz/calibration/submit', methods=['POST'])
+def calibration_submit():
+    """Submit calibration result - updates level and flags."""
     if not calibration_session["active"]:
         return jsonify({"success": False, "error": "No active calibration session"})
     
     data = request.get_json()
     question_index = data.get('question_index', 0)
+    flag_type = data.get('flag_type', None) # 'confusing', 'outdated', 'difficult', 'wrong', or None
     
     if question_index >= len(calibration_session["questions"]):
         return jsonify({"success": False, "error": "Invalid question index"})
     
     question = calibration_session["questions"][question_index]
     
-    # Update the question in the source file
     all_questions = load_all_questions()
     source_question = get_question_by_text(all_questions, question["question"])
     
     if source_question:
-        # Increment review_count (create if doesn't exist)
-        source_question["review_count"] = source_question.get("review_count", 0) + 1
-        # Set calibration_level to session level
+        # Migration: Ensure New Structure
+        if "flags" not in source_question:
+            source_question["flags"] = {
+                "confusing": 0,
+                "outdated": 0,
+                "difficult": 0,
+                "wrong": 0
+            }
+            # Migrate old review_count if exists (mapped to 'wrong' as fallback or kept separate? User said remove)
+            if "review_count" in source_question:
+                # Optional: mapped old review count to 'wrong' or just discard. 
+                # Discarding as per "Remove the old review_count field"
+                del source_question["review_count"]
+                
+        if "tags" not in source_question:
+            source_question["tags"] = []
+
+        # Update Flag
+        if flag_type and flag_type in source_question["flags"]:
+            source_question["flags"][flag_type] += 1
+            
+        # Update Level
         source_question["calibration_level"] = calibration_session["level"]
+        
         save_all_questions(all_questions)
     
     return jsonify({
         "success": True,
-        "message": "Question marked for review"
+        "message": "Calibration submitted"
     })
 
 

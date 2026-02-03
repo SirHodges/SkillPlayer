@@ -516,73 +516,113 @@
                             </div>
                         </div>
                     </div>
-                </div>
-        </main>
-    </div>
 
-    <!-- Admin Menu -->
-    <div class="admin-container">
-        <div id="admin-popup" class="admin-popup hidden">
-            <h3>⚙️ Admin Menu</h3>
+                    <!-- Post-Answer Check Overlay -->
+                    <div id="calibration-post-answer-overlay" class="calibration-overlay hidden">
+                        <h2>Answer Checked</h2>
+                        <div class="calibration-options-grid">
+                            <button class="calibration-option-btn btn-yellow" onclick="submitCalibration('wrong')">
+                                <div class="btn-icon">RB</div>
+                                Incorrect answer marked as correct
+                            </button>
+                            <button class="calibration-option-btn btn-green" onclick="submitCalibration(null)">
+                                <div class="btn-icon">B</div>
+                                Just right
+                            </button>
+                        </div>
+                        <div class="calibration-timer-bar">
+                            <div id="calibration-options-timer" class="timer-fill"></div>
+                        </div>
+                    </div>
 
-            <!-- Admin Actions -->
-            <div class="admin-actions">
-                <button class="admin-action-btn update-action" onclick="triggerUpdate()">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
-                        fill="currentColor">
-                        <path
-                            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11h-4v4h-2v-4H7v-2h4V7h2v4h4v2z" />
-                    </svg>
-                    <span>Update & Reboot</span>
-                </button>
-                <button class="admin-action-btn reset-action" onclick="promptResetScores()">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
-                        fill="currentColor">
-                        <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z" />
-                    </svg>
-                    <span>Reset All Scores</span>
-                </button>
-                <button class="admin-action-btn calibration-action" onclick="promptCalibrationPassword()">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
-                        fill="currentColor">
-                        <path
-                            d="M19.14 12.94c.04-.31.06-.63.06-.94 0-.31-.02-.63-.06-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.04.31-.06.63-.06.94s.02.63.06.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z" />
-                    </svg>
-                    <span>Calibration Mode</span>
-                </button>
-            </div>
-
-            <div class="admin-section">
-                <h3>System Logs</h3>
-                <div id="admin-log-console" class="admin-log-console">
-                    <div class="log-entry system">> Ready...</div>
-                </div>
-            </div>
-
-            <!-- Changelog Section -->
-            <div class="admin-section">
-                <div class="admin-changelog">
-                    <h4>Version History</h4>
-                    <div id="changelog-list" class="changelog-list">
-                        <!-- Items injected via JS -->
+                    <!-- Flag Reason Overlay -->
+                    <div id="calibration-flag-reason-overlay" class="calibration-overlay hidden">
+                        <h2>Select Issue</h2>
+                        <div class="calibration-options-grid">
+                            <button class="calibration-option-btn btn-yellow" onclick="submitCalibration('confusing')">
+                                <div class="btn-icon">X</div>
+                                Confusing wording
+                            </button>
+                            <button class="calibration-option-btn btn-yellow" onclick="submitCalibration('outdated')">
+                                <div class="btn-icon">Y</div>
+                                Outdated info
+                            </button>
+                            <button class="calibration-option-btn btn-yellow" onclick="submitCalibration('difficult')">
+                                <div class="btn-icon">A</div>
+                                Too difficult
+                            </button>
+                            <button class="calibration-option-btn btn-green" onclick="hideFlagReasonScreen()">
+                                <div class="btn-icon">B</div>
+                                Nevermind
+                            </button>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
-        <button id="admin-btn" class="admin-btn" onclick="toggleAdminMenu()">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="3"></circle>
-                <path
-                    d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
-                </path>
-            </svg>
-            <span id="version-label">v2.1</span>
-        </button>
-    </div>
 
-    <script src="/static/socket.io.min.js"></script>
-    <script src="/static/app.js"></script>
+                <!-- Admin Menu -->
+                <div class="admin-container">
+                    <div id="admin-popup" class="admin-popup hidden">
+                        <h3>⚙️ Admin Menu</h3>
+
+                        <!-- Admin Actions -->
+                        <div class="admin-actions">
+                            <button class="admin-action-btn update-action" onclick="triggerUpdate()">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                    fill="currentColor">
+                                    <path
+                                        d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11h-4v4h-2v-4H7v-2h4V7h2v4h4v2z" />
+                                </svg>
+                                <span>Update & Reboot</span>
+                            </button>
+                            <button class="admin-action-btn reset-action" onclick="promptResetScores()">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                    fill="currentColor">
+                                    <path
+                                        d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z" />
+                                </svg>
+                                <span>Reset All Scores</span>
+                            </button>
+                            <button class="admin-action-btn calibration-action" onclick="promptCalibrationPassword()">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                    fill="currentColor">
+                                    <path
+                                        d="M19.14 12.94c.04-.31.06-.63.06-.94 0-.31-.02-.63-.06-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.04.31-.06.63-.06.94s.02.63.06.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z" />
+                                </svg>
+                                <span>Calibration Mode</span>
+                            </button>
+                        </div>
+
+                        <div class="admin-section">
+                            <h3>System Logs</h3>
+                            <div id="admin-log-console" class="admin-log-console">
+                                <div class="log-entry system">> Ready...</div>
+                            </div>
+                        </div>
+
+                        <!-- Changelog Section -->
+                        <div class="admin-section">
+                            <div class="admin-changelog">
+                                <h4>Version History</h4>
+                                <div id="changelog-list" class="changelog-list">
+                                    <!-- Items injected via JS -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button id="admin-btn" class="admin-btn" onclick="toggleAdminMenu()">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="3"></circle>
+                            <path
+                                d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
+                            </path>
+                        </svg>
+                        <span id="version-label">v2.1</span>
+                    </button>
+                </div>
+
+                <script src="/static/socket.io.min.js"></script>
+                <script src="/static/app.js"></script>
 </body>
 
 </html>

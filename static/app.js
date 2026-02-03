@@ -1812,6 +1812,8 @@ let calibrationQuestions = [];
 let calibrationCurrentIndex = 0;
 let calibrationCalibratedCount = 0;
 let calibrationAnswerLocked = false;
+let calibrationState = 'question'; // 'question', 'post_answer', 'flag_reason'
+let calibrationPostAnswerTimer = null;
 
 function promptCalibrationPassword() {
     if (confirm('Are you sure you want to enter calibration mode?')) {
@@ -1940,6 +1942,9 @@ function displayCalibrationQuestion() {
     }
 
     calibrationAnswerLocked = false;
+    calibrationState = 'question';
+    hidePostAnswerScreen();
+    hideFlagReasonScreen();
 
     const question = calibrationQuestions[calibrationCurrentIndex];
     document.getElementById('calibration-question-num').textContent = calibrationCurrentIndex + 1;
@@ -2000,39 +2005,21 @@ async function selectCalibrationAnswer(answerIndex) {
         const data = await response.json();
 
         if (data.correct) {
-            // Correct answer - question is calibrated
-            calibrationCalibratedCount++;
+            // Correct answer
             if (buttons[data.correct_index]) buttons[data.correct_index].classList.add('correct');
-
             // Play sound
             soundRight.currentTime = 0;
             soundRight.play().catch(() => { });
-
-            showCalibrationFeedback('Correct! Question calibrated.', 'correct');
-
-            // Move to next question after delay
-            setTimeout(() => {
-                if (calibrationMode) {
-                    calibrationCurrentIndex++;
-                    displayCalibrationQuestion();
-                }
-            }, 800);
         } else {
-            // Wrong answer - still calibrated, proceed to next
-            calibrationCalibratedCount++;
+            // Wrong answer
             if (buttons[answerIndex]) buttons[answerIndex].classList.add('wrong');
             if (buttons[data.correct_index]) buttons[data.correct_index].classList.add('correct');
-
-            showCalibrationFeedback('Wrong answer. Question calibrated.', 'penalty');
-
-            // Move to next question after delay
-            setTimeout(() => {
-                if (calibrationMode) {
-                    calibrationCurrentIndex++;
-                    displayCalibrationQuestion();
-                }
-            }, 800);
         }
+
+        // Show Post-Answer Screen for verification
+        setTimeout(() => {
+            showPostAnswerScreen();
+        }, 800);
 
     } catch (error) {
         console.error('Failed to check calibration answer:', error);
@@ -2040,17 +2027,70 @@ async function selectCalibrationAnswer(answerIndex) {
     }
 }
 
-async function markForReview() {
-    if (!calibrationMode || calibrationAnswerLocked) return;
+function showPostAnswerScreen() {
+    calibrationState = 'post_answer';
+    const overlay = document.getElementById('calibration-post-answer-overlay');
+    overlay.classList.remove('hidden');
 
+    const timerBar = document.getElementById('calibration-options-timer');
+    timerBar.style.transition = 'none';
+    timerBar.style.width = '100%';
+
+    // Force reflow
+    void timerBar.offsetWidth;
+
+    // Start 2s timer
+    timerBar.style.transition = 'width 2s linear';
+    timerBar.style.width = '0%';
+
+    calibrationPostAnswerTimer = setTimeout(() => {
+        // Timeout = "Just Right" (No flag)
+        submitCalibration(null);
+    }, 2000);
+}
+
+function hidePostAnswerScreen() {
+    const overlay = document.getElementById('calibration-post-answer-overlay');
+    overlay.classList.add('hidden');
+    if (calibrationPostAnswerTimer) {
+        clearTimeout(calibrationPostAnswerTimer);
+        calibrationPostAnswerTimer = null;
+    }
+}
+
+function showFlagReasonScreen() {
+    calibrationState = 'flag_reason';
+    const overlay = document.getElementById('calibration-flag-reason-overlay');
+    overlay.classList.remove('hidden');
+}
+
+function hideFlagReasonScreen() {
+    const overlay = document.getElementById('calibration-flag-reason-overlay');
+    overlay.classList.add('hidden');
+    calibrationState = 'question';
+    calibrationAnswerLocked = false;
+}
+
+function markForReview() {
+    if (!calibrationMode || calibrationAnswerLocked) return;
     calibrationAnswerLocked = true;
+    showFlagReasonScreen();
+}
+
+async function submitCalibration(flagType) {
+    // If called from post-answer, clear timer
+    if (calibrationPostAnswerTimer) {
+        clearTimeout(calibrationPostAnswerTimer);
+        calibrationPostAnswerTimer = null;
+    }
 
     try {
-        const response = await fetch('/api/quiz/calibration/review', {
+        const response = await fetch('/api/quiz/calibration/submit', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                question_index: calibrationCurrentIndex
+                question_index: calibrationCurrentIndex,
+                flag_type: flagType
             })
         });
 
@@ -2058,23 +2098,17 @@ async function markForReview() {
 
         if (data.success) {
             calibrationCalibratedCount++;
-            showCalibrationFeedback('Marked for review and calibrated.', 'correct');
 
-            setTimeout(() => {
-                if (calibrationMode) {
-                    calibrationCurrentIndex++;
-                    displayCalibrationQuestion();
-                }
-            }, 800);
-        } else {
-            showCalibrationFeedback('Failed to mark for review.', 'penalty');
-            calibrationAnswerLocked = false;
+            // Move to next question
+            calibrationCurrentIndex++;
+            displayCalibrationQuestion();
         }
 
     } catch (error) {
-        console.error('Failed to mark for review:', error);
-        showCalibrationFeedback('Error marking for review.', 'penalty');
-        calibrationAnswerLocked = false;
+        console.error('Failed to submit calibration:', error);
+        alert('Error submitting calibration');
+        // Try to recover
+        displayCalibrationQuestion();
     }
 }
 
@@ -2239,13 +2273,31 @@ socket.on('gamepad_button', (data) => {
     // Only handle gamepad input when in gamepad mode and quiz mode
     if (inputMode === 'gamepad' && currentAppMode === 'quiz') {
         // Check if in calibration mode
-        if (calibrationMode && !calibrationAnswerLocked) {
+        // Check if in calibration mode
+        if (calibrationMode) {
             const answerIndex = data.answer_index;
-            if (answerIndex === 'skip') {
-                // RB = Mark for Review in calibration mode
-                markForReview();
-            } else if (answerIndex >= 0 && answerIndex <= 3) {
-                selectCalibrationAnswer(answerIndex);
+
+            if (calibrationState === 'question' && !calibrationAnswerLocked) {
+                if (answerIndex === 'skip') {
+                    // RB = Mark for Review
+                    markForReview();
+                } else if (answerIndex >= 0 && answerIndex <= 3) {
+                    selectCalibrationAnswer(answerIndex);
+                }
+            } else if (calibrationState === 'post_answer') {
+                if (answerIndex === 'skip') {
+                    // RB (Yellow) = Incorrect answer marked as correct
+                    submitCalibration('wrong');
+                } else if (answerIndex === 2) {
+                    // B (Green) = Just right
+                    submitCalibration(null);
+                }
+            } else if (calibrationState === 'flag_reason') {
+                // X=0, A=1, B=2, Y=3
+                if (answerIndex === 0) submitCalibration('confusing');
+                else if (answerIndex === 3) submitCalibration('outdated');
+                else if (answerIndex === 1) submitCalibration('difficult');
+                else if (answerIndex === 2) hideFlagReasonScreen();
             }
             return;
         }
