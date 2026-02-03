@@ -47,7 +47,9 @@ function initGamepadSocket() {
 let stopHoldTimeout = null;
 
 function startStopHold() {
-    const bar = document.getElementById('stop-progress');
+    // Use calibration stop bar if in calibration mode, otherwise use quiz stop bar
+    const barId = calibrationMode ? 'calibration-stop-progress' : 'stop-progress';
+    const bar = document.getElementById(barId);
     if (!bar) return;
 
     // Start animation
@@ -65,10 +67,17 @@ function cancelStopHold() {
         clearTimeout(stopHoldTimeout);
         stopHoldTimeout = null;
     }
-    const bar = document.getElementById('stop-progress');
-    if (bar) {
-        bar.style.transition = 'width 0.2s ease-out';
-        bar.style.width = '0%';
+    // Reset both progress bars
+    const quizBar = document.getElementById('stop-progress');
+    const calibrationBar = document.getElementById('calibration-stop-progress');
+
+    if (quizBar) {
+        quizBar.style.transition = 'width 0.2s ease-out';
+        quizBar.style.width = '0%';
+    }
+    if (calibrationBar) {
+        calibrationBar.style.transition = 'width 0.2s ease-out';
+        calibrationBar.style.width = '0%';
     }
 }
 
