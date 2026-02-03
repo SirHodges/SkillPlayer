@@ -493,6 +493,11 @@
                         </div>
 
                         <div class="quiz-game-area">
+                            <div id="calibration-inplace-timer-container" class="calibration-timer-bar invisible"
+                                style="margin: 0 auto 20px auto; width: 100%;">
+                                <div id="calibration-options-timer" class="timer-fill"></div>
+                            </div>
+
                             <div id="calibration-answers-container" class="quiz-answers-container">
                                 <!-- Answer buttons will be inserted here -->
                             </div>
@@ -517,25 +522,7 @@
                         </div>
                     </div>
 
-                    <!-- Post-Answer Check Overlay -->
-                    <div id="calibration-post-answer-overlay" class="calibration-overlay hidden">
-                        <h2>Answer Checked</h2>
-                        <div class="calibration-options-grid">
-                            <button class="calibration-option-btn btn-yellow" onclick="submitCalibration('wrong')">
-                                <div class="btn-icon">RB</div>
-                                Incorrect answer marked as correct
-                            </button>
-                            <button class="calibration-option-btn btn-green" onclick="submitCalibration(null)">
-                                <div class="btn-icon">B</div>
-                                Just right
-                            </button>
-                        </div>
-                        <div class="calibration-timer-bar">
-                            <div id="calibration-options-timer" class="timer-fill"></div>
-                        </div>
-                    </div>
-
-                    <!-- Flag Reason Overlay -->
+                    <!-- Flag Reason Overlay (Still used for implicit skip) -->
                     <div id="calibration-flag-reason-overlay" class="calibration-overlay hidden">
                         <h2>Select Issue</h2>
                         <div class="calibration-options-grid">

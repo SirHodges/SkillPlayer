@@ -1943,7 +1943,15 @@ function displayCalibrationQuestion() {
 
     calibrationAnswerLocked = false;
     calibrationState = 'question';
-    hidePostAnswerScreen();
+
+    // Clear timer and hide bar
+    if (calibrationPostAnswerTimer) {
+        clearTimeout(calibrationPostAnswerTimer);
+        calibrationPostAnswerTimer = null;
+    }
+    const timerContainer = document.getElementById('calibration-inplace-timer-container');
+    if (timerContainer) timerContainer.classList.add('invisible');
+
     hideFlagReasonScreen();
 
     const question = calibrationQuestions[calibrationCurrentIndex];
@@ -2016,9 +2024,9 @@ async function selectCalibrationAnswer(answerIndex) {
             if (buttons[data.correct_index]) buttons[data.correct_index].classList.add('correct');
         }
 
-        // Show Post-Answer Screen for verification
+        // Show In-Place Feedback
         setTimeout(() => {
-            showPostAnswerScreen();
+            showInPlaceFeedback();
         }, 800);
 
     } catch (error) {
@@ -2027,12 +2035,45 @@ async function selectCalibrationAnswer(answerIndex) {
     }
 }
 
-function showPostAnswerScreen() {
-    calibrationState = 'post_answer';
-    const overlay = document.getElementById('calibration-post-answer-overlay');
-    overlay.classList.remove('hidden');
+function showInPlaceFeedback() {
+    calibrationState = 'feedback';
 
+    // Transform answer buttons into flags
+    const buttons = document.querySelectorAll('#calibration-answers-container .quiz-answer-btn');
+    const feedbackOptions = [
+        { label: 'X', text: 'Confusing wording', class: 'btn-yellow' }, // 0: Confusing
+        { label: 'Y', text: 'Outdated info', class: 'btn-yellow' },   // 1: Outdated
+        { label: 'B', text: 'Bad Key / Wrong', class: 'btn-yellow' }, // 2: Wrong Key (Mapped to B)
+        { label: 'A', text: 'Too difficult', class: 'btn-yellow' }    // 3: Difficult
+    ];
+
+    buttons.forEach((btn, index) => {
+        if (feedbackOptions[index]) {
+            const opt = feedbackOptions[index];
+            // Update visual style
+            btn.className = `quiz-answer-btn ${opt.class}`;
+            // Remove previous click listeners by cloning
+            const newBtn = btn.cloneNode(true);
+            newBtn.innerHTML = `<span class="answer-letter ${inputMode === 'gamepad' ? getGamepadColor(index) : 'gray'}">${opt.label}</span> ${opt.text}`;
+
+            // Add handler
+            let flagType = null;
+            if (index === 0) flagType = 'confusing';
+            if (index === 1) flagType = 'outdated';
+            if (index === 2) flagType = 'wrong';
+            if (index === 3) flagType = 'difficult';
+
+            newBtn.onclick = () => submitCalibration(flagType);
+
+            btn.parentNode.replaceChild(newBtn, btn);
+        }
+    });
+
+    // Show and start timer
+    const timerContainer = document.getElementById('calibration-inplace-timer-container');
     const timerBar = document.getElementById('calibration-options-timer');
+
+    timerContainer.classList.remove('invisible');
     timerBar.style.transition = 'none';
     timerBar.style.width = '100%';
 
@@ -2049,13 +2090,12 @@ function showPostAnswerScreen() {
     }, 2000);
 }
 
-function hidePostAnswerScreen() {
-    const overlay = document.getElementById('calibration-post-answer-overlay');
-    overlay.classList.add('hidden');
-    if (calibrationPostAnswerTimer) {
-        clearTimeout(calibrationPostAnswerTimer);
-        calibrationPostAnswerTimer = null;
-    }
+function getGamepadColor(index) {
+    if (index === 0) return 'blue';
+    if (index === 1) return 'green';
+    if (index === 2) return 'yellow';
+    if (index === 3) return 'red';
+    return '';
 }
 
 function showFlagReasonScreen() {
@@ -2138,16 +2178,16 @@ async function endCalibration() {
 }
 
 // Gamepad support for calibration mode
-function handleCalibrationGamepadButton(answerIndex, player) {
-    if (!calibrationMode) return;
+// function handleCalibrationGamepadButton(answerIndex, player) {
+//     if (!calibrationMode) return;
 
-    if (answerIndex === 'skip') {
-        // RB = Mark for Review in calibration mode
-        markForReview();
-    } else if (answerIndex >= 0 && answerIndex <= 3) {
-        selectCalibrationAnswer(answerIndex);
-    }
-}
+//     if (answerIndex === 'skip') {
+//         // RB = Mark for Review in calibration mode
+//         markForReview();
+//     } else if (answerIndex >= 0 && answerIndex <= 3) {
+//         selectCalibrationAnswer(answerIndex);
+//     }
+// }
 
 
 
@@ -2284,14 +2324,12 @@ socket.on('gamepad_button', (data) => {
                 } else if (answerIndex >= 0 && answerIndex <= 3) {
                     selectCalibrationAnswer(answerIndex);
                 }
-            } else if (calibrationState === 'post_answer') {
-                if (answerIndex === 'skip') {
-                    // RB (Yellow) = Incorrect answer marked as correct
-                    submitCalibration('wrong');
-                } else if (answerIndex === 2) {
-                    // B (Green) = Just right
-                    submitCalibration(null);
-                }
+            } else if (calibrationState === 'feedback') {
+                // X=0, Y=1, B=2, A=3
+                if (answerIndex === 0) submitCalibration('confusing');
+                else if (answerIndex === 1) submitCalibration('outdated');
+                else if (answerIndex === 3) submitCalibration('difficult');
+                else if (answerIndex === 2) submitCalibration('wrong'); // B = Wrong Key
             } else if (calibrationState === 'flag_reason') {
                 // X=0, Y=1, B=2, A=3
                 if (answerIndex === 0) submitCalibration('confusing');
@@ -2303,7 +2341,6 @@ socket.on('gamepad_button', (data) => {
         }
 
         // FAILSAFE: If we receive a button press but are still on the binding screen,
-        // it means we missed the bound event. Force start now.
         const bindingScreen = document.getElementById('quiz-binding-screen');
         if (bindingScreen && bindingScreen.classList.contains('active')) {
             console.log('[Gamepad] Button received on binding screen - forcing start');
