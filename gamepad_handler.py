@@ -32,18 +32,27 @@ SF30_Y = 306
 
 # Map button codes to answer indices (diamond layout positions)
 # Note: Layout is generic, works for both 1P and 2P
+# Button code mapping
+START_BTN = 297
+SELECT_BTN = 296
+LEFT_TRIGGER = 292
+RIGHT_TRIGGER = 293
+
+# Map button codes to answer indices or actions
+# Map button codes to answer indices or actions
 BUTTON_TO_ANSWER = {
     # USB Gamepad Mappings
     X_BTN: 0,  # Top
     Y_BTN: 1,  # Right
     B_BTN: 2,  # Bottom
     A_BTN: 3,  # Left
+    RIGHT_TRIGGER: 'skip',
     
     # 8Bitdo SF30 Pro Mappings
-    SF30_X: 0, # Top
-    SF30_A: 1, # Right
-    SF30_B: 2, # Bottom
-    SF30_Y: 3, # Left
+    SF30_X: 0, 
+    SF30_A: 1, 
+    SF30_B: 2, 
+    SF30_Y: 3, 
 }
 
 
@@ -95,6 +104,12 @@ class GamepadHandler:
         self.rescan_thread = threading.Thread(target=self._rescan_loop, daemon=True)
         self.rescan_thread.start()
     
+    def log(self, message):
+        """Log message to console and emit to frontend admin terminal."""
+        print(message, flush=True)
+        # Emit to all connected clients
+        self.socketio.emit('server_log', {'message': message, 'timestamp': time.strftime('%H:%M:%S')})
+    
     def start_binding_mode(self, player_target='P1', multi=False):
         """Enter binding mode for a specific player target."""
         print(f"[Gamepad] Entering binding mode for {player_target} (Multi: {multi})")
@@ -120,7 +135,7 @@ class GamepadHandler:
         with self.lock:
             for path in found_paths:
                 if path not in self.active_listeners:
-                    print(f"[Gamepad] New device found at {path}, starting listener...")
+                    self.log(f"[Gamepad] New device found at {path}, starting listener...")
                     self.active_listeners.add(path)
                     thread = threading.Thread(
                         target=self._device_listener, 
@@ -141,7 +156,7 @@ class GamepadHandler:
         
         try:
             device = evdev.InputDevice(device_path)
-            print(f"[Gamepad] Connected: {device.name} at {device_path}")
+            self.log(f"[Gamepad] Connected: {device.name} at {device_path}")
             
             # Read events
             for event in device.read_loop():
@@ -150,7 +165,9 @@ class GamepadHandler:
                 
                 # Log EV_KEY for debugging
                 if event.type == ecodes.EV_KEY:
-                    print(f"[Gamepad] Raw: {event.code}, Val: {event.value}, Mode: {self.binding_mode}, Players: {self.players}", flush=True)
+                    # Verbose logging (optional, maybe too noisy for admin console, but standard print ok)
+                    # Use standard print for raw spam, log() for key events
+                    print(f"[Gamepad] Raw: {event.code}, Val: {event.value}", flush=True)
 
                 # Handle button presses (value=1)
                 if event.type == ecodes.EV_KEY and event.value == 1:
@@ -217,12 +234,17 @@ class GamepadHandler:
                 # Forward mapped buttons
                 if button_code in BUTTON_TO_ANSWER:
                     answer_index = BUTTON_TO_ANSWER[button_code]
-                    print(f"[Gamepad] Player {player_id} pressed Button {button_code} -> Answer {answer_index}")
+                    self.log(f"[Gamepad] Player {player_id} pressed Button {button_code} -> Answer {answer_index}")
                     
+                    if answer_index == 'skip':
+                        self.log("[Gamepad] SKIP EVENT EMITTED!")
+
                     self.socketio.emit('gamepad_button', {
                         'player': player_id,
                         'answer_index': answer_index
                     })
+                else:
+                    print(f"[Gamepad] Unmapped Button Pressed: {button_code}")
     
     def stop(self):
         """Stop the gamepad handler."""

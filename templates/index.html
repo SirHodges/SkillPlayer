@@ -289,7 +289,7 @@
                             </div>
                             <div class="quiz-skip-container">
                                 <button id="quiz-skip-btn" class="quiz-btn-skip skip-hidden" onclick="skipQuestion()">
-                                    Skip<br>-1 sec
+                                    <div class="rb-icon">RB</div> SKIP
                                 </button>
                             </div>
                         </div>
@@ -420,31 +420,36 @@
             <!-- Admin Actions -->
             <div class="admin-actions">
                 <button class="admin-action-btn update-action" onclick="triggerUpdate()">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M21 2v6h-6"></path>
-                        <path d="M3 12a9 9 0 0 1 15-6.7L21 8"></path>
-                        <path d="M3 22v-6h6"></path>
-                        <path d="M21 12a9 9 0 0 1-15 6.7L3 16"></path>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                        fill="currentColor">
+                        <path
+                            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11h-4v4h-2v-4H7v-2h4V7h2v4h4v2z" />
                     </svg>
                     <span>Update & Reboot</span>
                 </button>
                 <button class="admin-action-btn reset-action" onclick="promptResetScores()">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M3 6h18"></path>
-                        <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
-                        <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                        fill="currentColor">
+                        <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z" />
                     </svg>
-                    <span>Reset Scores</span>
+                    <span>Reset All Scores</span>
                 </button>
             </div>
 
+            <div class="admin-section">
+                <h3>System Logs</h3>
+                <div id="admin-log-console" class="admin-log-console">
+                    <div class="log-entry system">> Ready...</div>
+                </div>
+            </div>
+
             <!-- Changelog Section -->
-            <div class="admin-changelog">
-                <h4>Version History</h4>
-                <div id="changelog-list" class="changelog-list">
-                    <!-- Items injected via JS -->
+            <div class="admin-section">
+                <div class="admin-changelog">
+                    <h4>Version History</h4>
+                    <div id="changelog-list" class="changelog-list">
+                        <!-- Items injected via JS -->
+                    </div>
                 </div>
             </div>
         </div>

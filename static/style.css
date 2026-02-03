@@ -1117,6 +1117,65 @@ body {
     background: rgba(255, 255, 255, 0.05);
 }
 
+/* Right Bumper Icon */
+.rb-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 8px;
+    height: 24px;
+    background: linear-gradient(to bottom, #444, #222);
+    color: #fff;
+    border: 1px solid #555;
+    border-radius: 4px;
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    margin-right: 8px;
+    box-shadow: 0 2px 0 #000;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.5);
+    vertical-align: middle;
+}
+
+/* Admin Log Console */
+.admin-section {
+    margin-bottom: 20px;
+}
+
+.admin-section h3 {
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+    margin-bottom: 10px;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 5px;
+}
+
+.admin-log-console {
+    background: #0d1117;
+    border: 1px solid #30363d;
+    border-radius: 6px;
+    padding: 10px;
+    height: 150px;
+    overflow-y: auto;
+    font-family: 'Consolas', 'Monaco', monospace;
+    font-size: 0.85rem;
+    color: #4ade80;
+    /* Terminal Green */
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.log-entry {
+    line-height: 1.4;
+    word-break: break-all;
+}
+
+.log-entry.system {
+    color: #94a3b8;
+    font-style: italic;
+}
+
 /* Flashing placeholder for leaderboard entry */
 .score-placeholder {
     background: rgba(99, 102, 241, 0.15) !important;

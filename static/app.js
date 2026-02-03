@@ -1109,26 +1109,116 @@ function startStreakTimer() {
     }, 50);
 }
 
-async function skipQuestion() {
+let stealTimerInterval = null;
+
+async function skipQuestion(playerIndex = 1) {
     if (!quizIsGameActive || quizIsAnswerLocked) return;
 
-    quizIsAnswerLocked = true;
+    // 1-PLAYER MODE
+    if (quizPlayerCount === 1) {
+        quizIsAnswerLocked = true;
+        // Apply 1 second penalty
+        applyQuizPenalty(1);
+        showQuizFeedback('Skipped! -1 second', 'penalty');
+        gameStats.skips++;
+        updateStreak(false);
 
-    // Apply 1 second penalty
-    applyQuizPenalty(1);
-    showQuizFeedback('Skipped! -1 second', 'penalty');
+        // Track server SKIP
+        trackSkipOnServer(playerIndex);
 
-    // Track detailed stats
-    gameStats.skips++;
+        setTimeout(() => {
+            if (quizIsGameActive) {
+                quizCurrentQuestionIndex++;
+                quizIsAnswerLocked = false;
+                displayQuizQuestion();
+            }
+        }, 500);
+        return;
+    }
 
-    // Break streak on skip
-    updateStreak(false);
+    // 2-PLAYER MODE (STEAL MECHANIC)
+    const pKey = 'p' + playerIndex;
+    if (quizLocks[pKey]) return; // Already locked
 
-    // Track the skip on the server
+    // Lock THIS player (the one who skipped)
+    quizLocks[pKey] = true;
+    updateStreak(false, playerIndex); // Break their streak
+
+    // Visuals for Skipper
+    const pContainer = document.getElementById(pKey + '-score-container');
+    const pOverlay = document.getElementById(pKey + '-lock-overlay');
+    const pLockBar = document.getElementById(pKey + '-lock-bar');
+
+    if (pOverlay) {
+        pOverlay.innerHTML = '<div class="lock-msg">SKIPPED</div>';
+        pOverlay.classList.remove('hidden');
+    }
+    if (pLockBar) pLockBar.classList.remove('hidden');
+    if (pContainer) pContainer.classList.add('locked');
+
+    // Track stats
+    gameStats.skips++; // Global stat (or per player if tracked)
+
+    // Check if BOTH are now locked (e.g. both skipped or one locked one skipped)
+    if (quizLocks.p1 && quizLocks.p2) {
+        showQuizFeedback("Both Skipped/Locked! Moving on...", 'penalty');
+        quizIsAnswerLocked = true;
+        clearInterval(stealTimerInterval); // Stop any steal timer
+
+        setTimeout(() => {
+            if (quizIsGameActive) {
+                quizCurrentQuestionIndex++;
+                quizIsAnswerLocked = false;
+                displayQuizQuestion();
+            }
+        }, 1000);
+        return;
+    }
+
+    // STEAL OPPORTUNITY for the OTHER player
+    // Identify other player
+    const otherPlayerIndex = playerIndex === 1 ? 2 : 1;
+    const otherPKey = 'p' + otherPlayerIndex;
+
+    // Show Feedback "Player X Skipped! STEAL!"
+    showQuizFeedback(`Player ${playerIndex} Skipped! STEAL!`, 'alert');
+
+    // Start Steal Timer (4 seconds)
+    startStealTimer(4);
+}
+
+function startStealTimer(seconds) {
+    // Clear any existing steal timer
+    clearInterval(stealTimerInterval);
+
+    // We can use the main feedback area or a specific "Steal" UI
+    // For now, let's pulse the feedback text
+    const feedbackEl = quizElements.feedback;
+    feedbackEl.innerHTML = `STEAL! <span style="font-size: 1.5em; color: yellow;">${seconds}</span>`;
+
+    let time = seconds;
+    stealTimerInterval = setInterval(() => {
+        time--;
+        feedbackEl.innerHTML = `STEAL! <span style="font-size: 1.5em; color: yellow;">${time}</span>`;
+
+        if (time <= 0 || !quizIsGameActive) {
+            clearInterval(stealTimerInterval);
+            // Time up! Moving on
+            if (quizIsGameActive) {
+                showQuizFeedback("Time's up!", 'penalty');
+                setTimeout(() => {
+                    quizCurrentQuestionIndex++;
+                    quizIsAnswerLocked = false;
+                    displayQuizQuestion();
+                }, 500);
+            }
+        }
+    }, 1000);
+}
+
+async function trackSkipOnServer(playerIndex) {
     try {
-        // Calculate time before skipping
         const timeToAnswer = Date.now() - questionDisplayTime;
-
         const question = quizQuestions[quizCurrentQuestionIndex];
         await fetch('/api/quiz/skip', {
             method: 'POST',
@@ -1137,22 +1227,13 @@ async function skipQuestion() {
                 question: question.question,
                 question_index: quizCurrentQuestionIndex,
                 time_to_answer_ms: timeToAnswer,
-                streak_count: quizStreak,
+                streak_count: quizStreak, // Using global, but tracking is somewhat legacy
                 timestamp: new Date().toISOString()
             })
         });
     } catch (error) {
         console.error('Failed to track skip:', error);
     }
-
-    // Move to next question after short delay
-    setTimeout(() => {
-        if (quizIsGameActive) {
-            quizCurrentQuestionIndex++;
-            quizIsAnswerLocked = false;
-            displayQuizQuestion();
-        }
-    }, 500);
 }
 
 function stopQuizAttempt() {
@@ -1726,6 +1807,21 @@ socket.on('connect', () => {
 socket.on('disconnect', () => {
     bridgeStatus.textContent = "DISCONNECTED";
     bridgeStatus.style.color = "red";
+    bridgeStatus.style.color = "red";
+});
+
+// Server Log Handler for Admin Console
+socket.on('server_log', (data) => {
+    const consoleEl = document.getElementById('admin-log-console');
+    if (!consoleEl) return;
+
+    const entry = document.createElement('div');
+    entry.className = 'log-entry';
+    // Format: [HH:MM:SS] Message
+    entry.textContent = `[${data.timestamp}] ${data.message}`;
+
+    consoleEl.appendChild(entry);
+    consoleEl.scrollTop = consoleEl.scrollHeight; // Auto-scroll
 });
 
 // Gamepad button handler
@@ -1753,7 +1849,11 @@ socket.on('gamepad_button', (data) => {
 
         if (quizIsGameActive && !quizIsAnswerLocked) {
             const answerIndex = data.answer_index;
-            if (answerIndex >= 0 && answerIndex <= 3) {
+            if (answerIndex === 'skip') {
+                console.log('[Gamepad] SKIP command received');
+                const player = data.player || 1;
+                skipQuestion(player);
+            } else if (answerIndex >= 0 && answerIndex <= 3) {
                 const player = data.player || 1;
                 selectQuizAnswer(answerIndex, player);
             }
