@@ -496,30 +496,10 @@ def quiz_track_skip():
         "streak_count": streak_count
     })
     
-    # Load or create skip tracking file (legacy tracking)
-    skip_file = BASE_DIR / 'question_skips.json'
-    skips = {}
-    
-    if skip_file.exists():
-        try:
-            with open(skip_file, 'r', encoding='utf-8') as f:
-                skips = json.load(f)
-        except:
-            skips = {}
-    
-    # Increment skip count for this question
-    if question_text in skips:
-        skips[question_text] += 1
-    else:
-        skips[question_text] = 1
-    
-    # Save updated skips
-    with open(skip_file, 'w', encoding='utf-8') as f:
-        json.dump(skips, f, indent=2)
-    
+    # Return success (skip tracking is now handled solely by save_answer)
     return jsonify({
         "success": True,
-        "skip_count": skips[question_text]
+        "message": "Skip recorded"
     })
 
 

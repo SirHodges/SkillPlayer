@@ -50,7 +50,7 @@ let quizScore = 0;
 let quizPlayerCount = 1;
 let quizScores = { p1: 0, p2: 0 };
 let quizLocks = { p1: false, p2: false };
-let quizTimers = { p1: 60, p2: 60 };
+// let quizTimers = { p1: 60, p2: 60 }; // Removed legacy individual timers
 let quizStreaks = { p1: 0, p2: 0 };
 
 // Legacy/Global (used for 1P or tracking)
@@ -84,7 +84,7 @@ function setInputMode(mode) {
 
 // Sound Effects
 const soundRight = new Audio('/static/Right.mp3');
-const soundWrong = new Audio('/static/Wrong.mp3');
+// const soundWrong = new Audio('/static/Wrong.mp3'); // Removed unused
 
 // Initialize volume
 soundRight.volume = 0.5;
@@ -92,8 +92,6 @@ soundWrong.volume = 0.0; // Muted by default/removed
 
 function updateVolume(val) {
     soundRight.volume = val;
-    // soundWrong is effectively removed, but if we kept it:
-    // soundWrong.volume = val;
 }
 
 // Streak State
@@ -501,7 +499,7 @@ async function startQuiz() {
 
                 // Initialize 2-Player State
                 quizScores = { p1: 0, p2: 0 };
-                quizTimers = { p1: 60, p2: 60 }; // Kept for legacy ref, but main timer used
+                // quizTimers = { p1: 60, p2: 60 }; // Removed legacy
                 quizStreaks = { p1: 0, p2: 0 };
                 quizLocks = { p1: false, p2: false };
                 quizTimeRemaining = 60; // Use shared timer
@@ -546,16 +544,18 @@ async function startQuiz() {
                     const cancelBtn = document.getElementById('binding-cancel-btn');
                     if (cancelBtn) cancelBtn.style.display = 'inline-block';
                 }
-            }
 
-            // Tell backend to start listening
-            if (socket && socket.connected) {
-                socket.emit('start_gamepad_binding', { player_count: quizPlayerCount });
+                // Tell backend to start listening
+                if (socket && socket.connected) {
+                    socket.emit('start_gamepad_binding', { player_count: quizPlayerCount });
+                }
+            } else {
+                // Mouse Mode: Show countdown screen directly
+                showQuizScreen('countdown');
+                runCountdown();
             }
         } else {
-            // Show countdown screen directly for mouse mode
-            showQuizScreen('countdown');
-            runCountdown();
+            console.error('Quiz data load failed');
         }
     } catch (error) {
         console.error('Failed to start quiz:', error);
@@ -636,14 +636,13 @@ function updateQuizTimerDisplay() {
 }
 
 function applyQuizPenalty(seconds, playerIndex = 1) {
+    // Always subtract from SHARED timer
+    quizTimeRemaining = Math.max(0, quizTimeRemaining - seconds);
+    updateQuizTimerDisplay();
+
     if (quizPlayerCount > 1) {
-        const pKey = 'p' + playerIndex;
-        quizTimers[pKey] = Math.max(0, quizTimers[pKey] - seconds);
-        updateQuizTimerDisplay();
         showQuizFeedback(`-${seconds}s`, 'penalty', playerIndex);
     } else {
-        quizTimeRemaining = Math.max(0, quizTimeRemaining - seconds);
-        updateQuizTimerDisplay();
         showQuizFeedback(`-${seconds} seconds!`, 'penalty');
     }
 }
