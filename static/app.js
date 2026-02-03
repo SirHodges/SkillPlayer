@@ -88,7 +88,7 @@ const soundRight = new Audio('/static/Right.mp3');
 
 // Initialize volume
 soundRight.volume = 0.5;
-soundWrong.volume = 0.0; // Muted by default/removed
+// soundWrong.volume = 0.0; // Muted by default/removed
 
 function updateVolume(val) {
     soundRight.volume = val;
