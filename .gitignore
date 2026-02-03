@@ -16,6 +16,7 @@ views.json
 data/
 question_skips.json
 questions.json
+quizgame/
 content/
 
 # Environment
