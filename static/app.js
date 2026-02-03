@@ -2036,10 +2036,13 @@ async function selectCalibrationAnswer(answerIndex) {
 }
 
 function showInPlaceFeedback() {
+    console.log('[Calibration] Showing In-Place Feedback');
     calibrationState = 'feedback';
 
     // Transform answer buttons into flags
     const buttons = document.querySelectorAll('#calibration-answers-container .quiz-answer-btn');
+    if (!buttons.length) console.warn('[Calibration] No answer buttons found to transform');
+
     const feedbackOptions = [
         { label: 'X', text: 'Confusing wording', class: 'btn-yellow' }, // 0: Confusing
         { label: 'Y', text: 'Outdated info', class: 'btn-yellow' },   // 1: Outdated
@@ -2073,19 +2076,24 @@ function showInPlaceFeedback() {
     const timerContainer = document.getElementById('calibration-inplace-timer-container');
     const timerBar = document.getElementById('calibration-options-timer');
 
-    timerContainer.classList.remove('invisible');
-    timerBar.style.transition = 'none';
-    timerBar.style.width = '100%';
+    if (timerContainer && timerBar) {
+        timerContainer.classList.remove('invisible');
+        timerBar.style.transition = 'none';
+        timerBar.style.width = '100%';
 
-    // Force reflow
-    void timerBar.offsetWidth;
+        // Force reflow
+        void timerBar.offsetWidth;
 
-    // Start 2s timer
-    timerBar.style.transition = 'width 2s linear';
-    timerBar.style.width = '0%';
+        // Start 2s timer
+        timerBar.style.transition = 'width 2s linear';
+        timerBar.style.width = '0%';
+    } else {
+        console.error('[Calibration] Timer elements missing in DOM (Old HTML?)');
+    }
 
     calibrationPostAnswerTimer = setTimeout(() => {
         // Timeout = "Just Right" (No flag)
+        console.log('[Calibration] Feedback timeout - Submitting null');
         submitCalibration(null);
     }, 2000);
 }
