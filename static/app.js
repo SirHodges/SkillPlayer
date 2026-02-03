@@ -1814,6 +1814,7 @@ let calibrationCalibratedCount = 0;
 let calibrationAnswerLocked = false;
 let calibrationState = 'question'; // 'question', 'post_answer', 'flag_reason'
 let calibrationPostAnswerTimer = null;
+let calibrationFeedbackInputLocked = false; // Grace period lock
 
 function promptCalibrationPassword() {
     if (confirm('Are you sure you want to enter calibration mode?')) {
@@ -2088,14 +2089,51 @@ function showInPlaceFeedback() {
         timerBar.style.transition = 'width 2s linear';
         timerBar.style.width = '0%';
     } else {
-        console.error('[Calibration] Timer elements missing in DOM (Old HTML?)');
+        console.error('[Calibration] Timer elements missing in DOM, timers not started');
     }
+
+    // Input Grace Period: Ignore inputs for 500ms to prevent double-press/bounce
+    calibrationFeedbackInputLocked = true;
+    setTimeout(() => {
+        calibrationFeedbackInputLocked = false;
+        console.log('[Calibration] Feedback Input Unlocked');
+    }, 500);
 
     calibrationPostAnswerTimer = setTimeout(() => {
         // Timeout = "Just Right" (No flag)
         console.log('[Calibration] Feedback timeout - Submitting null');
         submitCalibration(null);
     }, 2000);
+}
+
+// Global Stop Hold Timer
+let stopHoldTimer = null;
+
+function startStopHold() {
+    console.log('[Hold] Start');
+    const bar = document.getElementById('calibration-stop-progress');
+    if (bar) {
+        bar.style.transition = 'width 2s linear';
+        bar.style.width = '100%';
+    }
+
+    stopHoldTimer = setTimeout(() => {
+        console.log('[Hold] Complete - Ending Calibration');
+        endCalibration();
+    }, 2000);
+}
+
+function cancelStopHold() {
+    console.log('[Hold] Cancel');
+    if (stopHoldTimer) {
+        clearTimeout(stopHoldTimer);
+        stopHoldTimer = null;
+    }
+    const bar = document.getElementById('calibration-stop-progress');
+    if (bar) {
+        bar.style.transition = 'none';
+        bar.style.width = '0%';
+    }
 }
 
 function getGamepadColor(index) {
@@ -2333,6 +2371,10 @@ socket.on('gamepad_button', (data) => {
                     selectCalibrationAnswer(answerIndex);
                 }
             } else if (calibrationState === 'feedback') {
+                if (calibrationFeedbackInputLocked) {
+                    console.log('[Gamepad] Input ignored during feedback grace period');
+                    return;
+                }
                 // X=0, Y=1, B=2, A=3
                 if (answerIndex === 0) submitCalibration('confusing');
                 else if (answerIndex === 1) submitCalibration('outdated');
