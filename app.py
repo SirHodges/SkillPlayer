@@ -37,6 +37,19 @@ CONTENT_DIR = BASE_DIR / "content"
 VIEWS_FILE = BASE_DIR / "views.json"
 ANSWERS_FILE = BASE_DIR / "quiz_answers.json"
 
+import datetime
+
+def get_build_time():
+    """Get the last modification time of this file to serve as build time."""
+    try:
+        # Use the modification time of this file
+        timestamp = os.path.getmtime(__file__)
+        dt = datetime.datetime.fromtimestamp(timestamp)
+        return dt.strftime("%H:%M %d/%b") # HH:MM DD/MMM
+    except Exception as e:
+        print(f"Error getting build time: {e}")
+        return "Unknown"
+
 app = Flask(__name__, 
             template_folder=str(BASE_DIR / "templates"),
             static_folder=str(BASE_DIR / "static"))
@@ -184,7 +197,8 @@ def get_videos_for_skill(category, skill_name):
 @app.route('/')
 def index():
     """Render the main application page."""
-    return render_template('index.html')
+    build_time = get_build_time()
+    return render_template('index.html', build_time=build_time)
 
 
 @app.route('/api/categories')
