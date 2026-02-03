@@ -504,6 +504,207 @@ def quiz_track_skip():
 
 
 # ========================================
+# Calibration Mode API Routes
+# ========================================
+
+# Store active calibration session
+calibration_session = {
+    "active": False,
+    "level": 0,
+    "questions": [],
+    "current_index": 0
+}
+
+QUESTIONS_FILE = BASE_DIR / "questions.json"
+
+
+@app.route('/api/quiz/calibration/counts', methods=['GET'])
+def calibration_counts():
+    """Get count of questions at each calibration level."""
+    all_questions = load_all_questions()
+    
+    # Count questions at each level (0-5)
+    counts = {i: 0 for i in range(6)}
+    for q in all_questions:
+        level = q.get("calibration_level", 0)
+        if level in counts:
+            counts[level] += 1
+        else:
+            counts[0] += 1  # Default to 0 if invalid
+    
+    return jsonify({
+        "success": True,
+        "counts": counts,
+        "total": len(all_questions)
+    })
+
+
+def load_all_questions():
+    """Load all questions from the JSON file."""
+    if QUESTIONS_FILE.exists():
+        try:
+            with open(QUESTIONS_FILE, 'r', encoding='utf-8') as f:
+                return json.load(f)
+        except (json.JSONDecodeError, IOError):
+            return []
+    return []
+
+
+def save_all_questions(questions):
+    """Save all questions back to the JSON file."""
+    try:
+        with open(QUESTIONS_FILE, 'w', encoding='utf-8') as f:
+            json.dump(questions, f, indent=2, ensure_ascii=False)
+        return True
+    except IOError:
+        return False
+
+
+def get_question_by_text(questions, question_text):
+    """Find a question in the list by its text."""
+    for q in questions:
+        if q.get("question") == question_text:
+            return q
+    return None
+
+
+@app.route('/api/quiz/calibration/start', methods=['POST'])
+def calibration_start():
+    """Start a calibration session with a specific level."""
+    data = request.get_json()
+    level = data.get('level', 1)
+    
+    if level < 1 or level > 5:
+        return jsonify({"success": False, "error": "Invalid level. Must be 1-5."})
+    
+    # Load all questions and filter by calibration_level < selected level
+    all_questions = load_all_questions()
+    eligible_questions = [
+        q for q in all_questions 
+        if q.get("calibration_level", 0) < level
+    ]
+    
+    if len(eligible_questions) == 0:
+        return jsonify({
+            "success": False,
+            "error": "There are no questions to calibrate at this level"
+        })
+    
+    # Shuffle questions
+    import random
+    random.shuffle(eligible_questions)
+    
+    # Prepare questions with shuffled answers
+    prepared = []
+    for q in eligible_questions:
+        answers = q["answers"].copy()
+        correct_answer = q["correct"]
+        random.shuffle(answers)
+        prepared.append({
+            "question": q["question"],
+            "answers": answers,
+            "correct_index": answers.index(correct_answer),
+            "original_question": q  # Keep reference for updates
+        })
+    
+    # Store session
+    calibration_session["active"] = True
+    calibration_session["level"] = level
+    calibration_session["questions"] = prepared
+    calibration_session["current_index"] = 0
+    
+    # Return questions for frontend
+    client_questions = [
+        {"question": q["question"], "answers": q["answers"]}
+        for q in prepared
+    ]
+    
+    return jsonify({
+        "success": True,
+        "level": level,
+        "questions": client_questions,
+        "total": len(client_questions)
+    })
+
+
+@app.route('/api/quiz/calibration/answer', methods=['POST'])
+def calibration_answer():
+    """Process a calibration answer - always updates calibration_level and proceeds."""
+    if not calibration_session["active"]:
+        return jsonify({"success": False, "error": "No active calibration session"})
+    
+    data = request.get_json()
+    question_index = data.get('question_index', 0)
+    answer_index = data.get('answer_index', -1)
+    
+    if question_index >= len(calibration_session["questions"]):
+        return jsonify({"success": False, "error": "Invalid question index"})
+    
+    question = calibration_session["questions"][question_index]
+    is_correct = answer_index == question["correct_index"]
+    
+    # Always update calibration_level regardless of correct/wrong answer
+    all_questions = load_all_questions()
+    source_question = get_question_by_text(all_questions, question["question"])
+    
+    if source_question:
+        source_question["calibration_level"] = calibration_session["level"]
+        save_all_questions(all_questions)
+    
+    return jsonify({
+        "success": True,
+        "correct": is_correct,
+        "correct_index": question["correct_index"]
+    })
+
+
+@app.route('/api/quiz/calibration/review', methods=['POST'])
+def calibration_mark_review():
+    """Mark a question for review - increments review_count and sets calibration_level."""
+    if not calibration_session["active"]:
+        return jsonify({"success": False, "error": "No active calibration session"})
+    
+    data = request.get_json()
+    question_index = data.get('question_index', 0)
+    
+    if question_index >= len(calibration_session["questions"]):
+        return jsonify({"success": False, "error": "Invalid question index"})
+    
+    question = calibration_session["questions"][question_index]
+    
+    # Update the question in the source file
+    all_questions = load_all_questions()
+    source_question = get_question_by_text(all_questions, question["question"])
+    
+    if source_question:
+        # Increment review_count (create if doesn't exist)
+        source_question["review_count"] = source_question.get("review_count", 0) + 1
+        # Set calibration_level to session level
+        source_question["calibration_level"] = calibration_session["level"]
+        save_all_questions(all_questions)
+    
+    return jsonify({
+        "success": True,
+        "message": "Question marked for review"
+    })
+
+
+@app.route('/api/quiz/calibration/end', methods=['POST'])
+def calibration_end():
+    """End the calibration session."""
+    calibration_session["active"] = False
+    calibration_session["level"] = 0
+    calibration_session["questions"] = []
+    calibration_session["current_index"] = 0
+    
+    return jsonify({
+        "success": True,
+        "message": "Calibration session ended"
+    })
+
+
+
+# ========================================
 # System Management API Routes
 # ========================================
 

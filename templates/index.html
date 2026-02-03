@@ -432,6 +432,87 @@
 
                         </div>
                     </div>
+
+                    <!-- Calibration Level Selector Screen -->
+                    <div id="calibration-level-screen" class="quiz-screen">
+                        <div class="calibration-header-banner">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"
+                                fill="currentColor">
+                                <path
+                                    d="M19.14 12.94c.04-.31.06-.63.06-.94 0-.31-.02-.63-.06-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.04.31-.06.63-.06.94s.02.63.06.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z" />
+                            </svg>
+                            CALIBRATION MODE
+                        </div>
+                        <h2 style="margin-bottom: 20px;">Select Calibration Level</h2>
+                        <p style="color: var(--text-secondary); margin-bottom: 30px;">
+                            Questions with calibration level BELOW your selection will be shown.
+                        </p>
+                        <div class="calibration-level-buttons">
+                            <button class="calibration-level-btn" onclick="startCalibration(1)">Level 1</button>
+                            <button class="calibration-level-btn" onclick="startCalibration(2)">Level 2</button>
+                            <button class="calibration-level-btn" onclick="startCalibration(3)">Level 3</button>
+                            <button class="calibration-level-btn" onclick="startCalibration(4)">Level 4</button>
+                            <button class="calibration-level-btn" onclick="startCalibration(5)">Level 5</button>
+                        </div>
+                        <!-- Input Mode Toggle for Calibration -->
+                        <div class="input-mode-toggle" style="margin-top: 30px;">
+                            <button class="input-toggle-btn active" data-mode="mouse" onclick="setInputMode('mouse')"
+                                title="Mouse Mode">
+                                <img src="/static/ui_mouse.png" alt="Mouse">
+                                Mouse
+                            </button>
+                            <button class="input-toggle-btn" data-mode="gamepad" onclick="setInputMode('gamepad')"
+                                title="Gamepad Mode">
+                                <img src="/static/ui_gamepad.png" alt="Gamepad">
+                                Gamepad
+                            </button>
+                        </div>
+                        <button class="quiz-btn-secondary" style="margin-top: 30px;"
+                            onclick="exitCalibrationLevelScreen()">Cancel</button>
+                    </div>
+
+                    <!-- Calibration Game Screen -->
+                    <div id="calibration-game-screen" class="quiz-screen">
+                        <div class="calibration-header-banner">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"
+                                fill="currentColor">
+                                <path
+                                    d="M19.14 12.94c.04-.31.06-.63.06-.94 0-.31-.02-.63-.06-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.04.31-.06.63-.06.94s.02.63.06.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z" />
+                            </svg>
+                            CALIBRATION MODE - Level <span id="calibration-level-display">1</span>
+                        </div>
+
+                        <div class="calibration-progress">
+                            <span>Question <span id="calibration-question-num">1</span> / <span
+                                    id="calibration-total-questions">0</span></span>
+                            <span id="calibration-calibrated-count" style="color: #22c55e;">Calibrated: 0</span>
+                        </div>
+
+                        <div class="quiz-question-container">
+                            <h2 id="calibration-question-text" class="quiz-question-text"></h2>
+                        </div>
+
+                        <div class="quiz-game-area">
+                            <div id="calibration-answers-container" class="quiz-answers-container">
+                                <!-- Answer buttons will be inserted here -->
+                            </div>
+                            <div class="quiz-skip-container">
+                                <button id="calibration-review-btn" class="calibration-btn-review"
+                                    onclick="markForReview()">
+                                    <div class="rb-icon">RB</div> MARK FOR REVIEW
+                                </button>
+                            </div>
+                        </div>
+
+                        <div id="calibration-feedback" class="quiz-feedback"></div>
+
+                        <div class="calibration-end-container">
+                            <button id="calibration-end-btn" class="calibration-end-btn" onclick="endCalibration()">
+                                End Calibration
+                            </button>
+                            <span class="stop-hint">Hold START (2s)</span>
+                        </div>
+                    </div>
                 </div>
         </main>
     </div>
@@ -457,6 +538,14 @@
                         <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z" />
                     </svg>
                     <span>Reset All Scores</span>
+                </button>
+                <button class="admin-action-btn calibration-action" onclick="promptCalibrationPassword()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                        fill="currentColor">
+                        <path
+                            d="M19.14 12.94c.04-.31.06-.63.06-.94 0-.31-.02-.63-.06-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.04.31-.06.63-.06.94s.02.63.06.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z" />
+                    </svg>
+                    <span>Calibration Mode</span>
                 </button>
             </div>
 

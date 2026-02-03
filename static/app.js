@@ -1310,6 +1310,11 @@ async function trackSkipOnServer(playerIndex) {
 }
 
 function stopQuizAttempt() {
+    // Check if in calibration mode
+    if (calibrationMode) {
+        endCalibration();
+        return;
+    }
     // End the quiz immediately when user clicks Stop Attempt
     endQuiz();
 }
@@ -1790,6 +1795,314 @@ async function resetAllScores() {
 }
 
 // ===========================================
+// Calibration Mode System
+// ===========================================
+let calibrationMode = false;
+let calibrationLevel = 0;
+let calibrationQuestions = [];
+let calibrationCurrentIndex = 0;
+let calibrationCalibratedCount = 0;
+let calibrationAnswerLocked = false;
+
+function promptCalibrationPassword() {
+    const password = prompt('Enter calibration password:');
+
+    if (password === null) {
+        return; // Cancelled
+    }
+
+    if (password.toLowerCase() === 'calibrate') {
+        closeAdminMenu();
+        showCalibrationLevelScreen();
+    } else {
+        alert('❌ Incorrect password');
+    }
+}
+
+function showCalibrationLevelScreen() {
+    // Switch to quiz mode first
+    switchAppMode('quiz');
+
+    // Show calibration level selector
+    document.querySelectorAll('.quiz-screen').forEach(screen => screen.classList.remove('active'));
+    document.getElementById('calibration-level-screen').classList.add('active');
+
+    // Load and display question counts per level
+    loadCalibrationCounts();
+}
+
+async function loadCalibrationCounts() {
+    try {
+        const response = await fetch('/api/quiz/calibration/counts');
+        const data = await response.json();
+
+        if (data.success) {
+            // Update each level button with the count of questions needing calibration
+            const buttons = document.querySelectorAll('.calibration-level-btn');
+            buttons.forEach((btn, index) => {
+                const level = index + 1;
+                // Count questions BELOW this level
+                let needsCalibration = 0;
+                for (let i = 0; i < level; i++) {
+                    needsCalibration += data.counts[i] || 0;
+                }
+
+                // Find or create count span
+                let countSpan = btn.querySelector('.calibration-count');
+                if (!countSpan) {
+                    countSpan = document.createElement('span');
+                    countSpan.className = 'calibration-count';
+                    btn.appendChild(countSpan);
+                }
+                countSpan.textContent = `(${needsCalibration} questions)`;
+            });
+        }
+    } catch (error) {
+        console.error('Failed to load calibration counts:', error);
+    }
+}
+
+function exitCalibrationLevelScreen() {
+    // Return to quiz start screen
+    showQuizScreen('start');
+}
+
+async function startCalibration(level) {
+    try {
+        const response = await fetch('/api/quiz/calibration/start', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ level: level })
+        });
+
+        const data = await response.json();
+
+        if (!data.success) {
+            alert(data.error || 'Failed to start calibration');
+            exitCalibrationLevelScreen();
+            return;
+        }
+
+        // Initialize calibration state
+        calibrationMode = true;
+        calibrationLevel = level;
+        calibrationQuestions = data.questions;
+        calibrationCurrentIndex = 0;
+        calibrationCalibratedCount = 0;
+        calibrationAnswerLocked = false;
+
+        // Update UI
+        document.getElementById('calibration-level-display').textContent = level;
+        document.getElementById('calibration-total-questions').textContent = calibrationQuestions.length;
+
+        // Show calibration game screen
+        document.querySelectorAll('.quiz-screen').forEach(screen => screen.classList.remove('active'));
+        document.getElementById('calibration-game-screen').classList.add('active');
+
+        // Apply input mode layout
+        const answersContainer = document.getElementById('calibration-answers-container');
+        if (inputMode === 'gamepad') {
+            answersContainer.classList.add('diamond-layout');
+        } else {
+            answersContainer.classList.remove('diamond-layout');
+        }
+
+        // Display first question
+        displayCalibrationQuestion();
+
+    } catch (error) {
+        console.error('Failed to start calibration:', error);
+        alert('Error starting calibration: ' + error.message);
+        exitCalibrationLevelScreen();
+    }
+}
+
+function displayCalibrationQuestion() {
+    if (calibrationCurrentIndex >= calibrationQuestions.length) {
+        // All questions calibrated
+        endCalibration();
+        return;
+    }
+
+    calibrationAnswerLocked = false;
+
+    const question = calibrationQuestions[calibrationCurrentIndex];
+    document.getElementById('calibration-question-num').textContent = calibrationCurrentIndex + 1;
+    document.getElementById('calibration-question-text').textContent = question.question;
+    document.getElementById('calibration-calibrated-count').textContent = `Calibrated: ${calibrationCalibratedCount}`;
+
+    // Clear previous answers
+    const answersContainer = document.getElementById('calibration-answers-container');
+    answersContainer.innerHTML = '';
+    document.getElementById('calibration-feedback').textContent = '';
+    document.getElementById('calibration-feedback').className = 'quiz-feedback';
+
+    // Reapply diamond layout if in gamepad mode
+    if (inputMode === 'gamepad') {
+        answersContainer.classList.add('diamond-layout');
+    } else {
+        answersContainer.classList.remove('diamond-layout');
+    }
+
+    // Create answer buttons
+    const letters = ['A', 'B', 'C', 'D'];
+    question.answers.forEach((answer, index) => {
+        let label = letters[index];
+        let colorClass = '';
+
+        if (inputMode === 'gamepad') {
+            if (index === 0) { label = 'X'; colorClass = 'blue'; }
+            if (index === 1) { label = 'A'; colorClass = 'red'; }
+            if (index === 2) { label = 'B'; colorClass = 'yellow'; }
+            if (index === 3) { label = 'Y'; colorClass = 'green'; }
+        }
+
+        const btn = document.createElement('button');
+        btn.className = 'quiz-answer-btn';
+        btn.innerHTML = `<span class="answer-letter ${colorClass}">${label}</span> ${answer}`;
+        btn.addEventListener('click', () => selectCalibrationAnswer(index));
+        answersContainer.appendChild(btn);
+    });
+}
+
+async function selectCalibrationAnswer(answerIndex) {
+    if (!calibrationMode || calibrationAnswerLocked) return;
+
+    calibrationAnswerLocked = true;
+
+    const buttons = document.getElementById('calibration-answers-container').querySelectorAll('.quiz-answer-btn');
+
+    try {
+        const response = await fetch('/api/quiz/calibration/answer', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                question_index: calibrationCurrentIndex,
+                answer_index: answerIndex
+            })
+        });
+
+        const data = await response.json();
+
+        if (data.correct) {
+            // Correct answer - question is calibrated
+            calibrationCalibratedCount++;
+            if (buttons[data.correct_index]) buttons[data.correct_index].classList.add('correct');
+
+            // Play sound
+            soundRight.currentTime = 0;
+            soundRight.play().catch(() => { });
+
+            showCalibrationFeedback('Correct! Question calibrated.', 'correct');
+
+            // Move to next question after delay
+            setTimeout(() => {
+                if (calibrationMode) {
+                    calibrationCurrentIndex++;
+                    displayCalibrationQuestion();
+                }
+            }, 800);
+        } else {
+            // Wrong answer - still calibrated, proceed to next
+            calibrationCalibratedCount++;
+            if (buttons[answerIndex]) buttons[answerIndex].classList.add('wrong');
+            if (buttons[data.correct_index]) buttons[data.correct_index].classList.add('correct');
+
+            showCalibrationFeedback('Wrong answer. Question calibrated.', 'penalty');
+
+            // Move to next question after delay
+            setTimeout(() => {
+                if (calibrationMode) {
+                    calibrationCurrentIndex++;
+                    displayCalibrationQuestion();
+                }
+            }, 800);
+        }
+
+    } catch (error) {
+        console.error('Failed to check calibration answer:', error);
+        calibrationAnswerLocked = false;
+    }
+}
+
+async function markForReview() {
+    if (!calibrationMode || calibrationAnswerLocked) return;
+
+    calibrationAnswerLocked = true;
+
+    try {
+        const response = await fetch('/api/quiz/calibration/review', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                question_index: calibrationCurrentIndex
+            })
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            calibrationCalibratedCount++;
+            showCalibrationFeedback('Marked for review and calibrated.', 'correct');
+
+            setTimeout(() => {
+                if (calibrationMode) {
+                    calibrationCurrentIndex++;
+                    displayCalibrationQuestion();
+                }
+            }, 800);
+        } else {
+            showCalibrationFeedback('Failed to mark for review.', 'penalty');
+            calibrationAnswerLocked = false;
+        }
+
+    } catch (error) {
+        console.error('Failed to mark for review:', error);
+        showCalibrationFeedback('Error marking for review.', 'penalty');
+        calibrationAnswerLocked = false;
+    }
+}
+
+function showCalibrationFeedback(message, type) {
+    const feedback = document.getElementById('calibration-feedback');
+    feedback.textContent = message;
+    feedback.className = `quiz-feedback ${type}`;
+}
+
+async function endCalibration() {
+    try {
+        await fetch('/api/quiz/calibration/end', { method: 'POST' });
+    } catch (error) {
+        console.error('Error ending calibration:', error);
+    }
+
+    calibrationMode = false;
+    calibrationLevel = 0;
+    calibrationQuestions = [];
+    calibrationCurrentIndex = 0;
+
+    // Show completion message
+    alert(`Calibration complete! ${calibrationCalibratedCount} questions calibrated.`);
+
+    // Return to quiz start screen
+    showQuizScreen('start');
+}
+
+// Gamepad support for calibration mode
+function handleCalibrationGamepadButton(answerIndex, player) {
+    if (!calibrationMode) return;
+
+    if (answerIndex === 'skip') {
+        // RB = Mark for Review in calibration mode
+        markForReview();
+    } else if (answerIndex >= 0 && answerIndex <= 3) {
+        selectCalibrationAnswer(answerIndex);
+    }
+}
+
+
+
+// ===========================================
 // Initialize
 // ===========================================
 // Create global tooltip element
@@ -1908,8 +2221,20 @@ socket.on('gamepad_button', (data) => {
         statusText.style.color = "cyan";
     }
 
-    // Only handle gamepad input when in gamepad mode, quiz mode, and game is active
+    // Only handle gamepad input when in gamepad mode and quiz mode
     if (inputMode === 'gamepad' && currentAppMode === 'quiz') {
+        // Check if in calibration mode
+        if (calibrationMode && !calibrationAnswerLocked) {
+            const answerIndex = data.answer_index;
+            if (answerIndex === 'skip') {
+                // RB = Mark for Review in calibration mode
+                markForReview();
+            } else if (answerIndex >= 0 && answerIndex <= 3) {
+                selectCalibrationAnswer(answerIndex);
+            }
+            return;
+        }
+
         // FAILSAFE: If we receive a button press but are still on the binding screen,
         // it means we missed the bound event. Force start now.
         const bindingScreen = document.getElementById('quiz-binding-screen');
@@ -1984,8 +2309,13 @@ socket.on('gamepad_bound', (data) => {
 
 // Listen for START button hold events (Stop Attempt) - Global Socket
 socket.on('gamepad_start_down', function (data) {
-    if (currentAppMode === 'quiz' && quizIsGameActive) {
-        startStopHold();
+    if (currentAppMode === 'quiz') {
+        if (calibrationMode) {
+            // End calibration with START hold
+            startStopHold();
+        } else if (quizIsGameActive) {
+            startStopHold();
+        }
     }
 });
 

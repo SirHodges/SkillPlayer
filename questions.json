@@ -674,7 +674,7 @@
     "answers": [
       "Multiple sclerosis",
       "Myasthenia gravis",
-      "Guillain-Barr\u00e9 syndrome",
+      "Guillain-Barré syndrome",
       "Muscular dystrophy"
     ],
     "correct": "Myasthenia gravis"
@@ -732,7 +732,7 @@
   {
     "question": "Which condition is characterized by demyelination of the central nervous system?",
     "answers": [
-      "Guillain-Barr\u00e9 syndrome",
+      "Guillain-Barré syndrome",
       "Multiple sclerosis",
       "Amyotrophic lateral sclerosis",
       "Parkinson's disease"
@@ -853,7 +853,7 @@
     "question": "Which condition is characterized by autoantibodies against acetylcholine receptors?",
     "answers": [
       "Multiple sclerosis",
-      "Guillain-Barr\u00e9 syndrome",
+      "Guillain-Barré syndrome",
       "Myasthenia gravis",
       "Lambert-Eaton syndrome"
     ],
@@ -893,11 +893,11 @@
     "question": "Which condition results from autoimmune attack on myelin in peripheral nerves?",
     "answers": [
       "Multiple sclerosis",
-      "Guillain-Barr\u00e9 syndrome",
+      "Guillain-Barré syndrome",
       "Myasthenia gravis",
       "Amyotrophic lateral sclerosis"
     ],
-    "correct": "Guillain-Barr\u00e9 syndrome"
+    "correct": "Guillain-Barré syndrome"
   },
   {
     "question": "What is the primary mechanism of action of beta-blockers?",
@@ -927,7 +927,8 @@
       "Apnea",
       "Bradypnea"
     ],
-    "correct": "Apnea"
+    "correct": "Apnea",
+    "calibration_level": 1
   },
   {
     "question": "Which condition is characterized by excessive growth hormone in children?",
@@ -957,7 +958,8 @@
       "Hashimoto's thyroiditis",
       "Myxedema"
     ],
-    "correct": "Hyperthyroidism"
+    "correct": "Hyperthyroidism",
+    "calibration_level": 1
   },
   {
     "question": "What is the term for abnormally fast heart rate?",
@@ -1503,11 +1505,11 @@
     "question": "Which growth factor is most important in the development of fibrosis?",
     "answers": [
       "Epidermal growth factor",
-      "Transforming growth factor-beta (TGF-\u03b2)",
+      "Transforming growth factor-beta (TGF-β)",
       "Platelet-derived growth factor",
       "Vascular endothelial growth factor"
     ],
-    "correct": "Transforming growth factor-beta (TGF-\u03b2)"
+    "correct": "Transforming growth factor-beta (TGF-β)"
   },
   {
     "question": "What distinguishes a keloid from a hypertrophic scar?",
@@ -2520,7 +2522,7 @@
     "correct": "Skin thickening from collagen deposition"
   },
   {
-    "question": "What are the primary symptoms of Sj\u00f6gren's syndrome?",
+    "question": "What are the primary symptoms of Sjögren's syndrome?",
     "answers": [
       "Joint pain and fever",
       "Dry eyes (keratoconjunctivitis sicca) and dry mouth",

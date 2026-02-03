@@ -1,5 +1,10 @@
 [
     {
+        "version": "2.5",
+        "date": "2026-02-03",
+        "desc": "Added Calibration mode"
+    },
+    {
         "version": "2.4",
         "date": "2026-02-03 11:30",
         "desc": "2 player Skip/Steal mechanic added. Debug Terminal added"
