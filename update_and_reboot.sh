@@ -3,7 +3,7 @@
 
 echo "📥 Pulling latest updates from GitHub..."
 cd ~/SkillPlayer
-git pull
+git pull origin main
 
 echo "✅ Update complete! Rebooting in 3 seconds..."
 sleep 3
