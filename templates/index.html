@@ -517,12 +517,9 @@
 
                         <div class="calibration-end-container">
                             <button id="calibration-end-btn" class="calibration-end-btn" onclick="endCalibration()">
-                                End Calibration
+                                <div id="calibration-stop-progress" class="btn-progress-fill"></div>
+                                <span style="position: relative; z-index: 2;">Exit Calibration (Hold Start)</span>
                             </button>
-                            <span class="stop-hint">Hold START (2s)</span>
-                            <div class="stop-bar-container" style="margin-top: 10px;">
-                                <div id="calibration-stop-progress" class="stop-bar-fill" style="width: 0%;"></div>
-                            </div>
                         </div>
                     </div>
 

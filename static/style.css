@@ -3263,8 +3263,34 @@ body {
     border-color: #ef4444;
 }
 
-.calibration-layout .quiz-answers-container {
-    flex: 1;
-    max-width: 400px;
-    margin: 0;
+/* Calibration End Button & Fill */
+.calibration-end-btn {
+    position: relative;
+    overflow: hidden;
+    background: #374151;
+    /* Dark gray default */
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    padding: 15px 30px;
+    border-radius: 8px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: all 0.2s;
+}
+
+.calibration-end-btn:hover {
+    background: #4b5563;
+}
+
+.btn-progress-fill {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 0%;
+    background-color: #ef4444;
+    /* Red fill */
+    /* Transition is handled by JS for the fill animation */
+    z-index: 1;
 }
