@@ -1814,7 +1814,10 @@ let calibrationCalibratedCount = 0;
 let calibrationAnswerLocked = false;
 let calibrationState = 'question'; // 'question', 'post_answer', 'flag_reason'
 let calibrationPostAnswerTimer = null;
+
 let calibrationFeedbackInputLocked = false; // Grace period lock
+let selectedCalibrationLevel = 0; // New state for selection before start
+
 
 function promptCalibrationPassword() {
     if (confirm('Are you sure you want to enter calibration mode?')) {
@@ -1833,7 +1836,41 @@ function showCalibrationLevelScreen() {
 
     // Load and display question counts per level
     loadCalibrationCounts();
+
+    // Reset selection
+    selectCalibrationLevel(0);
 }
+
+function selectCalibrationLevel(level) {
+    selectedCalibrationLevel = level;
+
+    // Update UI highlights
+    document.querySelectorAll('.calibration-level-btn').forEach((btn, index) => {
+        if ((index + 1) === level) {
+            btn.classList.add('selected');
+        } else {
+            btn.classList.remove('selected');
+        }
+    });
+
+    // Enable/Disable Start Button
+    const startBtn = document.getElementById('calibration-start-btn');
+    if (startBtn) {
+        startBtn.disabled = (level === 0);
+        if (level > 0) {
+            startBtn.classList.remove('disabled');
+        } else {
+            startBtn.classList.add('disabled');
+        }
+    }
+}
+
+function confirmStartCalibration() {
+    if (selectedCalibrationLevel > 0) {
+        startCalibration(selectedCalibrationLevel);
+    }
+}
+
 
 async function loadCalibrationCounts() {
     try {

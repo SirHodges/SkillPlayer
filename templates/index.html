@@ -448,11 +448,11 @@
                             Questions with calibration level BELOW your selection will be shown.
                         </p>
                         <div class="calibration-level-buttons">
-                            <button class="calibration-level-btn" onclick="startCalibration(1)">Level 1</button>
-                            <button class="calibration-level-btn" onclick="startCalibration(2)">Level 2</button>
-                            <button class="calibration-level-btn" onclick="startCalibration(3)">Level 3</button>
-                            <button class="calibration-level-btn" onclick="startCalibration(4)">Level 4</button>
-                            <button class="calibration-level-btn" onclick="startCalibration(5)">Level 5</button>
+                            <button class="calibration-level-btn" onclick="selectCalibrationLevel(1)">Level 1</button>
+                            <button class="calibration-level-btn" onclick="selectCalibrationLevel(2)">Level 2</button>
+                            <button class="calibration-level-btn" onclick="selectCalibrationLevel(3)">Level 3</button>
+                            <button class="calibration-level-btn" onclick="selectCalibrationLevel(4)">Level 4</button>
+                            <button class="calibration-level-btn" onclick="selectCalibrationLevel(5)">Level 5</button>
                         </div>
                         <!-- Input Mode Toggle for Calibration -->
                         <div class="input-mode-toggle" style="margin-top: 30px;">
@@ -467,6 +467,10 @@
                                 Gamepad
                             </button>
                         </div>
+                        <button id="calibration-start-btn" class="quiz-btn-primary disabled" style="margin-top: 20px;"
+                            onclick="confirmStartCalibration()" disabled>
+                            Start Calibration
+                        </button>
                         <button class="quiz-btn-secondary" style="margin-top: 30px;"
                             onclick="exitCalibrationLevelScreen()">Cancel</button>
                     </div>
