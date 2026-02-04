@@ -1845,11 +1845,8 @@ async function loadCalibrationCounts() {
             const buttons = document.querySelectorAll('.calibration-level-btn');
             buttons.forEach((btn, index) => {
                 const level = index + 1;
-                // Count questions BELOW this level
-                let needsCalibration = 0;
-                for (let i = 0; i < level; i++) {
-                    needsCalibration += data.counts[i] || 0;
-                }
+                // Count questions waiting at the previous level
+                let needsCalibration = data.counts[level - 1] || 0;
 
                 // Find or create count span
                 let countSpan = btn.querySelector('.calibration-count');
