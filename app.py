@@ -612,7 +612,7 @@ def calibration_start():
     all_questions = load_all_questions()
     eligible_questions = [
         q for q in all_questions 
-        if q.get("calibration_level", 0) < level
+        if q.get("calibration_level", 0) == level - 1
     ]
     
     if len(eligible_questions) == 0:
