@@ -1907,6 +1907,9 @@ function exitCalibrationLevelScreen() {
 
 async function startCalibration(level) {
     try {
+        // Force 1-player mode for calibration logic
+        quizPlayerCount = 1;
+
         const response = await fetch('/api/quiz/calibration/start', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
