@@ -40,12 +40,29 @@ ANSWERS_FILE = BASE_DIR / "quiz_answers.json"
 import datetime
 
 def get_build_time():
-    """Get the last modification time of this file to serve as build time."""
+    """Get the latest modification time of key files to serve as build time."""
     try:
-        # Use the modification time of this file
-        timestamp = os.path.getmtime(__file__)
-        dt = datetime.datetime.fromtimestamp(timestamp)
-        return dt.strftime("%H:%M %d/%b") # HH:MM DD/MMM
+        # Check multiple files to ensure timestamp updates if any part changes
+        files_to_check = [
+            __file__,
+            str(BASE_DIR / "static" / "app.js"),
+            str(BASE_DIR / "static" / "style.css"),
+            str(BASE_DIR / "templates" / "index.html")
+        ]
+        
+        max_timestamp = 0
+        for f in files_to_check:
+            p = Path(f)
+            if p.exists():
+                ts = p.stat().st_mtime
+                if ts > max_timestamp:
+                    max_timestamp = ts
+        
+        if max_timestamp > 0:
+            dt = datetime.datetime.fromtimestamp(max_timestamp)
+            return dt.strftime("%H:%M %d/%b") # HH:MM DD/MMM
+            
+        return "Unknown"
     except Exception as e:
         print(f"Error getting build time: {e}")
         return "Unknown"
