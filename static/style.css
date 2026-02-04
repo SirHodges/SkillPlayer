@@ -3215,7 +3215,8 @@ body {
 /* Revamped Calibration Layout */
 .calibration-layout {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
+    /* Move UP */
     justify-content: center;
     gap: 15px;
     width: 100%;
@@ -3231,12 +3232,15 @@ body {
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 12px;
-    padding: 0;
-    width: 70px;
-    height: 120px;
+    padding: 15px 5px;
+    /* Padding for text */
+    width: 110px;
+    /* Wider for full text */
+    min-height: 120px;
     cursor: pointer;
     color: var(--text-muted);
     transition: all 0.2s;
+    text-align: center;
 }
 
 .calibration-side-btn:hover {
