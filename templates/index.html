@@ -492,20 +492,25 @@
                             <h2 id="calibration-question-text" class="quiz-question-text"></h2>
                         </div>
 
-                        <div class="quiz-game-area">
+                        <div class="quiz-game-area calibration-layout">
+                            <!-- Left: Prev Review -->
+                            <button id="calibration-review-prev-btn" class="calibration-side-btn left"
+                                onclick="markPreviousForReview()">
+                                <div class="rb-icon lb-icon">LB</div>
+                                <span>PREV</span>
+                            </button>
+
+                            <!-- Center: Answers -->
                             <div id="calibration-answers-container" class="quiz-answers-container">
                                 <!-- Answer buttons will be inserted here -->
                             </div>
-                            <div class="quiz-skip-container calibration-controls">
-                                <button id="calibration-review-prev-btn" class="calibration-btn-review-prev"
-                                    onclick="markPreviousForReview()">
-                                    <div class="rb-icon lb-icon">LB</div> PREV REVIEW
-                                </button>
-                                <button id="calibration-review-btn" class="calibration-btn-review"
-                                    onclick="markForReview()">
-                                    <div class="rb-icon">RB</div> REVIEW
-                                </button>
-                            </div>
+
+                            <!-- Right: Review -->
+                            <button id="calibration-review-btn" class="calibration-side-btn right"
+                                onclick="markForReview()">
+                                <div class="rb-icon">RB</div>
+                                <span>REVIEW</span>
+                            </button>
                         </div>
 
                         <div id="calibration-feedback" class="quiz-feedback"></div>
