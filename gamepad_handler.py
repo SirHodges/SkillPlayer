@@ -47,6 +47,7 @@ BUTTON_TO_ANSWER = {
     B_BTN: 2,  # Bottom
     A_BTN: 3,  # Left
     RIGHT_TRIGGER: 'skip',
+    LEFT_TRIGGER: 'review_prev',
     
     # 8Bitdo SF30 Pro Mappings
     SF30_X: 0, 

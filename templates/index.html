@@ -496,10 +496,14 @@
                             <div id="calibration-answers-container" class="quiz-answers-container">
                                 <!-- Answer buttons will be inserted here -->
                             </div>
-                            <div class="quiz-skip-container">
+                            <div class="quiz-skip-container calibration-controls">
+                                <button id="calibration-review-prev-btn" class="calibration-btn-review-prev"
+                                    onclick="markPreviousForReview()">
+                                    <div class="rb-icon lb-icon">LB</div> PREV REVIEW
+                                </button>
                                 <button id="calibration-review-btn" class="calibration-btn-review"
                                     onclick="markForReview()">
-                                    <div class="rb-icon">RB</div> MARK FOR REVIEW
+                                    <div class="rb-icon">RB</div> REVIEW
                                 </button>
                             </div>
                         </div>

@@ -2178,6 +2178,42 @@ function markForReview() {
     }, 500);
 }
 
+// Mark PREVIOUS question for review (LB)
+async function markPreviousForReview() {
+    if (!calibrationMode || calibrationCurrentIndex <= 0) {
+        showCalibrationFeedback("Cannot mark previous: First question", "warning");
+        return;
+    }
+
+    console.log('[Calibration] Marking PREVIOUS for review...');
+
+    // Animate LB button if possible (optional)
+    const btn = document.getElementById('calibration-review-prev-btn');
+    if (btn) btn.classList.add('active'); // CSS hook? or just simple feedback
+
+    try {
+        const response = await fetch('/api/quiz/calibration/submit', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                question_index: calibrationCurrentIndex - 1, // PREVIOUS
+                flag_type: 'review'
+            })
+        });
+
+        const data = await response.json();
+        if (data.success) {
+            showCalibrationFeedback("Previous Question Marked for Review", "success");
+            setTimeout(() => {
+                if (btn) btn.classList.remove('active');
+                // Clear feedback after 2s
+            }, 500);
+        }
+    } catch (error) {
+        console.error('Failed to mark previous:', error);
+    }
+}
+
 async function submitCalibration(flagType) {
     // If called from post-answer, clear timer
     if (calibrationPostAnswerTimer) {
@@ -2382,6 +2418,9 @@ socket.on('gamepad_button', (data) => {
                 if (answerIndex === 'skip') {
                     // RB = Mark for Review
                     markForReview();
+                } else if (answerIndex === 'review_prev') {
+                    // LB = Mark Previous for Review
+                    markPreviousForReview();
                 } else if (answerIndex >= 0 && answerIndex <= 3) {
                     selectCalibrationAnswer(answerIndex);
                 }
