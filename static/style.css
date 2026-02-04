@@ -2940,6 +2940,18 @@ body {
     box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
 }
 
+.calibration-level-btn.selected {
+    background: linear-gradient(135deg, #f59e0b 0%, #ea580c 100%);
+    border-color: #f59e0b;
+    color: white;
+    box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4);
+    transform: translateY(-2px);
+}
+
+.calibration-level-btn.selected .calibration-count {
+    color: rgba(255, 255, 255, 0.8);
+}
+
 .calibration-progress {
     display: flex;
     justify-content: space-between;
