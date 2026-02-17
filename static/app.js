@@ -24,6 +24,19 @@ function initGamepadSocket() {
                     } else if (answerIndex >= 0 && answerIndex <= 3) {
                         selectQuizAnswer(answerIndex);
                     }
+                } else if (reviewMode) {
+                    // Review Mode gamepad controls
+                    const answerIndex = data.answer_index;
+
+                    if (answerIndex === 'skip') {
+                        // Right trigger = Delete
+                        console.log('[Review] Gamepad DELETE pressed');
+                        deleteReviewQuestion();
+                    } else if (answerIndex >= 0 && answerIndex <= 3) {
+                        // A/B/X/Y = Remove flag
+                        console.log('[Review] Gamepad REMOVE FLAG pressed');
+                        removeReviewFlag();
+                    }
                 }
             });
 
@@ -112,6 +125,11 @@ let quizTimeRemaining = 60;
 let quizTimerInterval = null;
 let quizIsGameActive = false;
 let quizIsAnswerLocked = false;
+
+// Review Mode State
+let reviewMode = false;
+let reviewQuestions = [];
+let reviewCurrentIndex = 0;
 
 // Input Mode State (mouse = column layout, gamepad = diamond layout)
 let inputMode = 'mouse';
@@ -1867,6 +1885,148 @@ function promptCalibrationPassword() {
         showCalibrationLevelScreen();
     }
 }
+
+// ===========================================
+// Review Mode Functions
+// ===========================================
+
+function promptReviewPassword() {
+    const password = prompt("Enter review password:");
+    if (password === "Review") {
+        closeAdminMenu();
+        startReviewMode();
+    } else if (password !== null) {
+        alert("Incorrect password");
+    }
+}
+
+async function startReviewMode() {
+    try {
+        const response = await fetch('/api/quiz/review/start', { method: 'POST' });
+        const data = await response.json();
+
+        if (data.success) {
+            if (data.total === 0) {
+                alert("No questions are flagged for review!");
+                return;
+            }
+
+            console.log(`[Review] Starting review with ${data.total} flagged questions`);
+            reviewMode = true;
+            reviewQuestions = data.questions;
+            reviewCurrentIndex = 0;
+
+            switchAppMode('quiz'); // Reuse quiz UI
+            showReviewQuestion();
+        } else {
+            console.error('[Review] Failed to start:', data.error);
+            alert('Failed to start review mode');
+        }
+    } catch (error) {
+        console.error('[Review] Error starting:', error);
+        alert('Error starting review mode');
+    }
+}
+
+function showReviewQuestion() {
+    if (reviewCurrentIndex >= reviewQuestions.length) {
+        alert(`Review complete! Reviewed ${reviewQuestions.length} questions.`);
+        endReviewMode();
+        return;
+    }
+
+    const q = reviewQuestions[reviewCurrentIndex];
+
+    // Update question text with review header
+    document.getElementById('quiz-question-text').textContent =
+        `[REVIEW ${reviewCurrentIndex + 1}/${reviewQuestions.length}] ${q.question}`;
+
+    // Display answers
+    const container = document.getElementById('quiz-answers-container');
+    container.innerHTML = '';
+
+    q.answers.forEach((ans, idx) => {
+        const btn = document.createElement('button');
+        btn.className = 'quiz-answer-btn';
+        btn.textContent = ans;
+        btn.dataset.index = idx;
+        btn.onclick = () => removeReviewFlag(); // All buttons remove flag
+        container.appendChild(btn);
+    });
+
+    // Show review screen
+    hideAllScreens();
+    document.getElementById('quiz-game-screen').classList.remove('hidden');
+
+    console.log(`[Review] Showing question ${reviewCurrentIndex + 1}/${reviewQuestions.length}`);
+}
+
+async function removeReviewFlag() {
+    if (reviewCurrentIndex >= reviewQuestions.length) return;
+
+    try {
+        const response = await fetch('/api/quiz/review/remove_flag', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ question_index: reviewCurrentIndex })
+        });
+
+        const data = await response.json();
+        if (data.success) {
+            console.log(`[Review] Flag removed from question ${reviewCurrentIndex}`);
+            reviewCurrentIndex++;
+            showReviewQuestion();
+        } else {
+            console.error('[Review] Failed to remove flag:', data.error);
+        }
+    } catch (error) {
+        console.error('[Review] Error removing flag:', error);
+    }
+}
+
+async function deleteReviewQuestion() {
+    if (reviewCurrentIndex >= reviewQuestions.length) return;
+
+    const q = reviewQuestions[reviewCurrentIndex];
+    if (!confirm(`Delete this question permanently?\n\n"${q.question}"`)) {
+        return;
+    }
+
+    try {
+        const response = await fetch('/api/quiz/review/delete', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ question_index: reviewCurrentIndex })
+        });
+
+        const data = await response.json();
+        if (data.success) {
+            console.log(`[Review] Deleted question ${reviewCurrentIndex}`);
+            reviewCurrentIndex++;
+            showReviewQuestion();
+        } else {
+            console.error('[Review] Failed to delete:', data.error);
+        }
+    } catch (error) {
+        console.error('[Review] Error deleting:', error);
+    }
+}
+
+async function endReviewMode() {
+    try {
+        await fetch('/api/quiz/review/end', { method: 'POST' });
+    } catch (error) {
+        console.error('[Review] Error ending session:', error);
+    }
+
+    reviewMode = false;
+    reviewQuestions = [];
+    reviewCurrentIndex = 0;
+
+    console.log('[Review] Session ended');
+    switchAppMode('skillplayer');
+}
+
 
 function showCalibrationLevelScreen() {
     // Switch to quiz mode first

@@ -773,6 +773,119 @@ def calibration_end():
 
 
 
+
+
+# Review Mode Session
+review_session = {
+    "active": False,
+    "questions": [],
+    "current_index": 0
+}
+
+
+# ===========================================
+# Review Mode API Endpoints
+# ===========================================
+
+@app.route('/api/quiz/review/start', methods=['POST'])
+def review_start():
+    """Start a review session with all flagged questions."""
+    global review_session
+    
+    all_questions = load_all_questions()
+    
+    # Filter questions where flags.review > 0
+    flagged = []
+    for q in all_questions:
+        if "flags" in q and q.get("flags", {}).get("review", 0) > 0:
+            flagged.append({
+                "question": q["question"],
+                "answers": q["answers"],
+                "correct": q["correct"],
+                "flags": q.get("flags", {}),
+                "level": q.get("level", 0)
+            })
+    
+    review_session = {
+        "active": True,
+        "questions": flagged,
+        "current_index": 0
+    }
+    
+    return jsonify({
+        "success": True,
+        "total": len(flagged),
+        "questions": flagged
+    })
+
+
+@app.route('/api/quiz/review/remove_flag', methods=['POST'])
+def review_remove_flag():
+    """Remove review flag from a question."""
+    global review_session
+    
+    if not review_session["active"]:
+        return jsonify({"success": False, "error": "No active review session"})
+    
+    data = request.get_json()
+    question_index = data.get('question_index', 0)
+    
+    if question_index < 0 or question_index >= len(review_session["questions"]):
+        return jsonify({"success": False, "error": "Invalid question index"})
+    
+    question = review_session["questions"][question_index]
+    
+    # Find and update in main questions file
+    all_questions = load_all_questions()
+    source_question = get_question_by_text(all_questions, question["question"])
+    
+    if source_question and "flags" in source_question:
+        source_question["flags"]["review"] = 0
+        save_all_questions(all_questions)
+        
+        return jsonify({"success": True, "message": "Review flag removed"})
+    
+    return jsonify({"success": False, "error": "Question not found"})
+
+
+@app.route('/api/quiz/review/delete', methods=['POST'])
+def review_delete():
+    """Delete a question permanently."""
+    global review_session
+    
+    if not review_session["active"]:
+        return jsonify({"success": False, "error": "No active review session"})
+    
+    data = request.get_json()
+    question_index = data.get('question_index', 0)
+    
+    if question_index < 0 or question_index >= len(review_session["questions"]):
+        return jsonify({"success": False, "error": "Invalid question index"})
+    
+    question = review_session["questions"][question_index]
+    
+    # Find and delete from main questions file
+    all_questions = load_all_questions()
+    all_questions = [q for q in all_questions if q["question"] != question["question"]]
+    
+    if save_all_questions(all_questions):
+        return jsonify({"success": True, "message": "Question deleted"})
+    
+    return jsonify({"success": False, "error": "Failed to save"})
+
+
+@app.route('/api/quiz/review/end', methods=['POST'])
+def review_end():
+    """End review session."""
+    global review_session
+    review_session = {
+        "active": False,
+        "questions": [],
+        "current_index": 0
+    }
+    return jsonify({"success": True})
+
+
 # ========================================
 # System Management API Routes
 # ========================================

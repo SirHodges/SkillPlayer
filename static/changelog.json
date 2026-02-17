@@ -1,5 +1,10 @@
 [
     {
+        "version": "2.6",
+        "date": "2026-02-17",
+        "desc": "Added password protected review mode to remove inappropriate questions"
+    },
+    {
         "version": "2.5",
         "date": "2026-02-03",
         "desc": "Added Calibration mode"
