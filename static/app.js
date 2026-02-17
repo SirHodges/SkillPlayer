@@ -147,6 +147,53 @@ function updateVolume(val) {
     soundRight.volume = val;
 }
 
+// ===========================================
+// Global Game State Reset
+// ===========================================
+function resetGameState() {
+    console.log('[System] Resetting Game State...');
+
+    // 1. Stop all Timers/Intervals
+    clearInterval(quizTimerInterval);
+    clearInterval(stealTimerInterval);
+    clearInterval(streakExpiryInterval);
+    clearTimeout(streakTimerTimeout);
+    clearTimeout(stopHoldTimeout);
+    clearTimeout(calibrationPostAnswerTimer);
+
+    quizTimerInterval = null;
+    stealTimerInterval = null;
+    streakTimerTimeout = null;
+    streakExpiryInterval = null;
+    stopHoldTimeout = null;
+    calibrationPostAnswerTimer = null;
+
+    // 2. Reset Game Flags
+    quizIsGameActive = false;
+    quizIsAnswerLocked = false;
+    calibrationMode = false;
+
+    // 3. Reset UI Visuals (Timers, Bars, Indicators)
+    cancelStopHold(); // Resets stop bars
+
+    if (quizElements.stealIndicator) quizElements.stealIndicator.classList.add('hidden');
+    if (document.getElementById('streak-indicator')) {
+        document.getElementById('streak-indicator').classList.add('hidden');
+    }
+
+    // Reset Lockout Bars
+    document.querySelectorAll('.lock-overlay').forEach(el => el.classList.add('hidden'));
+    document.querySelectorAll('.lockout-bar').forEach(el => el.classList.add('hidden'));
+    document.querySelectorAll('.player-score-container').forEach(el => el.classList.remove('locked'));
+
+    // 4. End Gamepad Session (if active)
+    if (socket && socket.connected) {
+        socket.emit('end_gamepad_session');
+    }
+
+    console.log('[System] Game State Reset Complete');
+}
+
 // Streak State
 let quizStreak = 0;
 let streakTimerTimeout = null;
@@ -484,14 +531,7 @@ function cancelBinding() {
 }
 
 function resetQuiz() {
-    // Stop any running timer
-    quizIsGameActive = false;
-    clearInterval(quizTimerInterval);
-
-    // End gamepad session if active
-    if (socket && socket.connected) {
-        socket.emit('end_gamepad_session');
-    }
+    resetGameState();
 
     // Reset all state
     quizQuestions = [];
@@ -537,6 +577,8 @@ function updateQuizRules(mode) {
 }
 
 async function startQuiz() {
+    resetGameState(); // Ensure clean slate
+
     try {
         // Add timestamp to prevent caching
         const response = await fetch(`/api/quiz/start?t=${Date.now()}`);
@@ -1906,6 +1948,8 @@ function exitCalibrationLevelScreen() {
 }
 
 async function startCalibration(level) {
+    resetGameState(); // Ensure clean slate
+
     try {
         // Force 1-player mode for calibration logic
         quizPlayerCount = 1;
@@ -2075,10 +2119,6 @@ async function selectCalibrationAnswer(answerIndex) {
 }
 
 function showInPlaceFeedback() {
-    // Deprecated - Simplified Flow
-}
-
-function showInPlaceFeedback() {
     console.log('[Calibration] Showing In-Place Feedback');
     calibrationState = 'feedback';
 
@@ -2086,11 +2126,13 @@ function showInPlaceFeedback() {
     const buttons = document.querySelectorAll('#calibration-answers-container .quiz-answer-btn');
     if (!buttons.length) console.warn('[Calibration] No answer buttons found to transform');
 
+    // Note: This feedback screen is deprecated in the current simplified flow
+    // Keeping this function for compatibility but it's no longer actively used
     const feedbackOptions = [
-        { label: 'X', text: 'Confusing wording', class: 'btn-yellow' }, // 0: Confusing
-        { label: 'Y', text: 'Outdated info', class: 'btn-yellow' },   // 1: Outdated
-        { label: 'B', text: 'Bad Key / Wrong', class: 'btn-yellow' }, // 2: Wrong Key (Mapped to B)
-        { label: 'A', text: 'Too difficult', class: 'btn-yellow' }    // 3: Difficult
+        { label: 'X', text: 'Mark for Review', class: 'btn-yellow' },
+        { label: 'Y', text: 'Mark for Review', class: 'btn-yellow' },
+        { label: 'B', text: 'Mark for Review', class: 'btn-yellow' },
+        { label: 'A', text: 'Mark for Review', class: 'btn-yellow' }
     ];
 
     buttons.forEach((btn, index) => {
@@ -2102,14 +2144,8 @@ function showInPlaceFeedback() {
             const newBtn = btn.cloneNode(true);
             newBtn.innerHTML = `<span class="answer-letter ${inputMode === 'gamepad' ? getGamepadColor(index) : 'gray'}">${opt.label}</span> ${opt.text}`;
 
-            // Add handler
-            let flagType = null;
-            if (index === 0) flagType = 'confusing';
-            if (index === 1) flagType = 'outdated';
-            if (index === 2) flagType = 'wrong';
-            if (index === 3) flagType = 'difficult';
-
-            newBtn.onclick = () => submitCalibration(flagType);
+            // Add handler - all buttons now just submit with 'review' flag
+            newBtn.onclick = () => submitCalibration('review');
 
             btn.parentNode.replaceChild(newBtn, btn);
         }

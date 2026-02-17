@@ -527,25 +527,17 @@
                         </div>
                     </div>
 
-                    <!-- Flag Reason Overlay (Still used for implicit skip) -->
+                    <!-- Flag Reason Overlay (Deprecated - keeping for compatibility) -->
                     <div id="calibration-flag-reason-overlay" class="calibration-overlay hidden">
-                        <h2>Select Issue</h2>
+                        <h2>Mark for Review?</h2>
                         <div class="calibration-options-grid">
-                            <button class="calibration-option-btn btn-yellow" onclick="submitCalibration('confusing')">
-                                <div class="btn-icon">X</div>
-                                Confusing wording
-                            </button>
-                            <button class="calibration-option-btn btn-yellow" onclick="submitCalibration('outdated')">
-                                <div class="btn-icon">Y</div>
-                                Outdated info
-                            </button>
-                            <button class="calibration-option-btn btn-yellow" onclick="submitCalibration('difficult')">
-                                <div class="btn-icon">A</div>
-                                Too difficult
+                            <button class="calibration-option-btn btn-yellow" onclick="submitCalibration('review')">
+                                <div class="btn-icon">✓</div>
+                                Yes, Mark for Review
                             </button>
                             <button class="calibration-option-btn btn-green" onclick="hideFlagReasonScreen()">
-                                <div class="btn-icon">B</div>
-                                Nevermind
+                                <div class="btn-icon">✗</div>
+                                Cancel
                             </button>
                         </div>
                     </div>

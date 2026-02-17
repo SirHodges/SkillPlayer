@@ -33,7 +33,36 @@ else:
     # Running as script
     BASE_DIR = Path(__file__).parent
 
-CONTENT_DIR = BASE_DIR / "content"
+def get_content_directory():
+    """
+    Determine content directory with priority:
+    1. Environment variable SKILLPLAYER_CONTENT_PATH
+    2. Auto-mounted USB: /media/pi/SKILLPLAYER/content (Linux only)
+    3. Fallback: ./content (local)
+    """
+    # Check environment variable first
+    env_path = os.environ.get('SKILLPLAYER_CONTENT_PATH')
+    if env_path:
+        path = Path(env_path)
+        if path.exists() and path.is_dir():
+            print(f"[Content] Using environment path: {path}")
+            return path
+        else:
+            print(f"[Content] WARNING: Environment path doesn't exist: {path}")
+    
+    # Check for auto-mounted USB on Raspberry Pi
+    if platform.system() == 'Linux':
+        usb_path = Path('/media/pi/SKILLPLAYER/content')
+        if usb_path.exists() and usb_path.is_dir():
+            print(f"[Content] Using USB drive: {usb_path}")
+            return usb_path
+    
+    # Fallback to local content folder
+    local_path = BASE_DIR / "content"
+    print(f"[Content] Using local path: {local_path}")
+    return local_path
+
+CONTENT_DIR = get_content_directory()
 VIEWS_FILE = BASE_DIR / "views.json"
 ANSWERS_FILE = BASE_DIR / "quiz_answers.json"
 
@@ -689,9 +718,10 @@ def calibration_submit():
     
     data = request.get_json()
     question_index = data.get('question_index', 0)
-    flag_type = data.get('flag_type', None) # 'confusing', 'outdated', 'difficult', 'wrong', or None
+    flag_type = data.get('flag_type', None) # 'review' or None
     
-    if question_index >= len(calibration_session["questions"]):
+    # Validate question index
+    if question_index < 0 or question_index >= len(calibration_session["questions"]):
         return jsonify({"success": False, "error": "Invalid question index"})
     
     question = calibration_session["questions"][question_index]
@@ -703,16 +733,11 @@ def calibration_submit():
         # Migration: Ensure New Structure
         if "flags" not in source_question:
             source_question["flags"] = {
-                "confusing": 0,
-                "outdated": 0,
-                "difficult": 0,
-                "wrong": 0,
                 "review": 0
             }
-            # Migrate old review_count if exists (mapped to 'wrong' as fallback or kept separate? User said remove)
+            # Migrate old review_count if exists
             if "review_count" in source_question:
-                # Optional: mapped old review count to 'wrong' or just discard. 
-                # Discarding as per "Remove the old review_count field"
+                # Discarding old review_count field
                 del source_question["review_count"]
                 
         if "tags" not in source_question:

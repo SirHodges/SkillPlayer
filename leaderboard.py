@@ -43,8 +43,11 @@ def load_scores() -> list:
 
 def save_scores(scores: list) -> None:
     """Save scores to file."""
-    with open(SCORES_FILE, 'w', encoding='utf-8') as f:
-        json.dump(scores, f, indent=2)
+    try:
+        with open(SCORES_FILE, 'w', encoding='utf-8') as f:
+            json.dump(scores, f, indent=2)
+    except IOError as e:
+        print(f"Error saving scores: {e}")
 
 
 def is_top_score(score: int) -> bool:

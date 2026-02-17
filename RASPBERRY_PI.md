@@ -79,7 +79,21 @@ You can either download the code directly from GitHub (easiest) or transfer it v
 
     *Wait for it to finish installing Python libraries. It might ask for your password (default is typically `raspberry` or `pi` unless you changed it).*
 
-## Part 3: Running the App
+## Part 2.5: USB Content Storage (Optional but Recommended)
+
+**Store your videos on a USB drive instead of the SD card!**
+
+This saves SD card space and makes content portable. The app automatically detects a USB drive labeled `SKILLPLAYER`.
+
+**Quick Steps**:
+1. Label your USB stick as `SKILLPLAYER`
+2. Create a `content/` folder on it with your Skills/Equipment/Other folders
+3. Plug it into the Pi
+4. Run SkillPlayer - it will automatically use the USB!
+
+**Full instructions**: See [USB_SETUP.md](USB_SETUP.md) for detailed setup guide.
+
+
 
 ### Option A: From Terminal (Test First)
 While still in the terminal, type:
