@@ -2399,35 +2399,8 @@ function showInPlaceFeedback() {
     }, 2000);
 }
 
-// Global Stop Hold Timer
-let stopHoldTimer = null;
-
-function startStopHold() {
-    console.log('[Hold] Start');
-    const bar = document.getElementById('calibration-stop-progress');
-    if (bar) {
-        bar.style.transition = 'width 2s linear';
-        bar.style.width = '100%';
-    }
-
-    stopHoldTimer = setTimeout(() => {
-        console.log('[Hold] Complete - Ending Calibration');
-        endCalibration();
-    }, 2000);
-}
-
-function cancelStopHold() {
-    console.log('[Hold] Cancel');
-    if (stopHoldTimer) {
-        clearTimeout(stopHoldTimer);
-        stopHoldTimer = null;
-    }
-    const bar = document.getElementById('calibration-stop-progress');
-    if (bar) {
-        bar.style.transition = 'none';
-        bar.style.width = '0%';
-    }
-}
+// NOTE: startStopHold() and cancelStopHold() are defined at the top of this file
+// They handle both quiz and calibration modes
 
 function getGamepadColor(index) {
     if (index === 0) return 'blue';
