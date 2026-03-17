@@ -1902,6 +1902,7 @@ function promptReviewPassword() {
 
 async function startReviewMode() {
     try {
+        console.log('[Review] Starting fetch...');
         const response = await fetch('/api/quiz/review/start', { method: 'POST' });
         const data = await response.json();
 
@@ -1916,15 +1917,38 @@ async function startReviewMode() {
             reviewQuestions = data.questions;
             reviewCurrentIndex = 0;
 
-            switchAppMode('quiz'); // Reuse quiz UI
+            // Manually switch UI to quiz mode without calling switchAppMode (which resets state)
+            currentAppMode = 'quiz';
+
+            // Update tab active states
+            document.querySelectorAll('.app-mode-tab').forEach(tab => {
+                tab.classList.toggle('active', tab.dataset.mode === 'quiz');
+            });
+
+            // Switch sidebar content
+            document.querySelectorAll('.sidebar-mode-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            const quizSidebar = document.getElementById('quiz-sidebar');
+            if (quizSidebar) quizSidebar.classList.add('active');
+
+            // Switch main content
+            document.querySelectorAll('.app-mode-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            const quizContent = document.getElementById('quiz-content');
+            if (quizContent) quizContent.classList.add('active');
+
+            console.log('[Review] Showing first question...');
             showReviewQuestion();
         } else {
             console.error('[Review] Failed to start:', data.error);
             alert('Failed to start review mode');
         }
     } catch (error) {
-        console.error('[Review] Error starting:', error);
-        alert('Error starting review mode');
+        console.error('[Review] Exception:', error);
+        console.error('[Review] Stack:', error.stack);
+        alert('Error starting review mode: ' + error.message);
     }
 }
 
@@ -1954,9 +1978,11 @@ function showReviewQuestion() {
         container.appendChild(btn);
     });
 
-    // Show review screen
-    hideAllScreens();
-    document.getElementById('quiz-game-screen').classList.remove('hidden');
+    // Show quiz game screen directly
+    const quizScreen = document.getElementById('quiz-game-screen');
+    if (quizScreen) {
+        quizScreen.classList.remove('hidden');
+    }
 
     console.log(`[Review] Showing question ${reviewCurrentIndex + 1}/${reviewQuestions.length}`);
 }
