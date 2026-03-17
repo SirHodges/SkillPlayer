@@ -268,6 +268,23 @@ class GamepadHandler:
                         })
                     else:
                         print(f"[Gamepad] Unmapped Button Pressed: {button_code}")
+        
+        elif not self.binding_mode:
+            # PRE-SESSION: Forward button presses so the start screen can respond
+            if value == 1:  # Press only
+                if button_code == START_BTN:
+                    self.log("[Gamepad] Pre-session START pressed")
+                    self.socketio.emit('gamepad_start_down', {'player': 0})
+                elif button_code in BUTTON_TO_ANSWER:
+                    answer_index = BUTTON_TO_ANSWER[button_code]
+                    self.log(f"[Gamepad] Pre-session button -> {answer_index}")
+                    self.socketio.emit('gamepad_button', {
+                        'player': 0,
+                        'answer_index': answer_index
+                    })
+            elif value == 0:
+                if button_code == START_BTN:
+                    self.socketio.emit('gamepad_start_up', {'player': 0})
     
     def stop(self):
         """Stop the gamepad handler."""
