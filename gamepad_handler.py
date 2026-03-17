@@ -174,6 +174,15 @@ class GamepadHandler:
                 if event.type == ecodes.EV_KEY:
                     if event.value in [0, 1]: # Ignore hold (2) auto-repeat events for now
                         self._handle_button_event(device_path, event.code, event.value)
+                
+                # Handle D-pad (hat) events for left/right navigation
+                if event.type == ecodes.EV_ABS and event.code == ecodes.ABS_HAT0X:
+                    if event.value == -1:  # Left
+                        self.log(f"[Gamepad] D-pad LEFT from {device_path}")
+                        self.socketio.emit('gamepad_dpad', {'direction': 'left'})
+                    elif event.value == 1:  # Right
+                        self.log(f"[Gamepad] D-pad RIGHT from {device_path}")
+                        self.socketio.emit('gamepad_dpad', {'direction': 'right'})
             
         except (OSError, FileNotFoundError) as e:
             print(f"[Gamepad] Device {device_path} disconnected: {e}")
