@@ -66,13 +66,13 @@ function startStopHold() {
     if (!bar) return;
 
     // Start animation
-    bar.style.transition = 'width 2s linear';
+    bar.style.transition = 'width 1s linear';
     bar.style.width = '100%';
 
     stopHoldTimeout = setTimeout(() => {
         stopQuizAttempt();
         cancelStopHold(); // Reset visual
-    }, 2000);
+    }, 1000);
 }
 
 function cancelStopHold() {
