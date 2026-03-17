@@ -282,20 +282,22 @@ class GamepadHandler:
         
         elif not self.binding_mode:
             # PRE-SESSION: Forward button presses so the start screen can respond
-            if value == 1:  # Press only
-                if button_code == START_BTN:
-                    self.log("[Gamepad] Pre-session START pressed")
+            # A button and START both use hold-to-start (with cancellation on release)
+            if button_code in [START_BTN, A_BTN, SF30_A]:
+                if value == 1:  # Press
+                    self.log(f"[Gamepad] Pre-session hold-start button DOWN (code {button_code})")
                     self.socketio.emit('gamepad_start_down', {'player': 0})
-                elif button_code in BUTTON_TO_ANSWER:
-                    answer_index = BUTTON_TO_ANSWER[button_code]
-                    self.log(f"[Gamepad] Pre-session button -> {answer_index}")
-                    self.socketio.emit('gamepad_button', {
-                        'player': 0,
-                        'answer_index': answer_index
-                    })
-            elif value == 0:
-                if button_code == START_BTN:
+                elif value == 0:  # Release
+                    self.log(f"[Gamepad] Pre-session hold-start button UP (code {button_code})")
                     self.socketio.emit('gamepad_start_up', {'player': 0})
+            elif value == 1 and button_code in BUTTON_TO_ANSWER:
+                # Other face buttons just auto-select gamepad mode (no quiz start)
+                answer_index = BUTTON_TO_ANSWER[button_code]
+                self.log(f"[Gamepad] Pre-session button -> {answer_index}")
+                self.socketio.emit('gamepad_button', {
+                    'player': 0,
+                    'answer_index': answer_index
+                })
     
     def stop(self):
         """Stop the gamepad handler."""

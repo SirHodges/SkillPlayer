@@ -2712,11 +2712,7 @@ socket.on('gamepad_button', (data) => {
             setInputMode('gamepad');
             console.log('[Gamepad] Auto-selected gamepad mode from start screen');
         }
-        // A button or any face button = hold to start
-        const answerIndex = data.answer_index;
-        if (answerIndex >= 0 && answerIndex <= 3) {
-            startHoldToStart();
-        }
+        // B/X/Y just switch to gamepad mode — A and START come in as gamepad_start_down
         return;
     }
 
