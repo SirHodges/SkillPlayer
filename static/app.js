@@ -48,16 +48,29 @@ function initGamepadSocket() {
 // Stop Hold Logic
 let stopHoldTimeout = null;
 
+// Debug helper: logs to both console AND the on-screen admin log panel
+function clientLog(msg) {
+    console.log(msg);
+    const consoleEl = document.getElementById('admin-log-console');
+    if (consoleEl) {
+        const entry = document.createElement('div');
+        entry.className = 'log-entry';
+        entry.textContent = msg;
+        consoleEl.appendChild(entry);
+        consoleEl.scrollTop = consoleEl.scrollHeight;
+    }
+}
+
 function startStopHold() {
     // Prevent multiple triggers if already holding
     if (stopHoldTimeout) return;
 
-    console.log('[StopHold] startStopHold() CALLED');
+    clientLog('[StopHold] startStopHold() CALLED');
 
     // Use calibration stop bar if in calibration mode, otherwise use quiz stop bar
     const barId = calibrationMode ? 'calibration-stop-progress' : 'stop-progress';
     const bar = document.getElementById(barId);
-    console.log('[StopHold] Looking for bar:', barId, 'Found:', !!bar);
+    clientLog('[StopHold] Looking for bar: ' + barId + ' Found: ' + !!bar);
     if (!bar) return;
 
     // Instantly reset visual state (fixes animation ignoring trigger)
@@ -68,17 +81,17 @@ function startStopHold() {
     // Start animation
     bar.style.transition = 'width 1s linear';
     bar.style.width = '100%';
-    console.log('[StopHold] Animation started, timer set for 1000ms');
+    clientLog('[StopHold] Animation started, timer set for 1000ms');
 
     stopHoldTimeout = setTimeout(() => {
-        console.log('[StopHold] Timer fired! Calling stopQuizAttempt()');
+        clientLog('[StopHold] Timer FIRED! Calling stopQuizAttempt()');
         stopQuizAttempt();
         cancelStopHold(); // Reset visual
     }, 1000);
 }
 
 function cancelStopHold() {
-    console.log('[StopHold] cancelStopHold() called, had timeout:', !!stopHoldTimeout);
+    clientLog('[StopHold] cancelStopHold() called, had timeout: ' + !!stopHoldTimeout);
     if (stopHoldTimeout) {
         clearTimeout(stopHoldTimeout);
         stopHoldTimeout = null;
@@ -2787,7 +2800,7 @@ socket.on('gamepad_bound', (data) => {
 
 // Listen for START button hold events (Stop Attempt) - Global Socket
 socket.on('gamepad_start_down', function (data) {
-    console.log('[StopHold] gamepad_start_down received!', 'appMode:', currentAppMode, 'gameActive:', quizIsGameActive, 'calibration:', calibrationMode);
+    clientLog('[StopHold] gamepad_start_down received! appMode:' + currentAppMode + ' gameActive:' + quizIsGameActive + ' calibration:' + calibrationMode);
     if (currentAppMode === 'quiz') {
         if (calibrationMode) {
             // End calibration with START hold
@@ -2799,7 +2812,7 @@ socket.on('gamepad_start_down', function (data) {
 });
 
 socket.on('gamepad_start_up', function (data) {
-    console.log('[StopHold] gamepad_start_up received!');
+    clientLog('[StopHold] gamepad_start_up received!');
     cancelStopHold();
 });
 
