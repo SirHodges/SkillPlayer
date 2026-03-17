@@ -60,6 +60,9 @@ function initGamepadSocket() {
 let stopHoldTimeout = null;
 
 function startStopHold() {
+    // Prevent multiple triggers if already holding
+    if (stopHoldTimeout) return;
+
     // Use calibration stop bar if in calibration mode, otherwise use quiz stop bar
     const barId = calibrationMode ? 'calibration-stop-progress' : 'stop-progress';
     const bar = document.getElementById(barId);
