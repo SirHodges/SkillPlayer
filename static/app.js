@@ -561,6 +561,9 @@ function resetQuiz() {
     // Reset UI
     quizElements.playerName.value = '';
     quizElements.nameEntry.classList.add('hidden');
+    
+    // Instantly reset timer display to full
+    updateQuizTimerDisplay(true);
 
     // Reset streak
     resetStreak();
@@ -645,8 +648,7 @@ async function startQuiz() {
 
             // Reset Score Displays
             updateScoreDisplay(); // Will handle hiding/showing p1/p2 containers
-
-            // If in gamepad mode (which is forced for 2P), show binding screen first
+            updateQuizTimerDisplay(true); // Reset timer UI to 100% instantly
             if (inputMode === 'gamepad') {
                 showQuizScreen('binding');
 
@@ -727,15 +729,25 @@ function startQuizTimer() {
     }, 1000);
 }
 
-function updateQuizTimerDisplay() {
+function updateQuizTimerDisplay(instant = false) {
     // SHARED TIMER DISPLAY (For both 1P and 2P)
     const minutes = Math.floor(quizTimeRemaining / 60);
-    const seconds = quizTimeRemaining % 60;
+    const seconds = Math.floor(quizTimeRemaining % 60);
     quizElements.timerText.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+
+    if (instant) {
+        quizElements.timerFill.style.transition = 'none';
+    }
 
     // Update timer bar
     const percentage = Math.max(0, Math.min(100, (quizTimeRemaining / 60) * 100));
     quizElements.timerFill.style.width = `${percentage}%`;
+    
+    if (instant) {
+        // Force reflow
+        void quizElements.timerFill.offsetWidth;
+        quizElements.timerFill.style.transition = '';
+    }
 
     // Change color when low (under 30 seconds)
     if (quizTimeRemaining <= 30) {
