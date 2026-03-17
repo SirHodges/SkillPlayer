@@ -169,9 +169,45 @@ function setInputMode(mode) {
     }
 
     // Update Start Quiz button text
-    const startBtn = document.getElementById('quiz-start-btn');
-    if (startBtn) {
-        startBtn.textContent = mode === 'gamepad' ? 'Press A or START to begin' : 'Start Quiz';
+    const startLabel = document.querySelector('#quiz-start-btn .start-label');
+    if (startLabel) {
+        startLabel.textContent = mode === 'gamepad' ? 'Hold A or START to begin' : 'Start Quiz';
+    }
+}
+
+// Hold-to-Start Logic (0.5s hold with bottom-to-top fill)
+let startHoldTimeout = null;
+
+function startHoldToStart() {
+    if (startHoldTimeout) return;
+
+    const bar = document.getElementById('start-progress');
+    if (!bar) return;
+
+    // Reset
+    bar.style.transition = 'none';
+    bar.style.height = '0%';
+    void bar.offsetWidth;
+
+    // Animate fill from bottom to top
+    bar.style.transition = 'height 0.5s linear';
+    bar.style.height = '100%';
+
+    startHoldTimeout = setTimeout(() => {
+        cancelStartHold();
+        startQuiz();
+    }, 500);
+}
+
+function cancelStartHold() {
+    if (startHoldTimeout) {
+        clearTimeout(startHoldTimeout);
+        startHoldTimeout = null;
+    }
+    const bar = document.getElementById('start-progress');
+    if (bar) {
+        bar.style.transition = 'height 0.15s ease-out';
+        bar.style.height = '0%';
     }
 }
 
@@ -2676,10 +2712,10 @@ socket.on('gamepad_button', (data) => {
             setInputMode('gamepad');
             console.log('[Gamepad] Auto-selected gamepad mode from start screen');
         }
-        // A button (index 3) or any face button = start the quiz
+        // A button or any face button = hold to start
         const answerIndex = data.answer_index;
         if (answerIndex >= 0 && answerIndex <= 3) {
-            startQuiz();
+            startHoldToStart();
         }
         return;
     }
@@ -2796,13 +2832,13 @@ socket.on('gamepad_bound', (data) => {
 socket.on('gamepad_start_down', function (data) {
     clientLog('[StopHold] gamepad_start_down received! appMode:' + currentAppMode + ' gameActive:' + quizIsGameActive + ' calibration:' + calibrationMode);
 
-    // If on the quiz start screen, auto-select gamepad and start the quiz
+    // If on the quiz start screen, auto-select gamepad and hold-to-start
     const startScreen = document.getElementById('quiz-start-screen');
     if (startScreen && startScreen.classList.contains('active') && currentAppMode === 'quiz') {
         if (inputMode !== 'gamepad') {
             setInputMode('gamepad');
         }
-        startQuiz();
+        startHoldToStart();
         return;
     }
 
@@ -2818,6 +2854,12 @@ socket.on('gamepad_start_down', function (data) {
 
 socket.on('gamepad_start_up', function (data) {
     clientLog('[StopHold] gamepad_start_up received!');
+    // Cancel hold-to-start if on start screen
+    const startScreen = document.getElementById('quiz-start-screen');
+    if (startScreen && startScreen.classList.contains('active')) {
+        cancelStartHold();
+        return;
+    }
     cancelStopHold();
 });
 

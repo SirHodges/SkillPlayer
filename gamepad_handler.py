@@ -176,13 +176,24 @@ class GamepadHandler:
                         self._handle_button_event(device_path, event.code, event.value)
                 
                 # Handle D-pad (hat) events for left/right navigation
-                if event.type == ecodes.EV_ABS and event.code == ecodes.ABS_HAT0X:
-                    if event.value == -1:  # Left
-                        self.log(f"[Gamepad] D-pad LEFT from {device_path}")
-                        self.socketio.emit('gamepad_dpad', {'direction': 'left'})
-                    elif event.value == 1:  # Right
-                        self.log(f"[Gamepad] D-pad RIGHT from {device_path}")
-                        self.socketio.emit('gamepad_dpad', {'direction': 'right'})
+                # Support both HAT (ABS_HAT0X) and analog axis (ABS_X) D-pads
+                if event.type == ecodes.EV_ABS:
+                    if event.code == ecodes.ABS_HAT0X:
+                        # Hat-switch style: -1=left, 0=center, 1=right
+                        if event.value == -1:
+                            self.log(f"[Gamepad] D-pad LEFT (HAT)")
+                            self.socketio.emit('gamepad_dpad', {'direction': 'left'})
+                        elif event.value == 1:
+                            self.log(f"[Gamepad] D-pad RIGHT (HAT)")
+                            self.socketio.emit('gamepad_dpad', {'direction': 'right'})
+                    elif event.code == ecodes.ABS_X:
+                        # Analog axis style: 0=left, 127/128=center, 255=right
+                        if event.value == 0:
+                            self.log(f"[Gamepad] D-pad LEFT (ABS_X)")
+                            self.socketio.emit('gamepad_dpad', {'direction': 'left'})
+                        elif event.value == 255:
+                            self.log(f"[Gamepad] D-pad RIGHT (ABS_X)")
+                            self.socketio.emit('gamepad_dpad', {'direction': 'right'})
             
         except (OSError, FileNotFoundError) as e:
             print(f"[Gamepad] Device {device_path} disconnected: {e}")
