@@ -52,9 +52,12 @@ function startStopHold() {
     // Prevent multiple triggers if already holding
     if (stopHoldTimeout) return;
 
+    console.log('[StopHold] startStopHold() CALLED');
+
     // Use calibration stop bar if in calibration mode, otherwise use quiz stop bar
     const barId = calibrationMode ? 'calibration-stop-progress' : 'stop-progress';
     const bar = document.getElementById(barId);
+    console.log('[StopHold] Looking for bar:', barId, 'Found:', !!bar);
     if (!bar) return;
 
     // Instantly reset visual state (fixes animation ignoring trigger)
@@ -65,14 +68,17 @@ function startStopHold() {
     // Start animation
     bar.style.transition = 'width 1s linear';
     bar.style.width = '100%';
+    console.log('[StopHold] Animation started, timer set for 1000ms');
 
     stopHoldTimeout = setTimeout(() => {
+        console.log('[StopHold] Timer fired! Calling stopQuizAttempt()');
         stopQuizAttempt();
         cancelStopHold(); // Reset visual
     }, 1000);
 }
 
 function cancelStopHold() {
+    console.log('[StopHold] cancelStopHold() called, had timeout:', !!stopHoldTimeout);
     if (stopHoldTimeout) {
         clearTimeout(stopHoldTimeout);
         stopHoldTimeout = null;
@@ -1388,19 +1394,14 @@ async function trackSkipOnServer(playerIndex) {
 }
 
 function stopQuizAttempt() {
+    console.log('[StopHold] stopQuizAttempt() CALLED');
     // Check if in calibration mode
     if (calibrationMode) {
-        showCalibrationFeedback("Calibration stopped early", "penalty");
-        setTimeout(() => {
-            endCalibration();
-        }, 1500);
+        endCalibration();
         return;
     }
-    // End the quiz immediately when user clicks Stop Attempt
-    showQuizFeedback("Quiz stopped early", "penalty");
-    setTimeout(() => {
-        endQuiz();
-    }, 1500);
+    // End the quiz immediately
+    endQuiz();
 }
 
 // Virtual Keyboard Functions
@@ -2786,6 +2787,7 @@ socket.on('gamepad_bound', (data) => {
 
 // Listen for START button hold events (Stop Attempt) - Global Socket
 socket.on('gamepad_start_down', function (data) {
+    console.log('[StopHold] gamepad_start_down received!', 'appMode:', currentAppMode, 'gameActive:', quizIsGameActive, 'calibration:', calibrationMode);
     if (currentAppMode === 'quiz') {
         if (calibrationMode) {
             // End calibration with START hold
@@ -2797,6 +2799,7 @@ socket.on('gamepad_start_down', function (data) {
 });
 
 socket.on('gamepad_start_up', function (data) {
+    console.log('[StopHold] gamepad_start_up received!');
     cancelStopHold();
 });
 
