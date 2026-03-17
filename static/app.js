@@ -1393,11 +1393,17 @@ async function trackSkipOnServer(playerIndex) {
 function stopQuizAttempt() {
     // Check if in calibration mode
     if (calibrationMode) {
-        endCalibration();
+        showCalibrationFeedback("Calibration stopped early", "penalty");
+        setTimeout(() => {
+            endCalibration();
+        }, 1500);
         return;
     }
     // End the quiz immediately when user clicks Stop Attempt
-    endQuiz();
+    showQuizFeedback("Quiz stopped early", "penalty");
+    setTimeout(() => {
+        endQuiz();
+    }, 1500);
 }
 
 // Virtual Keyboard Functions
@@ -2538,11 +2544,13 @@ async function endCalibration() {
     calibrationQuestions = [];
     calibrationCurrentIndex = 0;
 
-    // Show completion message
-    alert(`Calibration complete! ${calibrationCalibratedCount} questions calibrated.`);
-
-    // Return to quiz start screen
-    showQuizScreen('start');
+    // Show completion message in UI, then redirect
+    showCalibrationFeedback(`Calibration complete! ${calibrationCalibratedCount} calibrated.`, "success");
+    
+    setTimeout(() => {
+        // Return to quiz start screen
+        showQuizScreen('start');
+    }, 2000);
 }
 
 // Gamepad support for calibration mode
