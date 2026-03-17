@@ -142,12 +142,14 @@
                         <!-- Selector Moved Above Rules -->
                         <div class="player-mode-selector" style="margin-bottom: 20px;">
                             <label class="mode-option">
+                                <svg class="dpad-hint" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6z"/></svg>
                                 <input type="radio" name="player-mode" value="1" checked onchange="updateQuizRules(1)">
                                 <span class="mode-label">1 Player</span>
                             </label>
                             <label class="mode-option">
-                                <input type="radio" name="player-mode" value="2" onchange="updateQuizRules(2)">
                                 <span class="mode-label">2 Players</span>
+                                <input type="radio" name="player-mode" value="2" onchange="updateQuizRules(2)">
+                                <svg class="dpad-hint" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
                             </label>
                         </div>
 
@@ -191,7 +193,7 @@
                         </div>
                         <button id="quiz-start-btn" class="quiz-btn-primary" onclick="startQuiz()">
                             <div id="start-progress" class="start-progress"></div>
-                            <span class="start-label">Start Quiz</span>
+                            <span class="start-label">Click or hold START to begin</span>
                         </button>
                     </div>
 
