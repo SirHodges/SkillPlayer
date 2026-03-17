@@ -1370,12 +1370,12 @@ body {
 
 .quiz-question-number {
     color: var(--text-secondary);
-    font-size: 0.9rem;
+    font-size: 1.15rem;
     margin-bottom: 12px;
 }
 
 .quiz-question-text {
-    font-size: 1.4rem;
+    font-size: 2rem;
     font-weight: 600;
     line-height: 1.4;
 }
@@ -1441,7 +1441,7 @@ body {
     border-radius: 14px;
     color: var(--text-primary);
     font-family: 'Outfit', 'Segoe UI', sans-serif;
-    font-size: 1.05rem;
+    font-size: 1.4rem;
     text-align: left;
     cursor: pointer;
     transition: all 0.2s ease, opacity 1s ease;
