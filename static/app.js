@@ -39,17 +39,6 @@ function initGamepadSocket() {
                     }
                 }
             });
-
-            // Listen for START button hold events (Stop Attempt)
-            gamepadSocket.on('gamepad_start_down', function (data) {
-                if (currentAppMode === 'quiz' && quizIsGameActive) {
-                    startStopHold();
-                }
-            });
-
-            gamepadSocket.on('gamepad_start_up', function (data) {
-                cancelStopHold();
-            });
         }
     } catch (e) {
         console.log('[Gamepad] SocketIO not available:', e);
