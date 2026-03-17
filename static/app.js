@@ -65,6 +65,11 @@ function startStopHold() {
     const bar = document.getElementById(barId);
     if (!bar) return;
 
+    // Instantly reset visual state (fixes animation ignoring trigger)
+    bar.style.transition = 'none';
+    bar.style.width = '0%';
+    void bar.offsetWidth; // Force reflow
+
     // Start animation
     bar.style.transition = 'width 1s linear';
     bar.style.width = '100%';
