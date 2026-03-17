@@ -98,6 +98,10 @@ class GamepadHandler:
         self.active_listeners = set()
         self.lock = threading.Lock()
         
+        # Track button states (pressed or not) to debounce jitter
+        # Format: {player_id: {button_code: is_pressed_bool}}
+        self.button_states = {1: {}, 2: {}}
+        
         # Start initial device scan
         self._scan_and_start_listeners()
         
@@ -235,10 +239,15 @@ class GamepadHandler:
             if player_id > 0:
                 # 1. Handle Special Hold-to-Stop Button (START)
                 if button_code == START_BTN:
-                    if value == 1: # Down
+                    is_pressed = (value == 1)
+                    was_pressed = self.button_states[player_id].get(START_BTN, False)
+                    
+                    if is_pressed and not was_pressed:
+                         self.button_states[player_id][START_BTN] = True
                          self.log(f"[Gamepad] Player {player_id} START DOWN (Holding...)")
                          self.socketio.emit('gamepad_start_down', {'player': player_id})
-                    elif value == 0: # Up
+                    elif not is_pressed and was_pressed:
+                         self.button_states[player_id][START_BTN] = False
                          self.log(f"[Gamepad] Player {player_id} START UP (Released)")
                          self.socketio.emit('gamepad_start_up', {'player': player_id})
                     return # Start button is special, don't map to answers
