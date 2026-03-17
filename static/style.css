@@ -2409,18 +2409,6 @@ body {
     box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
 }
 
-.dpad-hint {
-    opacity: 0.4;
-    flex-shrink: 0;
-    transition: opacity 0.2s, color 0.2s;
-    color: var(--text-secondary);
-}
-
-.mode-option:has(input:checked) .dpad-hint {
-    opacity: 1;
-    color: var(--accent-primary);
-}
-
 /* Split Header Layout */
 .quiz-game-header {
     display: flex;
