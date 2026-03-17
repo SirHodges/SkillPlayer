@@ -282,8 +282,8 @@ class GamepadHandler:
         
         elif not self.binding_mode:
             # PRE-SESSION: Forward button presses so the start screen can respond
-            # A button and START both use hold-to-start (with cancellation on release)
-            if button_code in [START_BTN, A_BTN, SF30_A]:
+            # Only START uses hold-to-start (with cancellation on release)
+            if button_code == START_BTN:
                 if value == 1:  # Press
                     self.log(f"[Gamepad] Pre-session hold-start button DOWN (code {button_code})")
                     self.socketio.emit('gamepad_start_down', {'player': 0})
