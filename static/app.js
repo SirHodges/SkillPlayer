@@ -1,50 +1,3 @@
-// ===========================================
-// SocketIO for Gamepad Support
-// ===========================================
-let gamepadSocket = null;
-
-// Initialize gamepad socket after page load
-function initGamepadSocket() {
-    try {
-        if (typeof io !== 'undefined') {
-            gamepadSocket = io();
-            console.log('[Gamepad] SocketIO connected');
-
-            // Listen for gamepad button presses
-            gamepadSocket.on('gamepad_button', function (data) {
-                console.log('[Gamepad] Button received:', data);
-
-                // Only handle gamepad input when in gamepad mode, quiz mode, and game is active
-                if (inputMode === 'gamepad' && currentAppMode === 'quiz' && quizIsGameActive && !quizIsAnswerLocked) {
-                    const answerIndex = data.answer_index;
-
-                    if (answerIndex === 'skip') {
-                        console.log('[Gamepad] SKIP command received via primary socket');
-                        skipQuestion(data.player);
-                    } else if (answerIndex >= 0 && answerIndex <= 3) {
-                        selectQuizAnswer(answerIndex);
-                    }
-                } else if (reviewMode) {
-                    // Review Mode gamepad controls
-                    const answerIndex = data.answer_index;
-
-                    if (answerIndex === 'skip') {
-                        // Right trigger = Delete
-                        console.log('[Review] Gamepad DELETE pressed');
-                        deleteReviewQuestion();
-                    } else if (answerIndex >= 0 && answerIndex <= 3) {
-                        // A/B/X/Y = Remove flag
-                        console.log('[Review] Gamepad REMOVE FLAG pressed');
-                        removeReviewFlag();
-                    }
-                }
-            });
-        }
-    } catch (e) {
-        console.log('[Gamepad] SocketIO not available:', e);
-    }
-}
-
 // Stop Hold Logic
 let stopHoldTimeout = null;
 
@@ -483,7 +436,7 @@ async function selectSkill(skillId, skillName) {
             return;
         }
 
-        videosGrid.innerHTML = files.map((file, index) => {
+        videosGrid.innerHTML = files.map((file) => {
             const pdfIcon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="28" height="28">
                         <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm-1 2l5 5h-5V4zM8.5 13h1c.55 0 1 .45 1 1v1c0 .55-.45 1-1 1h-.5v1.5H8V13h.5zm3 0h1.25c.41 0 .75.34.75.75v2.5c0 .41-.34.75-.75.75H11.5V13zm4 0H17v1h-1v.5h1v1h-1V17h-1v-4h.5zM9 14v1h.5v-1H9zm3 0v2h.5v-2h-.5z"/>
                     </svg>`;
@@ -493,7 +446,7 @@ async function selectSkill(skillId, skillName) {
             const icon = file.type === 'pdf' ? pdfIcon : videoIcon;
             const newBadge = file.is_new ? '<span class="new-badge">NEW</span>' : '';
             return `
-                    <button class="video-card" onclick="playContent('${file.category}', '${file.skill}', '${file.filename}', '${file.name.replace(/'/g, "\\'")}', '${file.type}')">
+                    <button class="video-card" onclick="playContent(event, '${file.category}', '${file.skill}', '${file.filename}', '${file.name.replace(/'/g, "\\'")}', '${file.type}')">
                         <div class="video-card-icon">${icon}</div>
                         <div class="video-card-info">
                             <span class="video-name">${file.name} ${newBadge}</span>
@@ -508,14 +461,14 @@ async function selectSkill(skillId, skillName) {
 }
 
 // Play a video or show PDF
-function playContent(category, skill, filename, title, type) {
+function playContent(evt, category, skill, filename, title, type) {
     currentContent = { category, skill, filename, title, type };
 
     // Update active state
     document.querySelectorAll('.video-card').forEach(card => {
         card.classList.remove('active');
     });
-    event.currentTarget.classList.add('active');
+    evt.currentTarget.classList.add('active');
 
     // Hide placeholder
     videoPlaceholder.style.display = 'none';
@@ -1250,8 +1203,6 @@ function updateStreak(correct, playerIndex = 1) {
             if (quizStreak >= 3) {
                 const indicator = document.getElementById('streak-indicator');
                 const streakText = document.getElementById('streak-text');
-                const ringProgress = document.getElementById('streak-ring-progress');
-
                 if (indicator && streakText) {
                     // Update text
                     streakText.textContent = getStreakText(quizStreak);
@@ -1373,10 +1324,6 @@ async function skipQuestion(playerIndex = 1) {
     }
 
     // STEAL OPPORTUNITY for the OTHER player
-    // Identify other player
-    const otherPlayerIndex = playerIndex === 1 ? 2 : 1;
-    const otherPKey = 'p' + otherPlayerIndex;
-
     // Start Steal Timer (4 seconds)
     startStealTimer(4);
 }
@@ -1434,7 +1381,7 @@ function startStealTimer(seconds) {
     }, 1000);
 }
 
-async function trackSkipOnServer(playerIndex) {
+async function trackSkipOnServer() {
     try {
         const timeToAnswer = Date.now() - questionDisplayTime;
         const question = quizQuestions[quizCurrentQuestionIndex];
@@ -1585,11 +1532,16 @@ function skipNameEntry() {
     loadQuizEndLeaderboard();
 }
 
+async function fetchLeaderboardScores() {
+    const response = await fetch('/api/quiz/leaderboard');
+    const data = await response.json();
+    return data.scores;
+}
+
 async function loadQuizEndLeaderboardWithPlaceholder() {
     try {
-        const response = await fetch('/api/quiz/leaderboard');
-        const data = await response.json();
-        displayQuizScoresWithPlaceholder(data.scores, quizElements.endScoresList, quizScore);
+        const scores = await fetchLeaderboardScores();
+        displayQuizScoresWithPlaceholder(scores, quizElements.endScoresList, quizScore);
     } catch (error) {
         console.error('Failed to load leaderboard:', error);
     }
@@ -1723,9 +1675,8 @@ async function submitQuizScore() {
 
 async function loadQuizLeaderboard() {
     try {
-        const response = await fetch('/api/quiz/leaderboard');
-        const data = await response.json();
-        displayQuizScores(data.scores, quizElements.sidebarScoresList);
+        const scores = await fetchLeaderboardScores();
+        displayQuizScores(scores, quizElements.sidebarScoresList);
     } catch (error) {
         console.error('Failed to load leaderboard:', error);
     }
@@ -1733,9 +1684,8 @@ async function loadQuizLeaderboard() {
 
 async function loadQuizEndLeaderboard() {
     try {
-        const response = await fetch('/api/quiz/leaderboard');
-        const data = await response.json();
-        displayQuizScores(data.scores, quizElements.endScoresList);
+        const scores = await fetchLeaderboardScores();
+        displayQuizScores(scores, quizElements.endScoresList);
     } catch (error) {
         console.error('Failed to load leaderboard:', error);
     }
@@ -1783,12 +1733,12 @@ function displayQuizScores(scores, container) {
             row.dataset.stats = JSON.stringify(entry.stats);
 
             // Hover handler for fixed tooltip
-            row.addEventListener('mouseenter', function (e) {
+            row.addEventListener('mouseenter', function () {
                 const stats = JSON.parse(this.dataset.stats);
                 showFixedTooltip(this, stats);
             });
 
-            row.addEventListener('mouseleave', function (e) {
+            row.addEventListener('mouseleave', function () {
                 hideFixedTooltip();
             });
 
@@ -1834,7 +1784,7 @@ quizElements.playerName.addEventListener('keypress', (e) => {
 });
 
 // Close tooltip when clicking outside
-document.addEventListener('click', function (e) {
+document.addEventListener('click', function () {
     const tooltip = document.getElementById('fixed-quiz-tooltip');
     if (tooltip && tooltip.style.visibility === 'visible') {
         hideFixedTooltip();
@@ -2323,8 +2273,6 @@ function displayCalibrationQuestion() {
     const timerContainer = document.getElementById('calibration-inplace-timer-container');
     if (timerContainer) timerContainer.classList.add('invisible');
 
-    hideFlagReasonScreen();
-
     const question = calibrationQuestions[calibrationCurrentIndex];
     document.getElementById('calibration-question-num').textContent = calibrationCurrentIndex + 1;
     document.getElementById('calibration-question-text').textContent = question.question;
@@ -2407,72 +2355,6 @@ async function selectCalibrationAnswer(answerIndex) {
     }
 }
 
-function showInPlaceFeedback() {
-    console.log('[Calibration] Showing In-Place Feedback');
-    calibrationState = 'feedback';
-
-    // Transform answer buttons into flags
-    const buttons = document.querySelectorAll('#calibration-answers-container .quiz-answer-btn');
-    if (!buttons.length) console.warn('[Calibration] No answer buttons found to transform');
-
-    // Note: This feedback screen is deprecated in the current simplified flow
-    // Keeping this function for compatibility but it's no longer actively used
-    const feedbackOptions = [
-        { label: 'X', text: 'Mark for Review', class: 'btn-yellow' },
-        { label: 'Y', text: 'Mark for Review', class: 'btn-yellow' },
-        { label: 'B', text: 'Mark for Review', class: 'btn-yellow' },
-        { label: 'A', text: 'Mark for Review', class: 'btn-yellow' }
-    ];
-
-    buttons.forEach((btn, index) => {
-        if (feedbackOptions[index]) {
-            const opt = feedbackOptions[index];
-            // Update visual style
-            btn.className = `quiz-answer-btn ${opt.class}`;
-            // Remove previous click listeners by cloning
-            const newBtn = btn.cloneNode(true);
-            newBtn.innerHTML = `<span class="answer-letter ${inputMode === 'gamepad' ? getGamepadColor(index) : 'gray'}">${opt.label}</span> ${opt.text}`;
-
-            // Add handler - all buttons now just submit with 'review' flag
-            newBtn.onclick = () => submitCalibration('review');
-
-            btn.parentNode.replaceChild(newBtn, btn);
-        }
-    });
-
-    // Show and start timer
-    const timerContainer = document.getElementById('calibration-inplace-timer-container');
-    const timerBar = document.getElementById('calibration-options-timer');
-
-    if (timerContainer && timerBar) {
-        timerContainer.classList.remove('invisible');
-        timerBar.style.transition = 'none';
-        timerBar.style.width = '100%';
-
-        // Force reflow
-        void timerBar.offsetWidth;
-
-        // Start 2s timer
-        timerBar.style.transition = 'width 2s linear';
-        timerBar.style.width = '0%';
-    } else {
-        console.error('[Calibration] Timer elements missing in DOM, timers not started');
-    }
-
-    // Input Grace Period: Ignore inputs for 500ms to prevent double-press/bounce
-    calibrationFeedbackInputLocked = true;
-    setTimeout(() => {
-        calibrationFeedbackInputLocked = false;
-        console.log('[Calibration] Feedback Input Unlocked');
-    }, 500);
-
-    calibrationPostAnswerTimer = setTimeout(() => {
-        // Timeout = "Just Right" (No flag)
-        console.log('[Calibration] Feedback timeout - Submitting null');
-        submitCalibration(null);
-    }, 2000);
-}
-
 // NOTE: startStopHold() and cancelStopHold() are defined at the top of this file
 // They handle both quiz and calibration modes
 
@@ -2482,19 +2364,6 @@ function getGamepadColor(index) {
     if (index === 2) return 'yellow';
     if (index === 3) return 'red';
     return '';
-}
-
-function showFlagReasonScreen() {
-    calibrationState = 'flag_reason';
-    const overlay = document.getElementById('calibration-flag-reason-overlay');
-    overlay.classList.remove('hidden');
-}
-
-function hideFlagReasonScreen() {
-    const overlay = document.getElementById('calibration-flag-reason-overlay');
-    overlay.classList.add('hidden');
-    calibrationState = 'question';
-    calibrationAnswerLocked = false;
 }
 
 function markForReview() {
@@ -2696,27 +2565,24 @@ document.querySelectorAll('input[name="player-mode"]').forEach(input => {
 // ===========================================
 // SocketIO & Virtual Input (2-Player)
 // ===========================================
+const p1PosDisplay = document.getElementById('p1-pos');
 const p2PosDisplay = document.getElementById('p2-pos');
+const p1Cursor = document.getElementById('p1-cursor');
+const p2Cursor = document.getElementById('p2-cursor');
 
-// Check if library loaded
 if (typeof io === 'undefined') {
-    bridgeStatus.textContent = "LIB MISSING";
-    bridgeStatus.style.color = "orange";
+    console.error('[SocketIO] Library not found - gamepad support unavailable');
     throw new Error("Socket.IO library not found");
 }
 
 const socket = io();
 
 socket.on('connect', () => {
-    console.log('Connected to Input Bridge via SocketIO');
-    bridgeStatus.textContent = "CONNECTED";
-    bridgeStatus.style.color = "#00ff00";
+    console.log('[SocketIO] Connected');
 });
 
 socket.on('disconnect', () => {
-    bridgeStatus.textContent = "DISCONNECTED";
-    bridgeStatus.style.color = "red";
-    bridgeStatus.style.color = "red";
+    console.warn('[SocketIO] Disconnected');
 });
 
 // Server Log Handler for Admin Console
@@ -2801,7 +2667,6 @@ socket.on('gamepad_button', (data) => {
 });
 
 // Gamepad bound handler - triggered when a controller claims the session
-// Gamepad bound handler - triggered when a controller claims the session
 socket.on('gamepad_bound', (data) => {
     console.log('[Gamepad] Controller bound:', data);
     const statusText = document.getElementById('binding-status-text');
@@ -2857,7 +2722,7 @@ socket.on('gamepad_bound', (data) => {
 });
 
 // Listen for START button hold events (Stop Attempt) - Global Socket
-socket.on('gamepad_start_down', function (data) {
+socket.on('gamepad_start_down', function () {
     clientLog('[StopHold] gamepad_start_down received! appMode:' + currentAppMode + ' gameActive:' + quizIsGameActive + ' calibration:' + calibrationMode);
 
     // If on the quiz start screen, auto-select gamepad and hold-to-start
@@ -2880,7 +2745,7 @@ socket.on('gamepad_start_down', function (data) {
     }
 });
 
-socket.on('gamepad_start_up', function (data) {
+socket.on('gamepad_start_up', function () {
     clientLog('[StopHold] gamepad_start_up received!');
     // Cancel hold-to-start if on start screen
     const startScreen = document.getElementById('quiz-start-screen');
@@ -2935,12 +2800,12 @@ socket.on('binding_status', (data) => {
 // Update cursor positions (60Hz interpolation target)
 socket.on('state_update', (state) => {
     if (state.p1) {
-        p1Cursor.style.transform = `translate(${state.p1.x}px, ${state.p1.y}px)`;
-        p1PosDisplay.textContent = `${Math.round(state.p1.x)},${Math.round(state.p1.y)}`;
+        if (p1Cursor) p1Cursor.style.transform = `translate(${state.p1.x}px, ${state.p1.y}px)`;
+        if (p1PosDisplay) p1PosDisplay.textContent = `${Math.round(state.p1.x)},${Math.round(state.p1.y)}`;
     }
     if (state.p2) {
-        p2Cursor.style.transform = `translate(${state.p2.x}px, ${state.p2.y}px)`;
-        p2PosDisplay.textContent = `${Math.round(state.p2.x)},${Math.round(state.p2.y)}`;
+        if (p2Cursor) p2Cursor.style.transform = `translate(${state.p2.x}px, ${state.p2.y}px)`;
+        if (p2PosDisplay) p2PosDisplay.textContent = `${Math.round(state.p2.x)},${Math.round(state.p2.y)}`;
     }
 });
 
