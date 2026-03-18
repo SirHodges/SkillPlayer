@@ -1,5 +1,10 @@
 [
     {
+        "version": "2.8",
+        "date": "2026-03-18",
+        "desc": "Added Deck shuffling logic to reduce chance of repeat questions"
+    },
+    {
         "version": "2.7",
         "date": "2026-03-17",
         "desc": "Various bug fixes, Improved navigation with Gamepad"

@@ -8,6 +8,7 @@ import os
 import sys
 import json
 import time
+import random
 import webbrowser
 import threading
 from pathlib import Path
@@ -22,7 +23,7 @@ except ImportError:
     SOCKETIO_AVAILABLE = False
     print("[Info] flask-socketio not installed. Gamepad support disabled.")
 
-from quiz import load_questions, get_random_questions
+from quiz import load_questions
 from leaderboard import get_leaderboard, add_score, is_top_score, save_scores
 
 # Determine base path (works for both dev and PyInstaller exe)
@@ -375,18 +376,48 @@ current_quiz_game = {
     "score": 0
 }
 
+# Dealt deck: persists across games so every question is seen before any repeats.
+# Holds raw question dicts (answers not yet shuffled).
+quiz_deck = []
+
+DEAL_SIZE = 25  # Questions dealt per game (well above max answerable in 60s)
+
 
 @app.route('/api/quiz/start', methods=['GET'])
 def quiz_start_game():
-    """Start a new quiz game with random questions."""
-    questions = load_questions()
-    game_questions = get_random_questions(questions, len(questions))
-    
+    """Start a new quiz game, dealing from the persistent deck."""
+    global quiz_deck
+
+    all_questions = load_questions()
+
+    # Refill the deck whenever it runs low
+    if len(quiz_deck) < DEAL_SIZE:
+        new_deck = all_questions.copy()
+        random.shuffle(new_deck)
+        quiz_deck = quiz_deck + new_deck  # keep any remaining at the front
+
+    # Deal from the front of the deck
+    deal = quiz_deck[:DEAL_SIZE]
+    quiz_deck = quiz_deck[DEAL_SIZE:]
+
+    # Shuffle answers fresh for each dealt question
+    game_questions = []
+    for q in deal:
+        answers = q["answers"].copy()
+        correct_answer = q["correct"]
+        random.shuffle(answers)
+        game_questions.append({
+            "id": q.get("id"),
+            "question": q["question"],
+            "answers": answers,
+            "correct_index": answers.index(correct_answer)
+        })
+
     # Store game state
     current_quiz_game["questions"] = game_questions
     current_quiz_game["current_index"] = 0
     current_quiz_game["score"] = 0
-    
+
     # Return questions without correct answer info to client
     client_questions = [
         {
@@ -395,7 +426,7 @@ def quiz_start_game():
         }
         for q in game_questions
     ]
-    
+
     response = jsonify({
         "success": True,
         "questions": client_questions,
