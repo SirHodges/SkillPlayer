@@ -671,29 +671,33 @@ body {
     align-items: center;
     justify-content: center;
     gap: 10px;
-    padding: 0 20px;
+    padding: 0 16px;
     color: #ff4444;
-    font-size: 0.85rem;
-    font-weight: 600;
-    white-space: nowrap;
+    font-size: 1rem;
+    font-weight: 700;
+    text-align: center;
+    line-height: 1.3;
     flex-shrink: 0;
 }
 
-.mode-switch-hint svg {
-    animation: bounceUp 1.5s ease-in-out infinite;
+.mode-switch-hint svg:first-child {
+    animation: bounceLeft 1.5s ease-in-out infinite;
     flex-shrink: 0;
 }
 
-@keyframes bounceUp {
+.mode-switch-hint svg:last-child {
+    animation: bounceRight 1.5s ease-in-out infinite;
+    flex-shrink: 0;
+}
 
-    0%,
-    100% {
-        transform: translateY(0);
-    }
+@keyframes bounceLeft {
+    0%, 100% { transform: translateX(0); }
+    50% { transform: translateX(-6px); }
+}
 
-    50% {
-        transform: translateY(-6px);
-    }
+@keyframes bounceRight {
+    0%, 100% { transform: translateX(0); }
+    50% { transform: translateX(6px); }
 }
 
 /* Input Mode Toggle */
