@@ -141,6 +141,7 @@ let quizTimeRemaining = 60;
 let quizTimerInterval = null;
 let quizIsGameActive = false;
 let quizIsAnswerLocked = false;
+let endScreenAutoReturnTimer = null;
 
 // Review Mode State
 let reviewMode = false;
@@ -634,6 +635,11 @@ function resetQuiz() {
 }
 
 function showQuizStartScreen() {
+    // Cancel auto-return timer if user clicks Play Again manually
+    if (endScreenAutoReturnTimer) {
+        clearInterval(endScreenAutoReturnTimer);
+        endScreenAutoReturnTimer = null;
+    }
     resetQuiz();
     loadQuizLeaderboard();
 }
@@ -1517,6 +1523,32 @@ function endQuiz() {
         showQuizScreen('end');
 
         checkQuizTopScore();
+    }
+
+    // Update Play Again button text based on input mode
+    const playAgainBtn = document.getElementById('quiz-play-again-btn');
+    if (playAgainBtn) {
+        playAgainBtn.textContent = inputMode === 'gamepad'
+            ? 'Press START or A to play again'
+            : 'Play Again';
+    }
+
+    // Auto-return to start screen after 60 seconds
+    let autoReturnSeconds = 60;
+    if (playAgainBtn) {
+        const baseText = playAgainBtn.textContent;
+        endScreenAutoReturnTimer = setInterval(() => {
+            autoReturnSeconds--;
+            if (autoReturnSeconds <= 0) {
+                clearInterval(endScreenAutoReturnTimer);
+                endScreenAutoReturnTimer = null;
+                showQuizStartScreen();
+            } else {
+                if (playAgainBtn) {
+                    playAgainBtn.textContent = baseText + ` (${autoReturnSeconds}s)`;
+                }
+            }
+        }, 1000);
     }
 }
 
