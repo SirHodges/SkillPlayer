@@ -42,7 +42,64 @@ body {
 /* App Layout */
 .app-container {
     display: flex;
+    flex-direction: column;
     height: 100vh;
+    overflow: hidden;
+}
+
+/* Full-Width Top Mode Bar */
+.app-mode-topbar {
+    display: flex;
+    flex-shrink: 0;
+    height: 70px;
+    background: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 100%);
+    border-bottom: 2px solid var(--border-color);
+}
+
+.app-mode-topbar .app-mode-tab {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 0 32px;
+    background: transparent;
+    border: none;
+    border-bottom: 4px solid transparent;
+    color: var(--text-secondary);
+    font-family: 'Outfit', 'Segoe UI', sans-serif;
+    font-size: 1.25rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    letter-spacing: 0.3px;
+}
+
+.app-mode-topbar .app-mode-tab:hover {
+    background: rgba(255,255,255,0.05);
+    color: var(--text-primary);
+}
+
+.app-mode-topbar .app-mode-tab.active {
+    color: white;
+    border-bottom-color: var(--accent-primary);
+    background: rgba(99, 102, 241, 0.12);
+}
+
+.app-mode-topbar .app-mode-tab .mode-icon {
+    display: flex;
+    align-items: center;
+}
+
+/* Divider between the two top tabs */
+.app-mode-topbar .app-mode-tab:first-child {
+    border-right: 1px solid var(--border-color);
+}
+
+/* Body row below top bar */
+.app-body {
+    display: flex;
+    flex: 1;
     overflow: hidden;
 }
 
@@ -676,14 +733,9 @@ body {
     animation: none !important;
 }
 
-/* ========================================
-   App Mode Tabs (Top of Sidebar)
-   ======================================== */
-
+/* Old sidebar app-mode-tabs — kept for reference but hidden since tabs moved to topbar */
 .app-mode-tabs {
-    display: flex;
-    background: var(--bg-dark);
-    border-bottom: 1px solid var(--border-color);
+    display: none;
 }
 
 .app-mode-tab {
