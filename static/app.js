@@ -172,7 +172,7 @@ function setInputMode(mode) {
     // Update Start Quiz button text
     const startLabel = document.querySelector('#quiz-start-btn .start-label');
     if (startLabel) {
-        startLabel.textContent = mode === 'gamepad' ? 'Hold A or START to begin' : 'Start Quiz';
+        startLabel.textContent = mode === 'gamepad' ? 'Hold START to begin' : 'Start Quiz';
     }
 }
 
@@ -1529,7 +1529,7 @@ function endQuiz() {
     const playAgainBtn = document.getElementById('quiz-play-again-btn');
     if (playAgainBtn) {
         playAgainBtn.textContent = inputMode === 'gamepad'
-            ? 'Press START or A to play again'
+            ? 'Hold START to play again'
             : 'Play Again';
     }
 
